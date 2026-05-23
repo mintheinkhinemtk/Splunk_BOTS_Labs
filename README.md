@@ -1,10 +1,10 @@
-#About
+# About
 
 This is my comprehensive walkthroughs of Splunk's Boss of the SOC (BOTS) CTF-Style Labs
 
-#Walkthroughs
+# Walkthroughs
 
-- Splunk_BOTSV1 (https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/tree/main/Splunk_BOTSV1) 
+- [Splunk_BOTSV1](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/tree/main/Splunk_BOTSV1) 
 
 
 
