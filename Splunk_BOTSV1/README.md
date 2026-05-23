@@ -10,7 +10,9 @@ What is the likely IPv4 address of someone from the Po1s0n1vy group scanning imr
 
 To see which sourcetypes are contained in the index named botsv1,
 
+```
 |metadata type=sourcetypes index=botsv1
+```
 
 <img width="1887" height="848" alt="image" src="https://github.com/user-attachments/assets/ccd1020e-8707-4d13-924d-8fce6d88651d" />
 
@@ -26,29 +28,37 @@ Firstly, we will see the events related to stream:http as all of the http source
 
 Secondly, we will check the suricata sourcetype events to validate the IP from that stream:http scanning our server or not.
 
+```
 index=botsv1 imreallynotbatman.com sourcetype="stream:http" 
 | stats count by src, sourcetype
 | sort -count
+```
 
 <img width="1870" height="523" alt="image" src="https://github.com/user-attachments/assets/36eec8f8-60ad-4a44-b408-b0724727f13f" />
 
 
+```
 index=botsv1 imreallynotbatman.com sourcetype=suricata 
 | stats count by src
 | sort -count
+```
 
 <img width="1863" height="577" alt="image" src="https://github.com/user-attachments/assets/f64fa243-e182-450a-baaf-5230becf74ba" />
 
 source IP, 40.80.148.42, has the most count in the data.
 
+```
 index=botsv1 imreallynotbatman.com sourcetype=suricata src="40.80.148.42"
 | stats values(src), values(signature)
+```
 
 <img width="1848" height="818" alt="image" src="https://github.com/user-attachments/assets/1beb8998-2a29-4d2e-86c5-be44a5f1901c" />
 
 
+```
 index=botsv1 imreallynotbatman.com sourcetype=suricata src="23.22.63.114"
 | stats values(src), values(signature)
+```
 
 <img width="1873" height="440" alt="image" src="https://github.com/user-attachments/assets/6c7344ce-3407-4c61-a5bb-68682b654f6e" />
 
