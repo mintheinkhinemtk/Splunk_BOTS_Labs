@@ -18,7 +18,10 @@ To see which sourcetypes are contained in the index named botsv1,
 
 The question has the information of the scanned domain, imreallynotbatman.com
 
+```
 index=botsv1 imreallynotbatman.com | stats count by sourcetype | eventstats sum(count) as perc | eval percentage=round(count*100/perc,2)| fields - perc | sort - count
+```
+
 
 <img width="1875" height="612" alt="image" src="https://github.com/user-attachments/assets/1ba19ff9-2082-4045-a329-3d806f2ea24a" />
 
