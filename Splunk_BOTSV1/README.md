@@ -32,6 +32,7 @@ index=botsv1 imreallynotbatman.com sourcetype="stream:http"
 
 <img width="1870" height="523" alt="image" src="https://github.com/user-attachments/assets/36eec8f8-60ad-4a44-b408-b0724727f13f" />
 
+
 index=botsv1 imreallynotbatman.com sourcetype=suricata 
 | stats count by src
 | sort -count
@@ -44,6 +45,7 @@ index=botsv1 imreallynotbatman.com sourcetype=suricata src="40.80.148.42"
 | stats values(src), values(signature)
 
 <img width="1848" height="818" alt="image" src="https://github.com/user-attachments/assets/1beb8998-2a29-4d2e-86c5-be44a5f1901c" />
+
 
 index=botsv1 imreallynotbatman.com sourcetype=suricata src="23.22.63.114"
 | stats values(src), values(signature)
