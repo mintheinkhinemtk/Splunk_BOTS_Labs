@@ -4,7 +4,7 @@ This BOTS CTF walkthrough is based upon the Version 1 (2015) event. You can sign
 
 ## Scenario 1 - Web Defacement
 
-Q101
+### **Q101**
 
 What is the likely IPv4 address of someone from the Po1s0n1vy group scanning imreallynotbatman.com for web application vulnerabilities?
 
@@ -70,6 +70,29 @@ index=botsv1 imreallynotbatman.com sourcetype=suricata src="23.22.63.114"
 The log sources related to source IP, 40.80.148.42, returned signatures but 23.22.63.114 did not. From this, we can conclude that the attacker did a vulnerability scan with 40.80.148.42 IP. 
 
 Answer: 40.80.148.42
+
+### **Q102**
+
+What company created the web vulnerability scanner used by Po1s0n1vy? Type the company name.
+
+We can find this information in 'stream:http' as the http requests will have the vulnerability scanner name.
+
+```
+index=botsv1 imreallynotbatman.com sourcetype="stream:http"
+```
+
+After doing deep analysis and reading logs, we could found that the name was in 'src_headers'.
+
+```
+index=botsv1 imreallynotbatman.com sourcetype="stream:http" src_ip="40.80.148.42"
+| stats values(src_ip) values(src_headers)
+```
+
+<img width="1895" height="740" alt="image" src="https://github.com/user-attachments/assets/df45355b-ccfe-4689-b21c-905b2263da3b" />
+
+
+
+
 
 
 
