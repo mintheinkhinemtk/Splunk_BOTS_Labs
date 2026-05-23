@@ -14,8 +14,6 @@ To see which sourcetypes are contained in the index named botsv1,
 |metadata type=sourcetypes index=botsv1
 ```
 
-<img width="1887" height="848" alt="image" src="https://github.com/user-attachments/assets/ccd1020e-8707-4d13-924d-8fce6d88651d" />
-
 The question has the information of the scanned domain, imreallynotbatman.com
 
 ```
@@ -77,11 +75,7 @@ What company created the web vulnerability scanner used by Po1s0n1vy? Type the c
 
 We can find this information in 'stream:http' as the http requests will have the vulnerability scanner name.
 
-```
-index=botsv1 imreallynotbatman.com sourcetype="stream:http"
-```
-
-After doing deep analysis and reading logs, we could found that the name was in 'src_headers'.
+After doing deep analysis and reading logs, we found that the name was in 'src_headers'.
 
 ```
 index=botsv1 imreallynotbatman.com sourcetype="stream:http" src_ip="40.80.148.42"
@@ -89,6 +83,46 @@ index=botsv1 imreallynotbatman.com sourcetype="stream:http" src_ip="40.80.148.42
 ```
 
 <img width="1895" height="740" alt="image" src="https://github.com/user-attachments/assets/df45355b-ccfe-4689-b21c-905b2263da3b" />
+
+
+Answer: Acunetix
+
+### **Q103**
+
+What content management system is imreallynotbatman.com likely using?
+
+We need to aim for the destination web server, imreallynotbatman.com and its http status response, '200'.
+
+After doing log analysis, we found that the web server's IP is '192.168.250.70'.
+
+```
+index=botsv1 src =40.80.148.42 imreallynotbatman (dest="192.168.250.70") sourcetype=stream:http status=200
+|stats count by uri
+|eventstats sum(count) as total by uri
+|eval percentage = round(count*100/total,2)
+|fields - total
+|sort -count
+```
+
+<img width="1881" height="835" alt="image" src="https://github.com/user-attachments/assets/561b3ffa-d70e-4080-a8f1-92f3570de6cb" />
+
+We see 'joomla' in uri
+
+
+<img width="1152" height="467" alt="image" src="https://github.com/user-attachments/assets/2081817b-0570-40a8-a734-c6b06e02930a" />
+
+
+Answer: joomla
+
+
+### **Q104**
+
+What is the name of the file that defaced the imreallynotbatman.com website? Please submit only the name of the file with extension?
+
+
+
+
+
 
 
 
