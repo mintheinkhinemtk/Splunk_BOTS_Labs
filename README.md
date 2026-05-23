@@ -1,6 +1,6 @@
 # About
 
-This is my comprehensive walkthroughs of Splunk's Boss of the SOC (BOTS) CTF-Style Labs
+These are my comprehensive walkthroughs of Splunk's Boss of the SOC (BOTS) CTF-Style Labs
 
 # Walkthroughs
 
@@ -8,7 +8,7 @@ This is my comprehensive walkthroughs of Splunk's Boss of the SOC (BOTS) CTF-Sty
 
 # Suggestions
 
-- If you are stuck for an extended period of time, take a deep-rest or sleep and come back with refreshed mind. 
+- If you are stuck for an extended period of time, take a deep-rest or sleep and come back with a refreshed mind. 
 
 - Don't forget to take notes after taking an answer as you will surely have to read them to track the progress.
 
