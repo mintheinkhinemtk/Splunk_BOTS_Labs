@@ -8,9 +8,9 @@ These are my comprehensive walkthroughs of Splunk's Boss of the SOC (BOTS) CTF-S
 
 # Suggestions
 
-- If you are stuck for an extended period of time, take a deep-rest or sleep and come back with a refreshed mind. 
+- If you are stuck for an extended period of time, take a deep rest or sleep and come back with a refreshed mind. 
 
-- Don't forget to take notes after finding an answer as you will surely have to read them to track the progress.
+- Don't forget to take notes after finding an answer as you will surely have to read them to track your progress.
 
 - There will be times for you to look back to the previous questions.
 
