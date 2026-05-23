@@ -50,7 +50,7 @@ index=botsv1 imreallynotbatman.com sourcetype=suricata src="23.22.63.114"
 
 <img width="1873" height="440" alt="image" src="https://github.com/user-attachments/assets/6c7344ce-3407-4c61-a5bb-68682b654f6e" />
 
-The log sources related to source IP, 40.80.148.42, have signatures and 23.22.63.114 has nothing. From this, we can conclude that the attacker did a vulnerability scan with 40.80.148.42 IP. 
+The log sources related to source IP, 40.80.148.42, returned signatures but 23.22.63.114 did not. From this, we can conclude that the attacker did a vulnerability scan with 40.80.148.42 IP. 
 
 Answer: 40.80.148.42
 
