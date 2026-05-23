@@ -38,16 +38,7 @@ index=botsv1 imreallynotbatman.com sourcetype="stream:http"
 <img width="1870" height="523" alt="image" src="https://github.com/user-attachments/assets/36eec8f8-60ad-4a44-b408-b0724727f13f" />
 
 
-
-```
-index=botsv1 imreallynotbatman.com sourcetype=suricata 
-| stats count by src
-| sort -count
-```
-
-<img width="1863" height="577" alt="image" src="https://github.com/user-attachments/assets/f64fa243-e182-450a-baaf-5230becf74ba" />
-
-source IP, 40.80.148.42, has the most count in the data.
+source IP, 40.80.148.42, has the most count in the data. And then, we will need to check the two external IPs 40.80.148.42 and 23.22.63.114 in suricata logs.
 
 ```
 index=botsv1 imreallynotbatman.com sourcetype=suricata src="40.80.148.42"
