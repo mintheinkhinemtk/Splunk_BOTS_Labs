@@ -127,7 +127,8 @@ index=botsv1 sourcetype=suricata  src_ip="192.168.250.70" status="200"
 ```
 
 
-![alt text](image.png)
+<img width="1875" height="553" alt="image" src="https://github.com/user-attachments/assets/ad01e015-7a0c-48d2-a340-489a09931eaf" />
+
 
 Check 108.161.187.134.
 
@@ -136,7 +137,8 @@ index=botsv1 sourcetype=suricata  src_ip="192.168.250.70" dest_ip="108.161.187.1
 |stats count by status, http.hostname, src_ip, dest_ip
 ```
 
-![alt text](image-1.png)
+<img width="1872" height="398" alt="image" src="https://github.com/user-attachments/assets/88ed0299-58fa-41c8-acbb-626467347511" />
+
 
 
 We will exclude others as 192.168.2.50 is an internal IP and 106.161.187.134 is the one of joomla update site.
@@ -150,17 +152,20 @@ index=botsv1 sourcetype=suricata  src_ip="192.168.250.70" dest_ip="23.22.63.114"
 ```
 
 
-![alt text](image-5.png)
+<img width="1880" height="508" alt="image" src="https://github.com/user-attachments/assets/45cac322-dfad-44e3-b5a5-b85de6026b72" />
+
 
 Let's dig about this in stream:http and fortigate_utm source to confirm the information.
 
 
 ```
 index=botsv1 sourcetype=stream:http  src="192.168.250.70" dest_ip="23.22.63.114"
+|stats count by src_headers
 ```
 
 
-![alt text](image-6.png)
+<img width="1877" height="468" alt="image" src="https://github.com/user-attachments/assets/db497c66-79bd-4342-ba2a-3f82de163e31" />
+
 
 
 'Fortigate' UTM has the 'Malicious Websites' Category if they regard an external site as malicious
@@ -170,14 +175,16 @@ index=botsv1 sourcetype=fgt_utm 192.168.250.70 NOT dest=192.168.250.70 category=
 |stats count by dest
 ```
 
-![alt text](image-7.png)
+<img width="1871" height="398" alt="image" src="https://github.com/user-attachments/assets/5c46a8f1-1f2f-40b4-b574-15daacdcb33c" />
+
 
 ```
 index=botsv1 sourcetype=fgt_utm  src="192.168.250.70" dest="23.22.63.114"
 | stats count by _time, src, src_port, dest, dest_port, url, action
 ```
 
-![alt text](image-8.png)
+<img width="1863" height="667" alt="image" src="https://github.com/user-attachments/assets/64102718-a35d-4596-a9d9-6155f24be17d" />
+
 
 Answer: poisonivy-is-coming-for-you-batman.jpeg
 
