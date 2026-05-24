@@ -189,9 +189,26 @@ index=botsv1 sourcetype=fgt_utm  src="192.168.250.70" dest="23.22.63.114"
 Answer: poisonivy-is-coming-for-you-batman.jpeg
 
 
+### **Q105**
+
+This attack used dynamic DNS to resolve to the malicious IP. What fully qualified domain name (FQDN) is associated with this attack?
+
+We found this from the previous question as well as we can still find the FQDN information in 'stream:dns'.
+
+```
+index=botsv1 sourcetype=stream:dns answer="23.22.63.114"
+| stats values(name{})
+```
+
+<img width="1880" height="397" alt="image" src="https://github.com/user-attachments/assets/b3ec8f57-bbbd-4f36-a7a8-4746f7f4e960" />
 
 
+Answer: prankglassinebracket.jumpingcrab.com
 
+
+### **Q106**
+
+What IPv4 address has Po1s0n1vy tied to domains that are pre-staged to attack Wayne Enterprises?
 
 
 
