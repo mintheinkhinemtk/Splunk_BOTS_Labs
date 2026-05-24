@@ -110,8 +110,75 @@ Answer: joomla
 
 What is the name of the file that defaced the imreallynotbatman.com website? Please submit only the name of the file with extension?
 
+We would need to first know that the web server connection must be only outbound without any initiated inbound connections to think about how the file that defaced the website got into the server.
+
+Attacker would probably have got the reverse-shell and therefore, we need to find the external IP that was initiated by our web server. 
+
+We need to search the information in suricata and fortigate utm logs as they will have the connection and file information.
 
 
+Don't forget that we have two external IPs in the above questions in stream:http.
+
+
+```
+index=botsv1 sourcetype=suricata  src_ip="192.168.250.70" status="200"
+|stats count by status, src_ip, dest_ip
+```
+
+
+![alt text](image.png)
+
+Check 108.161.187.134.
+
+```
+index=botsv1 sourcetype=suricata  src_ip="192.168.250.70" dest_ip="108.161.187.134" status="200"
+|stats count by status, http.hostname, src_ip, dest_ip
+```
+
+![alt text](image-1.png)
+
+
+We will exclude others as 192.168.2.50 is an internal IP and 106.161.187.134 is the one of joomla update site.
+
+After doing log analysis, we found an interesting file in the log related to '23.22.63.114' IP.
+
+
+```
+index=botsv1 sourcetype=suricata  src_ip="192.168.250.70" dest_ip="23.22.63.114" status="200"
+|stats count by http.hostname, http.url, src_ip, dest_ip
+```
+
+
+![alt text](image-5.png)
+
+Let's dig about this in stream:http and fortigate_utm source to confirm the information.
+
+
+```
+index=botsv1 sourcetype=stream:http  src="192.168.250.70" dest_ip="23.22.63.114"
+```
+
+
+![alt text](image-6.png)
+
+
+'Fortigate' UTM has the 'Malicious Websites' Category if they regard an external site as malicious
+
+```
+index=botsv1 sourcetype=fgt_utm 192.168.250.70 NOT dest=192.168.250.70 category="Malicious Websites"
+|stats count by dest
+```
+
+![alt text](image-7.png)
+
+```
+index=botsv1 sourcetype=fgt_utm  src="192.168.250.70" dest="23.22.63.114"
+| stats count by _time, src, src_port, dest, dest_port, url, action
+```
+
+![alt text](image-8.png)
+
+Answer: poisonivy-is-coming-for-you-batman.jpeg
 
 
 
