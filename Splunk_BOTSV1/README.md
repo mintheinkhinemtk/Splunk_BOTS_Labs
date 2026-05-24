@@ -73,7 +73,8 @@ index=botsv1 imreallynotbatman.com sourcetype="stream:http" src_ip="40.80.148.42
 | stats values(src_ip) values(src_headers)
 ```
 
-<img width="1895" height="740" alt="image" src="https://github.com/user-attachments/assets/df45355b-ccfe-4689-b21c-905b2263da3b" />
+<img width="1882" height="731" alt="image" src="https://github.com/user-attachments/assets/9f36540e-cb6d-4c82-8d58-21fbe302eee5" />
+
 
 
 Answer: Acunetix
