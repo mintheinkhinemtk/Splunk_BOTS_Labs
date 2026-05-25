@@ -1,6 +1,8 @@
 # Splunk BOTSV1 CTF Walkthrough
 
-This BOTS CTF walkthrough is based upon the Version 1 (2015) event. You can sign up for an account and take the challenge at https://bots.splunk.com
+**Platform:** Splunk BOTS Version 1 (2015)  
+
+You can sign up for an account and take the challenge at https://bots.splunk.com
 
 ## Scenario 1 - Web Defacement
 
@@ -8,13 +10,10 @@ This BOTS CTF walkthrough is based upon the Version 1 (2015) event. You can sign
 
 What is the likely IPv4 address of someone from the Po1s0n1vy group scanning imreallynotbatman.com for web application vulnerabilities?
 
-To see which sourcetypes are contained in the index named botsv1,
+#### **Approach**
 
-```
-|metadata type=sourcetypes index=botsv1
-```
+Vulnerability scanners generate high-frequency requests with automated behaviour. As the domain was scanned for web application vulnerabilities and the suricata IDS would alert for a high-frequency scanning, the information could be found in stream:http and suricata logs. 
 
-The question has the information of the scanned domain, imreallynotbatman.com
 
 ```
 index=botsv1 imreallynotbatman.com | stats count by sourcetype | eventstats sum(count) as perc | eval percentage=round(count*100/perc,2)| fields - perc | sort - count
@@ -23,22 +22,31 @@ index=botsv1 imreallynotbatman.com | stats count by sourcetype | eventstats sum(
 
 <img width="1875" height="612" alt="image" src="https://github.com/user-attachments/assets/1ba19ff9-2082-4045-a329-3d806f2ea24a" />
 
-We see that there are suricata and stream:http sourcetypes.
 
-Firstly, we will see the events related to stream:http as all of the http sources are contained in that stream:http.
-
-Secondly, we will check the suricata sourcetype events to validate the IP from that stream:http scanning our server or not.
 
 ```
-index=botsv1 imreallynotbatman.com sourcetype="stream:http" 
-| stats count by src, sourcetype
+index=botsv1 imreallynotbatman.com sourcetype=suricata
+| stats count by src_ip
 | sort -count
 ```
 
-<img width="1870" height="523" alt="image" src="https://github.com/user-attachments/assets/36eec8f8-60ad-4a44-b408-b0724727f13f" />
+<img width="1877" height="533" alt="image" src="https://github.com/user-attachments/assets/2807e110-ce0f-4d02-a501-15c0f3ed876f" />
+
+As an external IP, 40.80.148.42, had the highest volume in the search results, it might be the attacker's IP that did the vulnerability scan. The information could be analyzed again in stream:http sourcetype as it was the main log source.
 
 
-source IP, 40.80.148.42, has the most count in the data. And then, we will need to check the two external IPs 40.80.148.42 and 23.22.63.114 in suricata logs.
+```
+index=botsv1 imreallynotbatman.com sourcetype=stream:http
+| stats count by src_ip, dest_ip
+| sort -count
+```
+
+
+<img width="1892" height="536" alt="image" src="https://github.com/user-attachments/assets/763dc7e2-9c63-4f90-9b0c-8fdcca1bed5c" />
+
+40.80.148.42 consistently appeared as the highest volume across both sourcetypes.
+
+Cross-validating against Suricata IDS Signatures were done to confirm the scanning behaviour
 
 ```
 index=botsv1 imreallynotbatman.com sourcetype=suricata src="40.80.148.42"
@@ -48,17 +56,11 @@ index=botsv1 imreallynotbatman.com sourcetype=suricata src="40.80.148.42"
 <img width="1848" height="818" alt="image" src="https://github.com/user-attachments/assets/1beb8998-2a29-4d2e-86c5-be44a5f1901c" />
 
 
-
-```
-index=botsv1 imreallynotbatman.com sourcetype=suricata src="23.22.63.114"
-| stats values(src), values(signature)
-```
-
-<img width="1873" height="440" alt="image" src="https://github.com/user-attachments/assets/6c7344ce-3407-4c61-a5bb-68682b654f6e" />
-
-The log sources related to source IP, 40.80.148.42, returned signatures but 23.22.63.114 did not. From this, we can conclude that the attacker did a vulnerability scan with 40.80.148.42 IP. 
+The log sources related to source IP, 40.80.148.42, matched multiple suricata scanning signatures, confirming 40.80.148.42 was the attacker's IP. 
 
 Answer: 40.80.148.42
+
+
 
 ### **Q102**
 
