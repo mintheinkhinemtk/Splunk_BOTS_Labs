@@ -4,6 +4,8 @@
 
 You can sign up for an account and take the challenge at https://bots.splunk.com
 
+**This walkthrough documents the analytical reasoning for each stage**
+
 ## Scenario 1 - Web Defacement
 
 ### **Q101**
@@ -209,13 +211,15 @@ As the information found was consistent across the three sourcetypes, the malici
 
 This attack used dynamic DNS to resolve to the malicious IP. What fully qualified domain name (FQDN) is associated with this attack?
 
-We found this from the previous question as well as we can still find the FQDN information in 'stream:dns'.
+We found this from the previous question as well as we could still find the FQDN information in 'stream:dns'.
 
 #### **Approach**
 
 To know the FQDN of the attacker, it's essential to understand how DNS queries and responses work as DNS resolves domain names to IPs.
 
 The web server would need to know the IP of the domain first before connecting to it. As the connection was made, there must be an answer for the IP.
+
+A DNS transaction has two main parts, the domain name asked for (name{} or query{}) and the IP Address returned by the server.
 
 
 ```
@@ -235,6 +239,21 @@ index=botsv1 sourcetype=stream:dns answer="23.22.63.114"
 
 What IPv4 address has Po1s0n1vy tied to domains that are pre-staged to attack Wayne Enterprises?
 
+#### **Approach**
+
+As the question asks about the pre stage before the attack, the necessary information won't be able to be found in the logs. 
+
+Because of this, OSINT had to be relied on. There were two external IPs related to this attack, 40.80.148.42 and 23.22.63.114
+
+40.80.148.42 was used for vulnerability scanning and 23.22.63.114 was used for the defacement.
+
+Searched them on virustotal and found this
+
+<img width="1360" height="810" alt="image" src="https://github.com/user-attachments/assets/4b70ed51-479e-4614-b520-5215e7ecdb2f" />
+
+23.22.63.114 IP was related to the attacker's domains and thus..
+
+**Answwer: 23.22.63.114**
 
 
 
