@@ -34,7 +34,7 @@ index=botsv1 imreallynotbatman.com sourcetype=suricata
 
 <img width="1877" height="533" alt="image" src="https://github.com/user-attachments/assets/2807e110-ce0f-4d02-a501-15c0f3ed876f" />
 
-As an external IP, 40.80.148.42, had the highest volume in the search results, it might be the attacker's IP that did the vulnerability scan. The information could be analyzed again in stream:http sourcetype as it was the main log source.
+As an external IP, 40.80.148.42, had the highest volume in the search results, it appeared to be the attacker's IP that did the vulnerability scan. The information could be analyzed again in stream:http sourcetype as it was the main log source.
 
 
 ```
@@ -95,7 +95,7 @@ What content management system is imreallynotbatman.com likely using?
 
 To know the CMS that the domain was using, it's important to know that the vulnerability scanner could have found the CMS name with the help of http status code '200', 'success', as it would probe for the CMS directories and the attacker could confirm this by seeing the status code.
 
-Because of this, the web server's IP was needed and after doing log analysis, it was found the web server's IP being '192.168.250.70'.
+Because of this, the web server's IP was needed and after doing log analysis, the web server's IP was identified as '192.168.250.70'.
 
 ```
 index=botsv1 src =40.80.148.42 imreallynotbatman (dest="192.168.250.70") sourcetype=stream:http status=200
@@ -108,7 +108,7 @@ index=botsv1 src =40.80.148.42 imreallynotbatman (dest="192.168.250.70") sourcet
 
 <img width="1881" height="835" alt="image" src="https://github.com/user-attachments/assets/561b3ffa-d70e-4080-a8f1-92f3570de6cb" />
 
-'joomla' could be seen across multiple uri paths and as we all know, joomla is one of the mostly used CMS.
+'joomla' could be seen across multiple uri paths and as we all know, joomla is one of the most widely used CMS.
 
 
 <img width="1152" height="467" alt="image" src="https://github.com/user-attachments/assets/2081817b-0570-40a8-a734-c6b06e02930a" />
@@ -125,7 +125,7 @@ What is the name of the file that defaced the imreallynotbatman.com website? Ple
 
 It is important to know that the web server should not initiate outbound connections to random domains and there must be no user browsing the internet on the web server because of the security policy in order to prevent access to malicious domains.
 
-Although the things are like that, firewalls should not block every initiated outbound connections from the web server blindly as there will be the times that the web server has to initiate the outbound to the legitimate external APIs or other related connections.
+However, firewalls should not block every initiated outbound connections from the web server blindly as there will be the times that the web server has to initiate the outbound to the legitimate external APIs or other related connections.
 
 Therefore, from my hypothesis and the above theory, attackers could have got the reverse shell access as the initiated outbound connections from the web server would not be blocked by the firewall as not to disrupt the business process.
 
@@ -145,7 +145,7 @@ index=botsv1 sourcetype=suricata  src_ip="192.168.250.70" status="200"
 <img width="1875" height="553" alt="image" src="https://github.com/user-attachments/assets/ad01e015-7a0c-48d2-a340-489a09931eaf" />
 
 
-Suricata showed that destination IPs connected from the web server. Check first '108.161.187.134'.
+Suricata showed that destination IPs connected from the web server. The IP, '108.161.187.134', was investigated first.
 
 
 ```
@@ -171,7 +171,7 @@ index=botsv1 sourcetype=suricata  src_ip="192.168.250.70" dest_ip="23.22.63.114"
 <img width="1880" height="508" alt="image" src="https://github.com/user-attachments/assets/45cac322-dfad-44e3-b5a5-b85de6026b72" />
 
 
-Let's dig about this in stream:http and fortigate_utm source to confirm the information.
+Let's dig this into stream:http and fortigate_utm source to confirm the information.
 
 
 ```
@@ -181,7 +181,7 @@ index=botsv1 sourcetype=stream:http  src_ip="192.168.250.70" dest_ip="23.22.63.1
 
 <img width="1866" height="581" alt="image" src="https://github.com/user-attachments/assets/3015f11f-6c23-4488-9572-74a23263b460" />
 
-The suspicious domain, the suspicious domain and the file were found out. 
+The suspicious domain and the file were found out.
 
 
 'Fortigate' UTM has the 'Malicious Websites' Category if they regard an external site as malicious
@@ -211,7 +211,7 @@ As the information found was consistent across the three sourcetypes, the malici
 
 This attack used dynamic DNS to resolve to the malicious IP. What fully qualified domain name (FQDN) is associated with this attack?
 
-We found this from the previous question as well as we could still find the FQDN information in 'stream:dns'.
+We could still find the FQDN information in 'stream:dns' though we found this in the previous question.
 
 #### **Approach**
 
