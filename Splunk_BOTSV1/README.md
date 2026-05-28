@@ -119,14 +119,19 @@ index=botsv1 src =40.80.148.42 imreallynotbatman (dest="192.168.250.70") sourcet
 
 What is the name of the file that defaced the imreallynotbatman.com website? Please submit only the name of the file with extension?
 
-We would need to first know that the web server connection must be only outbound without any initiated inbound connections to think about how the file that defaced the website got into the server.
+#### **Approach**
 
-Attacker would probably have got the reverse-shell and therefore, we need to find the external IP that was initiated by our web server. 
+It is important to know that the web server should not initiate outbound connections to random domains and there must be no user browsing the internet on the web server because of the security policy in order to prevent access to malicious domains.
 
-We need to search the information in suricata and fortigate utm logs as they will have the connection and file information.
+Although the things are like that, firewalls should not block every initiated outbound connections from the web server blindly as there will be the times that the web server has to initiate the outbound to the legitimate external APIs or other related connections.
+
+Therefore, from my hypothesis and the above theory, attackers could have got the reverse shell access as the initiated outbound connections from the web server would not be blocked by the firewall as not to disrupt the business process.
+
+It was needed to find the external IP that was initiated by the web server, imreallynotbatman.com. Before that, the IP Address of the web server was needed and it's 192.168.250.70 from the above questions.
+
+The information would be searched in suricata, stream:http and fortigate utm logs as they would have the connection and file information.
 
 
-Don't forget that we have two external IPs in the above questions in stream:http.
 
 
 ```
@@ -138,7 +143,8 @@ index=botsv1 sourcetype=suricata  src_ip="192.168.250.70" status="200"
 <img width="1875" height="553" alt="image" src="https://github.com/user-attachments/assets/ad01e015-7a0c-48d2-a340-489a09931eaf" />
 
 
-Check 108.161.187.134.
+Suricata showed that destination IPs connected from the web server. Check first '108.161.187.134'.
+
 
 ```
 index=botsv1 sourcetype=suricata  src_ip="192.168.250.70" dest_ip="108.161.187.134" status="200"
@@ -149,9 +155,9 @@ index=botsv1 sourcetype=suricata  src_ip="192.168.250.70" dest_ip="108.161.187.1
 
 
 
-We will exclude others as 192.168.2.50 is an internal IP and 106.161.187.134 is the one of joomla update site.
+Except the two External IPs, 40.80.148.42 and 23.22.63.114O, others were excluded as 192.168.2.50 being an internal IP and 106.161.187.134 one of the joomla update sites.
 
-After doing log analysis, we found an interesting file in the log related to '23.22.63.114' IP.
+After doing log analysis, an interesting file in the log related to '23.22.63.114' IP was found in suricata logs.
 
 
 ```
@@ -167,23 +173,24 @@ Let's dig about this in stream:http and fortigate_utm source to confirm the info
 
 
 ```
-index=botsv1 sourcetype=stream:http  src="192.168.250.70" dest_ip="23.22.63.114"
-|stats count by src_headers
+index=botsv1 sourcetype=stream:http  src_ip="192.168.250.70" dest_ip="23.22.63.114"
+|stats count by src_headers, src_port, src_ip, dest_port, dest_ip
 ```
 
+<img width="1866" height="581" alt="image" src="https://github.com/user-attachments/assets/3015f11f-6c23-4488-9572-74a23263b460" />
 
-<img width="1877" height="468" alt="image" src="https://github.com/user-attachments/assets/db497c66-79bd-4342-ba2a-3f82de163e31" />
-
+The suspicious domain, the suspicious domain and the file were found out. 
 
 
 'Fortigate' UTM has the 'Malicious Websites' Category if they regard an external site as malicious
 
 ```
-index=botsv1 sourcetype=fgt_utm 192.168.250.70 NOT dest=192.168.250.70 category="Malicious Websites"
+index=botsv1 sourcetype=fgt_utm 192.168.250.70 NOT dest=192.168.250.70 category="Malicious Websites" action="allowed"
 |stats count by dest
 ```
 
-<img width="1871" height="398" alt="image" src="https://github.com/user-attachments/assets/5c46a8f1-1f2f-40b4-b574-15daacdcb33c" />
+<img width="1868" height="402" alt="image" src="https://github.com/user-attachments/assets/6df5f200-f1d5-4d86-9f5b-a58093bd5e91" />
+
 
 
 ```
@@ -193,8 +200,9 @@ index=botsv1 sourcetype=fgt_utm  src="192.168.250.70" dest="23.22.63.114"
 
 <img width="1863" height="667" alt="image" src="https://github.com/user-attachments/assets/64102718-a35d-4596-a9d9-6155f24be17d" />
 
+As the information found was consistent across the three sourcetypes, the malicious file was confirmed.
 
-Answer: poisonivy-is-coming-for-you-batman.jpeg
+**Answer: poisonivy-is-coming-for-you-batman.jpeg**
 
 
 ### **Q105**
