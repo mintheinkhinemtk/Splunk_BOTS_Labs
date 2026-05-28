@@ -74,7 +74,7 @@ What company created the web vulnerability scanner used by Po1s0n1vy? Type the c
 The http requests would have the information about the vulnerability scanner name 
 because the attacker did the  vulnerability scan using http protocol and the requests and therefore, it could be found in 'stream:http'.
 
-After doing deep analysis and reading logs, the name was found in 'src_headers'.
+After doing deep analysis and reading the logs, the name was found in 'src_headers'.
 
 ```
 index=botsv1 imreallynotbatman.com sourcetype="stream:http" src_ip="40.80.148.42"
@@ -171,7 +171,7 @@ index=botsv1 sourcetype=suricata  src_ip="192.168.250.70" dest_ip="23.22.63.114"
 <img width="1880" height="508" alt="image" src="https://github.com/user-attachments/assets/45cac322-dfad-44e3-b5a5-b85de6026b72" />
 
 
-Let's dig this into stream:http and fortigate_utm source to confirm the information.
+Let's investigate in stream:http and fortigate_utm source to confirm the information.
 
 
 ```
@@ -253,7 +253,7 @@ Searched them on virustotal and found this
 
 23.22.63.114 IP was related to the attacker's domains and thus..
 
-**Answwer: 23.22.63.114**
+**Answer: 23.22.63.114**
 
 
 
