@@ -83,13 +83,13 @@ index=botsv1 imreallynotbatman.com sourcetype="stream:http" src_ip="40.80.148.42
 
 
 
-Answer: Acunetix
+**Answer: Acunetix**
 
 ### **Q103**
 
 What content management system is imreallynotbatman.com likely using?
 
-####**Approach**
+#### **Approach**
 
 To know the CMS that the domain was using, it's important to know that the vulnerability scanner could have found the CMS name with the help of http status code '200', 'success', as it would probe for the CMS directories and the attacker could confirm this by seeing the status code.
 
@@ -112,7 +112,7 @@ index=botsv1 src =40.80.148.42 imreallynotbatman (dest="192.168.250.70") sourcet
 <img width="1152" height="467" alt="image" src="https://github.com/user-attachments/assets/2081817b-0570-40a8-a734-c6b06e02930a" />
 
 
-Answer: joomla
+**Answer: joomla**
 
 
 ### **Q104**
