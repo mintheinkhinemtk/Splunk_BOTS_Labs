@@ -89,9 +89,11 @@ Answer: Acunetix
 
 What content management system is imreallynotbatman.com likely using?
 
-We need to aim for the destination web server, imreallynotbatman.com and its http status response, '200'.
+####**Approach**
 
-After doing log analysis, we found that the web server's IP is '192.168.250.70'.
+To know the CMS that the domain was using, it's important to know that the vulnerability scanner could have found the CMS name with the help of http status code '200', 'success', as it would probe for the CMS directories and the attacker could confirm this by seeing the status code.
+
+Because of this, the web server's IP was needed and after doing log analysis, it was found the web server's IP being '192.168.250.70'.
 
 ```
 index=botsv1 src =40.80.148.42 imreallynotbatman (dest="192.168.250.70") sourcetype=stream:http status=200
@@ -104,7 +106,7 @@ index=botsv1 src =40.80.148.42 imreallynotbatman (dest="192.168.250.70") sourcet
 
 <img width="1881" height="835" alt="image" src="https://github.com/user-attachments/assets/561b3ffa-d70e-4080-a8f1-92f3570de6cb" />
 
-We can see 'joomla' across multiple uri paths.
+'joomla' could be seen across multiple uri paths and as we all know, joomla is one of the mostly used CMS.
 
 
 <img width="1152" height="467" alt="image" src="https://github.com/user-attachments/assets/2081817b-0570-40a8-a734-c6b06e02930a" />
