@@ -155,7 +155,7 @@ index=botsv1 sourcetype=suricata  src_ip="192.168.250.70" dest_ip="108.161.187.1
 
 
 
-Except the two External IPs, 40.80.148.42 and 23.22.63.114O, others were excluded as 192.168.2.50 being an internal IP and 106.161.187.134 one of the joomla update sites.
+Except the two External IPs, 40.80.148.42 and 23.22.63.114, others were excluded as 192.168.2.50 being an internal IP and 106.161.187.134 one of the joomla update sites.
 
 After doing log analysis, an interesting file in the log related to '23.22.63.114' IP was found in suricata logs.
 
@@ -211,6 +211,13 @@ This attack used dynamic DNS to resolve to the malicious IP. What fully qualifie
 
 We found this from the previous question as well as we can still find the FQDN information in 'stream:dns'.
 
+#### **Approach**
+
+To know the FQDN of the attacker, it's essential to understand how DNS queries and responses work as DNS resolves domain names to IPs.
+
+The web server would need to know the IP of the domain first before connecting to it. As the connection was made, there must be an answer for the IP.
+
+
 ```
 index=botsv1 sourcetype=stream:dns answer="23.22.63.114"
 | stats values(name{})
@@ -219,8 +226,10 @@ index=botsv1 sourcetype=stream:dns answer="23.22.63.114"
 <img width="1880" height="397" alt="image" src="https://github.com/user-attachments/assets/b3ec8f57-bbbd-4f36-a7a8-4746f7f4e960" />
 
 
-Answer: prankglassinebracket.jumpingcrab.com
+**Note: Attackers use dynamic dns services like jumpingcrab.com because the domain-to-IP mapping changes dynamically in order to bypass static IP-based blocking.**
 
+
+**Answer: prankglassinebracket.jumpingcrab.com** 
 
 ### **Q106**
 
