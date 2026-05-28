@@ -46,7 +46,7 @@ index=botsv1 imreallynotbatman.com sourcetype=stream:http
 
 40.80.148.42 consistently appeared as the highest volume across both sourcetypes.
 
-Cross-validating against Suricata IDS Signatures were done to confirm the scanning behaviour
+Cross-validating against Suricata IDS Signatures was done to confirm the scanning behaviour
 
 ```
 index=botsv1 imreallynotbatman.com sourcetype=suricata src="40.80.148.42"
@@ -67,9 +67,12 @@ The log sources related to source IP, 40.80.148.42, matched multiple suricata sc
 
 What company created the web vulnerability scanner used by Po1s0n1vy? Type the company name.
 
-We can find this information in 'stream:http' as the http requests will have the vulnerability scanner name.
+#### **Approach**
 
-After doing deep analysis and reading logs, we found that the name was in 'src_headers'.
+The http requests would have the information about the vulnerability scanner name 
+because the attacker did the  vulnerability scan using http protocol and the requests and therefore, it could be found in 'stream:http'.
+
+After doing deep analysis and reading logs, the name was found in 'src_headers'.
 
 ```
 index=botsv1 imreallynotbatman.com sourcetype="stream:http" src_ip="40.80.148.42"
