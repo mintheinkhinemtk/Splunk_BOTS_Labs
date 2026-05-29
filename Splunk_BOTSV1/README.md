@@ -255,5 +255,95 @@ Searched them on virustotal and found this
 
 **Answer: 23.22.63.114**
 
+### **There is no Q107**
+
+### **Q108**
+
+What IPv4 address is likely attempting a brute force password attack against imreallynotbatman.com?
+
+#### **Approach**
+
+To identify this, it's essential to know that the http POST method is most commonly used for web login attempts as web forms encapsulate credentials within the http request body rather than the URL and users have to submit credentials via web forms.
+
+Login forms use POST specifically because we do not want credentials appearing in the URL, browser history, or server logs to hide the credentials from others as a confidential policy
+
+To confirm this, the http methods were listed.
 
 
+```
+index=botsv1 imreallynotbatman dest="192.168.250.70" sourcetype=stream:http 
+|stats count by http_method
+|sort -count
+```
+
+<img width="1877" height="682" alt="image" src="https://github.com/user-attachments/assets/0d8709d2-c42e-4f87-8379-fd3a851e4bd9" />
+
+
+The http POST requests were the most commonly occurred as expected.
+
+
+'form_data' field has every username and password input by the users in http post request and thus, attacker's attempted credentials could be found in that. '_time' field was put to know the periodic flow of the brute force attack.
+
+
+Content-Type from the client being the attacker, must be 'application/x-www-form-urlencoded' as this is the standard encoding for login forms.
+
+
+**Note: Content-Type tells the server how the form data is encoded.**
+
+
+```
+index=botsv1 imreallynotbatman dest="192.168.250.70" sourcetype=stream:http http_method=POST form_data=*username*passwd*  cs_content_type="application/x-www-form-urlencoded" | table  _time, url, form_data
+```
+
+<img width="1872" height="847" alt="image" src="https://github.com/user-attachments/assets/eaf4f0bd-f799-414e-bd25-71810313cdb6" />
+
+
+
+Finding the src_ip that did the brute force attack
+
+
+```
+index=botsv1 imreallynotbatman dest="192.168.250.70" sourcetype=stream:http http_method=POST form_data=*username*passwd*  cs_content_type="application/x-www-form-urlencoded" | stats  count by  src_ip
+```
+
+<img width="1876" height="400" alt="image" src="https://github.com/user-attachments/assets/9433c644-c8ee-45d3-8160-9e0975cc855d" />
+
+
+As '23.22.63.114' had the highest counts for the http POST requests, it had been identified as the one that did the brute forcing.
+
+**Answer: 23.22.63.114**
+
+
+### **Q109**
+
+What is the name of the executable uploaded by Po1s0n1vy? 
+
+
+#### **Approach**
+
+As the executable was uploaded, it was confirmed that the information must be found in the http POST request and responses.
+
+Status code '200' means success and therefore, the logs related to this code was investigated first.
+
+As the file was uploaded, the content-type must be 'multipart/form-data' and the content-diposition must have the files that the attacker uploaded.
+
+
+**Note: content-type declares the file type and content-disposition does how to handle the file**
+
+
+As content-disposition has the filename field for every file that attacker put it in their headers.. 
+
+The intended data could be search using the keyword 'content-disposition' OR 'filename'. The 'filename' worked well.
+
+
+```
+index=botsv1 sourcetype=stream:http dest="192.168.250.70" http_method=POST  "filename"
+|stats count by part_filename{}
+```
+
+
+<img width="1887" height="443" alt="image" src="https://github.com/user-attachments/assets/a323f2c0-22bc-4fe9-ade2-2f5b183d0785" />
+
+The executable file was found in the query response
+
+**Answer: 3791.exe**
