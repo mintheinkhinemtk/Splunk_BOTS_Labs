@@ -360,7 +360,8 @@ Seeing in the raw log to know the detailed information..
 
 The executable file '3791.exe' and a web shell disgused as 'agent.php' were successfully uploaded with the status response code '200' from the Microsoft web server and the attacker's IP that uploaded the files was shown as '40.80.148.42' as well. 
 
-**Note: Status code 303 for the file 'agent.php' meant the post request was successful and the server was now redirecting the attacker to the dash board page of joomla CMS to see the results."
+**Note: Status code 303 for the file 'agent.php' meant the post request was successful and the server was now redirecting the attacker to the dash board page of joomla CMS to see the results."**
+
 
 **Answer: 3791.exe**
 
