@@ -349,7 +349,7 @@ Seeing in the raw log to know the detailed information..
 <img width="1918" height="168" alt="image" src="https://github.com/user-attachments/assets/359c3abd-e67e-44cc-87e0-306c2a3d2d23" />
 
 
-The executable file '3791.exe' was successfully uploaded with the status response code '200' from the server.
+The executable file '3791.exe' was successfully uploaded with the status response code '200' from the Microsoft web server and the attacker's IP that uploaded the file was shown as '40.80.148.42' as well.
 
 **Answer: 3791.exe**
 
