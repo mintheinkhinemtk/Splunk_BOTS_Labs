@@ -371,10 +371,164 @@ The executable file '3791.exe' and a web shell disgused as 'agent.php' were succ
 **Answer: 3791.exe**
 
 
-### **Q105** 
+### **Q110** 
 
 What is the MD5 hash of the executable uploaded?
 
 #### **Approach**
 
+As it had been already known that the web server system was Microsoft, the information would be found in Microsoft Sysmon Logs.
 
+
+
+**Note: Crucially, Sysmon is configured to calculate the hashes of the executable files at the exact moment the process starts. As  EventCode '1' represents process creation, the code gives you the full context of 'Who ran it, what the command line was, and what its unique signature (MD5/SHA256) are.**
+
+
+As I wanted to find the MD5 hash of 3791.exe, the search was filtered using the 'CommandLine' field that had '3791.exe' run.
+
+```
+index=botsv1 sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" EventCode=1  CommandLine="3791.exe" | stats  count by host Image MD5
+```
+
+
+<img width="1872" height="405" alt="image" src="https://github.com/user-attachments/assets/4a4f7ac6-1493-46d6-ba6a-fec882d7ea42" />
+
+
+**Answer: AAE3F5A29935E6ABCC2C2754D12A9AF0**
+
+
+### **Q111**
+
+GCPD reported that common TTPs (Tactics, Techniques, Procedures) for the Po1s0n1vy APT group, if initial compromise fails, is to send a spear phishing email with custom malware attached to their intended target. This malware is usually connected to Po1s0n1vys initial attack infrastructure. Using research techniques, provide the SHA256 hash of this malware.
+
+
+#### **Approach**
+
+As the IPs that attacked the web server are '40.80.148.42' and '23.22.63.114', I tried to search them in VirusTotal first and found the file with a name containing 'screensaver' that showed it being used for spear phishing attacks.
+
+
+<img width="1581" height="845" alt="image" src="https://github.com/user-attachments/assets/f4abcf27-93bb-4a6f-8b98-4e9de86d99aa" />
+
+
+ **Filename: 'MirandaTateScreensaver.scr.exe'**
+
+ I found search the SHA256 hash of the file in 'hybrid-anaysis.com'.
+
+ <img width="1292" height="646" alt="image" src="https://github.com/user-attachments/assets/b4bc1637-600b-4f03-9eba-e28bcf52c273" />
+
+
+**Answer: 9709473ab351387aab9e816eff3910b9f28a7a70202e250ed46dba8f820f34a8**
+
+
+### **Q112**
+
+What special hex code is associated with the customized malware discussed in question 111?
+
+
+#### **Approach**
+
+As the hex code is associated with the customized malware, I tried searching about that using its hash in the comment sections of that malware in VirusTotal
+
+
+<img width="1792" height="498" alt="image" src="https://github.com/user-attachments/assets/fbea492e-31ad-45d0-898e-857dc33eccc9" />
+
+
+The person who did the comment is Ryan Kovar, who is a person related to Splunk. Try searching for who he is.
+
+
+After that, I tried to decode the hexcode to strings using cyberchef, The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis at 'https://gchq.github.io/CyberChef/'.
+
+<img width="1905" height="565" alt="image" src="https://github.com/user-attachments/assets/93f81c20-d807-43aa-9b47-5f65fcec4c28" />
+
+
+**Answer: 53 74 65 76 65 20 42 72 61 6e 74 27 73 20 42 65 61 72 64 20 69 73 20 61 20 70 6f 77 65 72 66 75 6c 20 74 68 69 6e 67 2e 20 46 69 6e 64 20 74 68 69 73 20 6d 65 73 73 61 67 65 20 61 6e 64 20 61 73 6b 20 68 69 6d 20 74 6f 20 62 75 79 20 79 6f 75 20 61 20 62 65 65 72 21 21 21**
+
+
+**There is no Q113**
+
+### **Q114**
+
+What was the first brute force password used?
+
+#### **Approach**
+
+As found in 'Q108', I knew the source IP that did the brute force attack was '23.22.63.114'.
+
+
+```
+index=botsv1 imreallynotbatman dest="192.168.250.70" sourcetype=stream:http http_method=POST form_data=*username*passwd*  cs_content_type="application/x-www-form-urlencoded"  src_ip="23.22.63.114" 
+|table  _time, form_data
+|sort +_time
+|head 10
+```
+
+Sorting the time to get the first attempt gave me the answer.
+
+<img width="1862" height="850" alt="image" src="https://github.com/user-attachments/assets/c4399f66-4977-4c4b-a127-bbe97a06852f" />
+
+
+**Answer: 12345678**
+
+
+### **Q105**
+
+One of the passwords in the brute force attack is James Brodsky's favorite Coldplay song. We are looking for a six character word on this one. Which is it?
+
+
+#### **Approach**
+
+I tried to filter the passwords that had only six characters using rex command in SPL that does regular expression.
+
+
+```
+index=botsv1 imreallynotbatman dest="192.168.250.70" sourcetype=stream:http http_method=POST
+| rex field=form_data "passwd=(?<userpassword>\w+)"
+| search userpassword=*
+| eval passlength = len(userpassword)
+| where passlength = 6
+| table userpassword, passlength
+```
+
+<img width="1885" height="836" alt="image" src="https://github.com/user-attachments/assets/4ca22d6f-b824-4651-868f-7499b657375e" />
+
+
+There was a coldplay.csv file in the dataset and I found it.
+
+We can also get a list of coldplay songs from wikipedia and put them in a custom csv file created and filter to get the six-word songs using Excel Commands if you are doing the challenge with the dataset installed from the official Splunk dataset for BOTSV1 github link and setting up the lab manually.
+
+
+```
+|inputlookup coldplay.csv
+```
+
+<img width="1865" height="832" alt="image" src="https://github.com/user-attachments/assets/95dc77b7-0521-4bea-9c22-ba26ae16922d" />
+
+
+inputlookup: read as an event generating command from a file in splunk
+outputlookup: write to a file and used as a streaming command
+lookup: read as a streaming command from a file to add fields or manipulate raw fields
+
+Changing the names of songs to the lowercase.
+
+```
+|inputlookup coldplay.csv 
+|eval songs = lower(Songs)
+|fields songs
+|outputlookup coldplay.csv 
+```
+
+
+
+
+
+```
+index=botsv1 imreallynotbatman dest="192.168.250.70" sourcetype=stream:http http_method=POST
+| rex field=form_data "passwd=(?<userpassword>\w+)"
+| search userpassword=*
+| eval passlength = len(userpassword)
+| table userpassword, passlength
+| where passslength = 6
+| eval password = lower(userpassword)
+| lookup coldplay.csv songs as password OUTPUTNEW songs 
+| search songs=* | table songs
+```
