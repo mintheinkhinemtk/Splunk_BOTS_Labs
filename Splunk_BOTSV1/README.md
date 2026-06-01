@@ -265,7 +265,7 @@ What IPv4 address is likely attempting a brute force password attack against imr
 
 To identify this, it's essential to know that the http POST method is most commonly used for web login attempts as web forms encapsulate credentials within the http request body rather than the URL and users have to submit credentials via web forms.
 
-Login forms use POST specifically because we do not want credentials appearing in the URL, browser history, or server logs to hide the credentials from others as a confidential policy
+Login forms use POST specifically because credentials are not wanted appearing in the URL, browser history, or server logs to hide the credentials from others as a confidential policy
 
 To confirm this, the http methods were listed.
 
@@ -323,27 +323,35 @@ What is the name of the executable uploaded by Po1s0n1vy?
 
 As the executable was uploaded, it was confirmed that the information must be found in the http POST request and responses.
 
-Status code '200' means success and therefore, the logs related to this code was investigated first.
-
-As the file was uploaded, the content-type must be 'multipart/form-data' and the content-diposition must have the files that the attacker uploaded.
+As the file was uploaded, the content-type must be 'multipart/form-data' and the content-diposition must have the files that the attacker uploaded and the http response code must be '200' to know the successful action.
 
 
 **Note: content-type declares the file type and content-disposition does how to handle the file**
 
 
-As content-disposition has the filename field for every file that attacker put it in their headers.. 
+As content-disposition has the 'filename' field for every file that attacker put it in their headers.
 
-The intended data could be search using the keyword 'content-disposition' OR 'filename'. The 'filename' worked well.
+The intended data could be search using the keyword 'content-disposition' OR 'filename'.
+
 
 
 ```
-index=botsv1 sourcetype=stream:http dest="192.168.250.70" http_method=POST  "filename"
-|stats count by part_filename{}
+index=botsv1 sourcetype=stream:http dest="192.168.250.70" http_method=POST  "content_disposition"
+| stats count by part_filename{}
 ```
 
 
-<img width="1887" height="443" alt="image" src="https://github.com/user-attachments/assets/a323f2c0-22bc-4fe9-ade2-2f5b183d0785" />
+<img width="1873" height="442" alt="image" src="https://github.com/user-attachments/assets/86577bc0-efc4-4ee6-835b-76feba0dfe1f" />
 
-The executable file was found in the query response
+
+Seeing in the raw log to know the detailed information..
+
+<img width="1918" height="168" alt="image" src="https://github.com/user-attachments/assets/359c3abd-e67e-44cc-87e0-306c2a3d2d23" />
+
+
+The executable file '3791.exe' was successfully uploaded with the status response code '200' from the server.
 
 **Answer: 3791.exe**
+
+
+
