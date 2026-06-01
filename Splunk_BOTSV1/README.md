@@ -353,6 +353,11 @@ Seeing in the raw log to know the detailed information..
 <img width="1247" height="701" alt="image" src="https://github.com/user-attachments/assets/7dc9fed4-97a7-4d4e-9e38-97b05ca10e03" />
 
 
+```
+index=botsv1 sourcetype=stream:http "install_package" "agent.php"
+| table _time, src_ip, dest_ip, uri, http_user_agent status
+```
+
 
 <img width="1881" height="515" alt="image" src="https://github.com/user-attachments/assets/d82b8807-4014-4435-85ea-0f228211154c" />
 
@@ -365,5 +370,11 @@ The executable file '3791.exe' and a web shell disgused as 'agent.php' were succ
 
 **Answer: 3791.exe**
 
+
+### **Q105** 
+
+What is the MD5 hash of the executable uploaded?
+
+#### **Approach**
 
 
