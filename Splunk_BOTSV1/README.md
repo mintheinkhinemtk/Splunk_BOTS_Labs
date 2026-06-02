@@ -537,6 +537,7 @@ index=botsv1 imreallynotbatman dest="192.168.250.70" sourcetype=stream:http http
 **Answer: yellow**
 
 
+
 ### **Q116**
 
 What was the correct password for admin access to the content management system running "imreallynotbatman.com"?
@@ -583,8 +584,107 @@ As the 'uri' field showed the admin panel for joomla CMS and status code was 303
 
 
 
+### **Q117**
+
+What was the average password length used in the password brute forcing attempt?
+
+
+#### **Approach**
+
+The average password length is all of the total password lengths divided by the counts of password attempts. 
+In Splunk, avg() function can be used with stats for aggregation.
 
 
 
+```
+index=botsv1 sourcetype=stream:http http_method=POST
+| rex field=form_data "passwd=(?<userpassword>\w+)"
+| search userpassword=*
+| eval mylen=len(userpassword)
+| stats avg(mylen) as avg_len_http
+| eval avg_len_http=round(avg_len_http,0)
+```
 
 
+<img width="1871" height="536" alt="image" src="https://github.com/user-attachments/assets/ed28fc5f-cc2f-4fc3-a075-8ddc0e52aa46" />
+
+
+**Answer: 6**
+
+
+### **Q118**
+
+How many seconds elapsed between the time the brute force password scan identified the correct password and the compromised login? 
+
+
+#### **Approach**
+
+As I knew about that the IPs, '23.22.63.114' was used for brute force attack and '40.80.148.42' was used for the credential access, the time difference in seconds between these timestamps of these two events could be found. The password was 'batman'.
+
+First, I list again the results
+
+
+```
+index=botsv1 sourcetype=stream:http 
+| rex field=form_data "passwd=(?<userpassword>\w+)"
+| search userpassword=batman
+| table _time userpassword src
+```
+
+
+<img width="1867" height="522" alt="image" src="https://github.com/user-attachments/assets/f8ad9656-c633-43c4-98e2-b5913b0dae3b" />
+
+
+As expected, the two events were found.
+
+
+The transaction command in Splunk groups multiple separate log entries into one single mega event based on shared identifiers.
+
+Calculation: it automatically creates a new field called duration.
+
+duration = timestamp of last event - timestamp of first event
+
+A transaction is defined by the common value or values specified. 
+
+Thus, I aimed for the 'userpassword' field created from the rex command.
+
+
+```
+index=botsv1 sourcetype=stream:http form_data=*username*passwd*
+| rex field=form_data "passwd=(?<userpassword>\w+)"
+| search userpassword=batman
+| transaction userpassword
+| eval duration = round(duration,2)
+| table duration
+```
+
+
+<img width="1867" height="526" alt="image" src="https://github.com/user-attachments/assets/15278b00-b96b-40a9-b3b1-d97124faf041" />
+
+
+
+**Answer: 92.17**
+
+
+
+### **Q119**
+
+How many unique passwords were attempted in the brute force attempt?
+
+
+#### **Approach**
+
+dc() function in Splunk outputs unique counts of the values. As there were 413 events related to brute force attacks having one for the successful login and the others were attempts, using dc() output the unique values reducing the duplication.
+
+```
+index=botsv1 sourcetype=stream:http form_data=*username*passwd*
+| rex field=form_data "passwd=(?<userpassword>\w+)"
+| search userpassword=*
+| stats dc(userpassword)
+```
+
+
+<img width="1872" height="471" alt="image" src="https://github.com/user-attachments/assets/c2a64c13-7b95-44ee-9d3c-30db183a05f8" />
+
+
+**Answer: 412**
