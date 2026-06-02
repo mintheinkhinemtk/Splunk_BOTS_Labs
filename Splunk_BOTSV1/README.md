@@ -470,7 +470,7 @@ Sorting the time to get the first attempt gave me the answer.
 **Answer: 12345678**
 
 
-### **Q105**
+### **Q115**
 
 One of the passwords in the brute force attack is James Brodsky's favorite Coldplay song. We are looking for a six character word on this one. Which is it?
 
@@ -502,7 +502,7 @@ We can also get a list of coldplay songs from wikipedia and put them in a custom
 |inputlookup coldplay.csv
 ```
 
-<img width="1865" height="832" alt="image" src="https://github.com/user-attachments/assets/95dc77b7-0521-4bea-9c22-ba26ae16922d" />
+
 
 
 inputlookup: read as an event generating command from a file in splunk
@@ -513,12 +513,12 @@ Changing the names of songs to the lowercase.
 
 ```
 |inputlookup coldplay.csv 
-|eval songs = lower(songs)
+|eval songs = lower(Songs)
 |outputlookup coldplay.csv 
 ```
 
-<img width="1817" height="725" alt="image" src="https://github.com/user-attachments/assets/7d0aa611-1333-4890-a371-396a89e63c76" />
 
+Matching a 6 character song from the lookup csv file against the passwords extracted from the search results
 
 
 ```
@@ -534,5 +534,57 @@ index=botsv1 imreallynotbatman dest="192.168.250.70" sourcetype=stream:http http
 ```
 
 
-<img width="1822" height="663" alt="image" src="https://github.com/user-attachments/assets/b4904a7d-1775-4246-9ac6-d8cb06b45850" />
+**Answer: yellow**
+
+
+### **Q116**
+
+What was the correct password for admin access to the content management system running "imreallynotbatman.com"?
+
+
+**Approach**
+
+As the source ip that did the brute force attack was known as '23.22.63.114' from the 'Q108', it was needed to confirm the brute force attack being successful and which IP logging in with the succeeded password. As per question, the admin access was focused to find its password.
+
+
+```
+index=botsv1 sourcetype=stream:http form_data=*username*passwd* dest_ip=192.168.250.70
+| rex field=form_data "passwd=(?<userpassword>\w+)"
+| stats count values(src) by userpassword
+| sort -count
+```
+
+
+I used values() function to the 'src' fields to see the unique source IP values related to 'userpassword' field.
+
+<img width="1878" height="852" alt="image" src="https://github.com/user-attachments/assets/03a6f25c-26e6-4249-9008-4ebe77add8a8" />
+
+
+Both '40.80.148.42' and '23.22.63.114' were found as the same count number '1' for the password 'batman'. That meant that the brute force attack was successful with the password 'batman' with the IP '23.22.63.114' and the '40.80.148.42' IP was used for logging in to the joomla CMS. The 'uri' field was confirmed to know whether the successful authentication granted access the attacker to the administrator portal."
+
+
+```
+index=botsv1 sourcetype=stream:http form_data=*username*passwd* dest_ip=192.168.250.70 src=40.80.148.42
+| rex field=form_data "passwd=(?<userpassword>\w+)"
+| search userpassword=*
+| table _time uri userpassword status
+```
+
+
+<img width="1877" height="471" alt="image" src="https://github.com/user-attachments/assets/97b7db66-704d-472e-82fa-0b9d12b648c8" />
+
+
+**Note: Status code 303 meant the server successfully processed the credential payload and it was redirecting the attacker to the admin dash board page of joomla CMS."**
+
+
+As the 'uri' field showed the admin panel for joomla CMS and status code was 303 which meant success, it was confirmed that correct password for the admin account was...
+
+**Answer:batman**
+
+
+
+
+
+
+
 
