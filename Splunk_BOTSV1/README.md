@@ -485,8 +485,9 @@ index=botsv1 imreallynotbatman dest="192.168.250.70" sourcetype=stream:http http
 | rex field=form_data "passwd=(?<userpassword>\w+)"
 | search userpassword=*
 | eval passlength = len(userpassword)
-| where passlength = 6
 | table userpassword, passlength
+| where passlength = 6
+
 ```
 
 <img width="1885" height="836" alt="image" src="https://github.com/user-attachments/assets/4ca22d6f-b824-4651-868f-7499b657375e" />
@@ -512,23 +513,26 @@ Changing the names of songs to the lowercase.
 
 ```
 |inputlookup coldplay.csv 
-|eval songs = lower(Songs)
-|fields songs
+|eval songs = lower(songs)
 |outputlookup coldplay.csv 
 ```
 
-
+<img width="1817" height="725" alt="image" src="https://github.com/user-attachments/assets/7d0aa611-1333-4890-a371-396a89e63c76" />
 
 
 
 ```
-index=botsv1 imreallynotbatman dest="192.168.250.70" sourcetype=stream:http http_method=POST
-| rex field=form_data "passwd=(?<userpassword>\w+)"
-| search userpassword=*
-| eval passlength = len(userpassword)
-| table userpassword, passlength
-| where passslength = 6
-| eval password = lower(userpassword)
-| lookup coldplay.csv songs as password OUTPUTNEW songs 
+index=botsv1 imreallynotbatman dest="192.168.250.70" sourcetype=stream:http http_method=POST 
+| rex field=form_data "passwd=(?<userpassword>\w+)" 
+| search userpassword=* 
+| eval passlength = len(userpassword) 
+| where passlength = 6 
+| table userpassword, passlength 
+| eval password = lower(userpassword) 
+| lookup coldplay.csv songs as password OUTPUTNEW songs  
 | search songs=* | table songs
 ```
+
+
+<img width="1822" height="663" alt="image" src="https://github.com/user-attachments/assets/b4904a7d-1775-4246-9ac6-d8cb06b45850" />
+
