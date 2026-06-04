@@ -87,6 +87,8 @@ index=botsv1 imreallynotbatman.com sourcetype="stream:http" src_ip="40.80.148.42
 
 **Answer: Acunetix**
 
+
+
 ### **Q103**
 
 What content management system is imreallynotbatman.com likely using?
@@ -114,7 +116,9 @@ index=botsv1 src =40.80.148.42 imreallynotbatman (dest="192.168.250.70") sourcet
 <img width="1152" height="467" alt="image" src="https://github.com/user-attachments/assets/2081817b-0570-40a8-a734-c6b06e02930a" />
 
 
+
 **Answer: joomla**
+
 
 
 ### **Q104**
@@ -371,6 +375,7 @@ The executable file '3791.exe' and a web shell disgused as 'agent.php' were succ
 **Answer: 3791.exe**
 
 
+
 ### **Q110** 
 
 What is the MD5 hash of the executable uploaded?
@@ -397,6 +402,7 @@ index=botsv1 sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" Ev
 **Answer: AAE3F5A29935E6ABCC2C2754D12A9AF0**
 
 
+
 ### **Q111**
 
 GCPD reported that common TTPs (Tactics, Techniques, Procedures) for the Po1s0n1vy APT group, if initial compromise fails, is to send a spear phishing email with custom malware attached to their intended target. This malware is usually connected to Po1s0n1vys initial attack infrastructure. Using research techniques, provide the SHA256 hash of this malware.
@@ -418,6 +424,7 @@ As the IPs that attacked the web server are '40.80.148.42' and '23.22.63.114', I
 
 
 **Answer: 9709473ab351387aab9e816eff3910b9f28a7a70202e250ed46dba8f820f34a8**
+
 
 
 ### **Q112**
@@ -444,6 +451,7 @@ After that, I tried to decode the hexcode to strings using cyberchef, The Cyber 
 **Answer: 53 74 65 76 65 20 42 72 61 6e 74 27 73 20 42 65 61 72 64 20 69 73 20 61 20 70 6f 77 65 72 66 75 6c 20 74 68 69 6e 67 2e 20 46 69 6e 64 20 74 68 69 73 20 6d 65 73 73 61 67 65 20 61 6e 64 20 61 73 6b 20 68 69 6d 20 74 6f 20 62 75 79 20 79 6f 75 20 61 20 62 65 65 72 21 21 21**
 
 
+
 **There is no Q113**
 
 ### **Q114**
@@ -468,6 +476,7 @@ Sorting the time to get the first attempt gave me the answer.
 
 
 **Answer: 12345678**
+
 
 
 ### **Q115**
@@ -503,6 +512,8 @@ We can also get a list of coldplay songs from wikipedia and put them in a custom
 ```
 
 
+<img width="1898" height="843" alt="image" src="https://github.com/user-attachments/assets/3e790248-e75e-434d-90d3-09906eb0ede9" />
+
 
 
 inputlookup: read as an event generating command from a file in splunk
@@ -513,9 +524,13 @@ Changing the names of songs to the lowercase.
 
 ```
 |inputlookup coldplay.csv 
-|eval songs = lower(Songs)
+|eval song = lower(song)
 |outputlookup coldplay.csv 
 ```
+
+
+<img width="1853" height="827" alt="image" src="https://github.com/user-attachments/assets/ea1d2135-c384-450b-a38b-3ce5e530fb5e" />
+
 
 
 Matching a 6 character song from the lookup csv file against the passwords extracted from the search results
@@ -529,9 +544,12 @@ index=botsv1 imreallynotbatman dest="192.168.250.70" sourcetype=stream:http http
 | where passlength = 6 
 | table userpassword, passlength 
 | eval password = lower(userpassword) 
-| lookup coldplay.csv songs as password OUTPUTNEW songs  
-| search songs=* | table songs
+| lookup coldplay.csv song as password OUTPUTNEW song  
+| search song=* | table song
 ```
+
+<img width="1875" height="631" alt="image" src="https://github.com/user-attachments/assets/bb971fe5-e627-471d-9295-5884802f5d3d" />
+
 
 
 **Answer: yellow**
