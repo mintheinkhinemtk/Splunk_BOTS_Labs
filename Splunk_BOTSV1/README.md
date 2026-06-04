@@ -706,3 +706,46 @@ index=botsv1 sourcetype=stream:http form_data=*username*passwd*
 
 
 **Answer: 412**
+
+
+ ## **Summary**
+
+
+#### **Mapping with the MITRE framework**
+
+
+**1. RECONNAISSANCE**
+
+
+The attacker firstly did the vulnerability scanning to the web server, imreallynotbatman.com, with '40.80.148.42' gathering the information of CMS as joomla using Acuentix Web Vulnerability Scanner.
+
+
+
+**2. RESOURCE DEVELOPMENT**
+
+
+The attacker tied '23.22.63.114' IP to their domains that are pre-staged to attack Wayne Enterprises and  used dynamic dns services like jumpingcrab.com resolving to their IP, '23.22.63.114'. They also prepared their IP, '40.80.148.42', for attacking Wayne Enterprises.
+
+
+
+**3. INITIAL ACCESS**
+
+
+The attacker attempted brute force attack to the web server using '23.22.63.114' IP and from this, they got the admin password for the joomla CMS. 
+
+
+They got the access to the CMS with the password using '40.80.148.42' IP.
+
+
+
+**4. EXECUTION, PERSISTENCE and 'COMMAND AND CONTROL'**
+
+
+They uploaded the web shell, 'agent.php', successfully and got the web shell access as a persistence mechanism. From this, attacker executed commands using web shell and dropped the malware, 3791.exe, using that shell access and got the reverse shell to their C2 with the help of malware to gain persistence and C2 tactics.
+
+
+
+**5. IMPACT** 
+
+The Wayne Enterprise had the confidential, integrity and reputational impact from this incident. 
+The attacker got access to the web server, forced the system to write, save, and execute arbitrary code via the persistence shells and do the web defacement impacting confidential, integrity and reputational ones.
