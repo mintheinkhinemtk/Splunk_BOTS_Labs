@@ -1,4 +1,4 @@
-# Splunk BOTSV1 CTF Walkthrough
+# **Splunk BOTSV1 CTF Walkthrough**
 
 **Platform:** Splunk BOTS Version 1 (2015)  
 
@@ -6,7 +6,7 @@ You can sign up for an account and take the challenge at https://bots.splunk.com
 
 **This walkthrough documents the analytical reasoning for each stage**
 
-## Scenario 1 - Web Defacement
+## **Scenario 1 - Web Defacement**
 
 ### **Q101**
 
@@ -749,3 +749,131 @@ They uploaded the web shell, 'agent.php', successfully and got the web shell acc
 
 The Wayne Enterprise had the confidential, integrity and reputational impact from this incident. 
 The attacker got access to the web server, forced the system to write, save, and execute arbitrary code via the persistence shells and do the web defacement impacting confidential, integrity and reputational ones.
+
+
+
+## **Scenario 2 - Ransomware**
+
+### **Q200**
+
+What was the most likely IPv4 address of we8105desk on 24AUG2016?
+
+
+#### **Approach**
+
+DNS logs are related to find them as well in the local environment to resolve workstation names altogether with the organization domain to IP Addresses. 
+
+As explained in the scenario 1, DNS transactions have two main parts, domain name asked for (name{} or query{}) and the IP Address answer for that domain name.
+
+Thus, I tried to investigate in DNS Logs.
+
+
+```
+index=botsv1 "we8105desk" sourcetype="stream:dns"  "name{}"="we8105desk.waynecorpinc.local" 
+| stats  count by answer 
+```
+
+
+<img width="1880" height="421" alt="image" src="https://github.com/user-attachments/assets/1f392846-a866-469d-8b03-61603cd9171b" />
+
+
+**Answer: 192.168.250.100**
+
+
+### **Q201**
+
+Amongst the Suricata signatures that detected the Cerber malware, which one alerted the fewest number of times? Submit ONLY the signature ID value as the answer.
+
+
+#### **Approach**
+
+'Suricata' and 'Cerber' were mentioned in the question and thus, I investigated for signature names having 'Cerber' related to the IP of we8105desk in suricata logs.
+
+
+```
+index=botsv1 sourcetype=suricata 192.168.250.100 signature=*Cerber*
+| stats count by signature alert.signature_id
+```
+
+
+<img width="1883" height="525" alt="image" src="https://github.com/user-attachments/assets/0a01b9c7-f897-4964-ae81-2a5bcaea8490" />
+
+
+Signature ID '2816763' with the name having 'Cerber' having the lowest count as '1' could be seen.
+
+
+**Answer: 2816763**
+
+
+### **Q202**
+
+What fully qualified domain name (FQDN) does the Cerber ransomware attempt to direct the user to at the end of its encryption phase?
+
+
+#### **Approach**
+
+DNS Logs were investigated in relation to the victim source IP, '192.168.250.100' as the question asked 'FQDN'. 
+
+Victim's IP was the source because the ransomware attempted to direct him to its domain. The DNS transaction must be from the victim querying for the ransomware's domain. 
+
+I filtered the query type to 'A', Forward DNS, as it maps a domain name to the related IPv4 Address.
+
+Forward DNS — domain → IP (A/AAAA records). 
+
+I wanted to see the forward transaction as the victim exactly did that.
+
+The timeline was really important to know the incident happening time to filter out the unnecessary events to get the result.
+
+Because of this, I used the query in 'Q201' altogether with the timeline to briefly know the incident time. Before this, I tried to get the brief timeline of the 'Cerber' ransomware alerts in the suricata IDS.
+
+
+```
+index=botsv1 sourcetype=suricata 192.168.250.100 signature=*Cerber*
+| stats count by _time signature alert.signature_id
+```
+
+<img width="1883" height="602" alt="image" src="https://github.com/user-attachments/assets/360830e4-beb7-4c73-8116-a1ce438a9f64" />
+
+The timeline were from `16:49:24 to 17:15:12` on 24th Aug, 2016.
+
+
+I tried to put the timeline as "since 24th Aug, 2016 at `16:49:00`" into the dns query searching. 
+
+
+```
+index=botsv1 sourcetype="stream:dns" src=192.168.250.100  record_type=A 
+| stats  count by _time query{} 
+```
+
+<img width="1872" height="846" alt="image" src="https://github.com/user-attachments/assets/7830ba63-c438-4432-9468-d75101166353" />
+
+
+The queries for the legitimate domains and protocols, isatap, wpad, microsoft.com, waynecorpinc.local, bing.com, windows.com and msftncsi.com were filtered out again. 
+
+
+**Note: ISATAP stands for Intra-Site Automatic Tunnel Addressing Protocol. It is a network transition technology used to transmit IPv6 packets over an existing IPv4 network infrastructure.**
+
+
+**Note: WPAD stands for Web Proxy Auto-Discovery Protocol. It is a network protocol used by web browsers and operating systems to automatically detect and apply proxy server settings without manual configuration.**
+
+
+**Note: msftncsi refers to the domains www.msftncsi.com and dns.msftncsi.com, which are operated by Microsoft for the Network Connectivity Status Indicator (NCSI) feature in Windows. It is the system that Windows uses to verify whether you have an active internet connection or not.**
+
+```
+index=botsv1 sourcetype=stream:DNS src=192.168.250.100 record_type=A NOT (query{}=*.microsoft.com OR query{}=*.waynecorpinc.local OR query{}=*.bing.com OR query{}=isatap OR query{}=wpad OR query{}=*.windows.com OR query{}=*.msftncsi.com) 
+| table _time query{} src dest
+| sort +_time
+```
+
+
+<img width="1877" height="577" alt="image" src="https://github.com/user-attachments/assets/5ea3bca8-b3f0-4f9f-9641-20f43331ed2a" />
+
+
+Found the domain being 'cerberhhyed5frqa.xmfir0.win'
+
+
+**Answer: 	cerberhhyed5frqa.xmfir0.win**
+
+
+### **Q203**
+
