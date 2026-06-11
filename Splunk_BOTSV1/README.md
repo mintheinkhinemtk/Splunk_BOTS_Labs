@@ -908,7 +908,7 @@ Registrar is 'OVH, SAS OVH sas' and when it was searched in google, it showed as
 
 <img width="677" height="381" alt="image" src="https://github.com/user-attachments/assets/1b35027d-311b-4ba4-8154-8df646d6f347" />
 
-Because of this, I could conclude that the attacker used the cloud computing service to mask his identity and that it is located in France. Another question was occurred in my mind as 'why would the victim browse normally to the France domain though even there were security policies in his coporation'.
+Because of this, I could conclude that the attacker used the cloud computing service to mask his identity and that it is located in France. Another question occurred in my mind as 'why would the victim browse normally to the France domain though even there were security policies in his coporation'.
 
 Concluding this...
 
@@ -922,3 +922,37 @@ During the initial Cerber infection a VB script is run. The entire script from t
 
 #### **Approach **
 
+Detailed information related to the executable and script execution in Windows can be found in sysmon logs. Sysmon gathers any command line event if it's configured well.
+
+Process creation means that a process is created from its parent when any executable, file or script is run via the command line. The system will run command line processes automatically in the background when needed and Sysmon will log those events as well. For process creation, Sysmon logs these events under EventCode '1'.
+
+
+Because of this, I decided to do the investigation in the Sysmon logs concerning Sysmon EventCode '1'.
+
+
+As the description in the lab mentioned 'Miranda_Tate_unveiled.dotm' from the USB drive that the attacker inserted into the victim's machine, the VB script would have spawned from that template file run with WINWORD.exe.
+
+
+```
+index=botsv1 we8105desk sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" "Miranda_Tate_unveiled.dotm" EventCode=1
+| table host ParentCommandLine CommandLine ParentImage Image
+```
+
+<img width="1893" height="660" alt="image" src="https://github.com/user-attachments/assets/219981fd-0c92-40e7-843e-fee23710ab08" />
+
+I could find the vbs script name as '%APPDATA%\%RANDOM%.vbs' in the 'CommandLine' field.
+
+
+
+```
+index=botsv1 we8105desk sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" "Miranda_Tate_unveiled.dotm" EventCode=1
+| where match(CommandLine, "RANDOM%\.vbs")
+| eval length=len(CommandLine)
+| table _time length CommandLine
+```
+
+<img width="1882" height="842" alt="image" src="https://github.com/user-attachments/assets/d9614b3b-8938-4a4f-b337-d12e733ae839" />
+
+
+
+**Answer: 4490**
