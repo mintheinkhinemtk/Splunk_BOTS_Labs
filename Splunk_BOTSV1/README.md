@@ -877,3 +877,48 @@ Found the domain being 'cerberhhyed5frqa.xmfir0.win'
 
 ### **Q203**
 
+What was the first suspicious domain visited by we8105desk on 24AUG2016?
+
+
+#### **Approach**
+
+Timeline was included the question and thus I investigated in the dns log source as usual according to the timeline provided as since 24-AUG-2016 `00:00:00` 
+
+
+```
+index=botsv1 sourcetype=stream:DNS src=192.168.250.100 record_type=A NOT (query{}=*.microsoft.com OR query{}=*.waynecorpinc.local OR query{}=*.bing.com OR query{}=isatap OR query{}=wpad OR query{}=*.windows.com OR query{}=*.msftncsi.com) 
+| table _time query{} src dest
+| sort +_time
+```
+
+
+<img width="1872" height="667" alt="image" src="https://github.com/user-attachments/assets/245676c3-21e4-4af5-a3e6-19470547984c" />
+
+
+'solidaritedeproximite.org' was founded at 16:48:12.267 on 2016-08-24.
+When it was searched in google...
+
+<img width="1137" height="398" alt="image" src="https://github.com/user-attachments/assets/871627f4-7d9d-4417-9af5-8bcf884f357e" />
+
+Searching in 'whoisrecord'
+
+<img width="1135" height="642" alt="image" src="https://github.com/user-attachments/assets/dc83a58c-4d33-430a-8679-cff1de02e726" />
+
+Registrar is 'OVH, SAS OVH sas' and when it was searched in google, it showed as cloud computing in France.
+
+<img width="677" height="381" alt="image" src="https://github.com/user-attachments/assets/1b35027d-311b-4ba4-8154-8df646d6f347" />
+
+Because of this, I could conclude that the attacker used the cloud computing service to mask his identity and that it is located in France. Another question was occurred in my mind as 'why would the victim browse normally to the France domain though even there were security policies in his coporation'.
+
+Concluding this...
+
+**Answer: solidaritedeproximite.org**
+
+
+### **Q204**
+
+During the initial Cerber infection a VB script is run. The entire script from this execution, pre-pended by the name of the launching .exe, can be found in a field in Splunk. What is the length of the value of this field?
+
+
+#### **Approach **
+
