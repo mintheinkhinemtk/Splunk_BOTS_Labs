@@ -956,3 +956,41 @@ index=botsv1 we8105desk sourcetype="xmlwineventlog:microsoft-windows-sysmon/oper
 
 
 **Answer: 4490**
+
+
+### **Q105**
+
+What is the name of the USB key inserted by Bob Smith?
+
+
+#### **Approach**
+
+The information related to USB keys can be investigated in Windows Registry Logs.
+
+There is a USBSTOR, a key in the Windows Registry, containing information about USB storage devices that are connected to a computer system and locating at 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\USBSTOR'.
+
+USBSTOR refers to the Windows Mass Storage Class Driver (usbstor.sys).
+
+
+FriendlyName is a registry value under USBSTOR that gives you the human-readable name of the USB device that help me find the name of the USB key inserted.
+
+It's stored at:
+'HKLM\SYSTEM\CurrentControlSet\Enum\USBSTOR\<device_type>\<serial>\FriendlyName'
+
+I investigated using these kinds of specific information in Windows Registry Logs.
+
+
+
+```
+index=botsv1 sourcetype="winregistry" USBSTOR friendlyname host="we8105desk"
+| fields *
+| table host registry_path registry_key_name registry_type registry_value_name registry_value_data
+```
+
+
+<img width="1876" height="431" alt="image" src="https://github.com/user-attachments/assets/5da7d383-7942-42d4-8b8d-f111f48c4b27" />
+
+
+Found the name as 'MIRANDA_PRI'
+
+
