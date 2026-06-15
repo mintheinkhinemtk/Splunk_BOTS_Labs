@@ -958,7 +958,7 @@ index=botsv1 we8105desk sourcetype="xmlwineventlog:microsoft-windows-sysmon/oper
 **Answer: 4490**
 
 
-### **Q105**
+### **Q205**
 
 What is the name of the USB key inserted by Bob Smith?
 
@@ -992,5 +992,63 @@ index=botsv1 sourcetype="winregistry" USBSTOR friendlyname host="we8105desk"
 
 
 Found the name as 'MIRANDA_PRI'
+
+
+
+### **Q206**
+
+Bob Smith's workstation (we8105desk) was connected to a file server during the ransomware outbreak. What is the IPv4 address of the file server?
+
+
+#### **Approach**
+
+This information could be investigated in stream:smb as the environment used Windows System. 
+
+
+```
+index=botsv1 we8105desk sourcetype="stream:smb" src_ip=192.168.250.100
+|stats count by src_ip src_port dest_ip dest_port
+```
+
+
+<img width="1878" height="412" alt="image" src="https://github.com/user-attachments/assets/78e2a703-bd30-4912-8c7a-5f1009fbe5d9" />
+
+
+As 192.168.250.100 was connecting to 192.168.250.20 and its smb port, 445, with its emphemeral source port, it could be the file server.
+
+I investigated this information in the Windows Sysmon Logs in Splunk to confirm the answer. SMB uses port 445 and Sysmon Event ID for network connections is 3.
+
+
+```
+index=botsv1 we8105desk sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" EventCode=3 SourceIp="192.168.250.100" DestinationPort=445
+| table SourceIp SourcePort DestinationIp dest DestinationPort
+```
+
+
+<img width="1882" height="767" alt="image" src="https://github.com/user-attachments/assets/bdf28d06-22dd-440f-a71f-71b17a329965" />
+
+
+I got the server name: we9041srv
+
+
+The data related to fileshare could be found in Windows Registry Logs.
+
+
+```
+index=botsv1 sourcetype=WinRegistry host=we8105desk fileshare
+| stats count by host registry_type registry_key_name registry_path
+```
+
+<img width="1875" height="472" alt="image" src="https://github.com/user-attachments/assets/33e3e8d6-3100-403e-beb0-cbbdfb20f361" />
+
+
+<img width="1875" height="466" alt="image" src="https://github.com/user-attachments/assets/a0ca11c6-4fd2-4d3c-96c0-c203e0825f25" />
+
+
+Registry path had the IP '192.168.250.20' in the registry path for the file shares from Bob Smith's machine and it showed that the server name was we9041srv. I could conclude the IP as...
+
+
+Answer: 192.168.250.20 
+
 
 
