@@ -814,7 +814,7 @@ What fully qualified domain name (FQDN) does the Cerber ransomware attempt to di
 
 DNS Logs were investigated in relation to the victim source IP, '192.168.250.100' as the question asked 'FQDN'. 
 
-Victim's IP was the source because the ransomware attempted to direct him to its domain. The DNS transaction must be from the victim querying for the ransomware's domain. 
+Victim's IP was the source since the ransomware attempted to direct him to its domain. The DNS transaction must be from the victim querying for the ransomware's domain. 
 
 I filtered the query type to 'A', Forward DNS, as it maps a domain name to the related IPv4 Address.
 
@@ -860,7 +860,7 @@ The queries for the legitimate domains and protocols, isatap, wpad, microsoft.co
 **Note: msftncsi refers to the domains www.msftncsi.com and dns.msftncsi.com, which are operated by Microsoft for the Network Connectivity Status Indicator (NCSI) feature in Windows. It is the system that Windows uses to verify whether you have an active internet connection or not.**
 
 ```
-index=botsv1 sourcetype=stream:DNS src=192.168.250.100 record_type=A NOT (query{}=*.microsoft.com OR query{}=*.waynecorpinc.local OR query{}=*.bing.com OR query{}=isatap OR query{}=wpad OR query{}=*.windows.com OR query{}=*.msftncsi.com) 
+index=botsv1 sourcetype=stream:DNS src=192.168.250.100 record_type=A NOT(query{}=*.microsoft.com OR query{}=*.waynecorpinc.local OR query{}=*.bing.com OR query{}=isatap OR query{}=wpad OR query{}=*.windows.com OR query{}=*.msftncsi.com) 
 | table _time query{} src dest
 | sort +_time
 ```
@@ -895,7 +895,7 @@ index=botsv1 sourcetype=stream:DNS src=192.168.250.100 record_type=A NOT (query{
 <img width="1872" height="667" alt="image" src="https://github.com/user-attachments/assets/245676c3-21e4-4af5-a3e6-19470547984c" />
 
 
-'solidaritedeproximite.org' was founded at 16:48:12.267 on 2016-08-24.
+'solidaritedeproximite.org' was founded at `16:48:12` on 2016-08-24.
 When it was searched in google...
 
 <img width="1137" height="398" alt="image" src="https://github.com/user-attachments/assets/871627f4-7d9d-4417-9af5-8bcf884f357e" />
@@ -913,6 +913,7 @@ Because of this, I could conclude that the attacker used the cloud computing ser
 Concluding this...
 
 **Answer: solidaritedeproximite.org**
+
 
 
 ### **Q204**
@@ -1113,3 +1114,141 @@ index=botsv1 sourcetype=XmlWinEventLog:Microsoft-Windows-Sysmon/Operational (Pro
 As Wscript.exe was in the CommandLine and its ParentId was shown, the Parent process was Wscritp.exe and its Id being '3968'.
 
 **Answer: 3968**
+
+
+### **Q209**
+
+The Cerber ransomware encrypts files located in Bob Smith's Windows profile. How many .txt files does it encrypt?
+
+
+#### **Approach**
+
+The name of the ransomware execution file given by the attacker still had not found and since, I tried to look for its name.
+
+Due to the file 'Miranda_Tate_unveiled.dotm' from the description, I investigated using that file name to look for the ransomware that could be downloaded from its C2 from running the vb script spawned from the dotm file.
+
+
+```
+index=botsv1 we8105desk sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" "Miranda_Tate_unveiled.dotm" 
+| table _time host Image EventID
+```
+
+
+<img width="1882" height="440" alt="image" src="https://github.com/user-attachments/assets/c0ad1c72-ce3c-4103-8c95-a97fd73a2930" />
+
+
+
+I found out that the EventID and an executable file as 2 that records when a process explicitly modifies a file’s creation timestamp, and 'osk.exe' at the time: 2016-08-24 `17:04:32`.
+
+Including CommandLine Events..
+
+```
+index=botsv1 we8105desk sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" "Miranda_Tate_unveiled.dotm" 
+| table _time host Image ParentProcessId ParentCommandLine ProcessId CommandLine
+| sort -_time
+```
+
+
+<img width="1895" height="855" alt="image" src="https://github.com/user-attachments/assets/fa1157a7-9429-425d-948e-57f364704b6e" />
+
+
+The time of 'osk.exe' was after 'Miranda_Tate_unveiled.dotm' being run.
+
+Searched again more explicitly using this information.
+
+
+```
+index=botsv1 we8105desk sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" "Miranda_Tate_unveiled.dotm" Image=*osk.exe
+| table _time host Image TargetFilename
+```
+
+<img width="1877" height="362" alt="image" src="https://github.com/user-attachments/assets/31a9f4c4-dd4a-4058-9f5f-66531aa3af49" />
+
+Owning to osk.exe is not a legitimate name and created after the malicious dotm file was run, I could conclude that osk.exe was the ransomware file and it encrypted the dotm file as well from the result of the EventID 2.
+
+
+Finally, finding all the .txt files encrypted under Both Smith's Windows profile was done.
+
+
+```
+index=botsv1 sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational"  host=we8105desk *.txt   Image="C:\\Users\\bob.smith.WAYNECORPINC\\AppData\\Roaming\\{35ACA89F-933F-6A5D-2776-A3589FB99832}\\osk.exe" TargetFilename="C:\\Users\\bob.smith.WAYNECORPINC\\Desktop\*.txt"| fields *  | stats values(TargetFilename)
+```
+
+
+<img width="1878" height="846" alt="image" src="https://github.com/user-attachments/assets/b8aa0938-81a2-4c9d-be91-0457ec536712" />
+
+
+
+** Answer: 406**
+
+
+### **Q210**
+
+The malware downloads a file that contains the Cerber ransomware cryptor code. What is the name of that file?
+
+
+
+#### **Approach**
+
+From seeing the question, it had been shown that the timeline was before the end of encryption phase and thus, I tried to investigate the answer related to "solidaritedeproximite.org" domain that was the first visited by the victim. 
+
+The malware would have downloaded the ransomware cryptor code from that domain as there were only two suspicious domain found, "solidaritedeproximite.org", the first domain the malware visited and "cerberhhyed5frqa.xmfir0.win", the one it visited at the end of encryption phase.
+
+
+```
+index=botsv1 sourcetype=stream:DNS src=192.168.250.100 "solidaritedeproximite.org"
+| table _time  src dest query{} name{} answer
+| sort +_time
+```
+
+
+<img width="1870" height="488" alt="image" src="https://github.com/user-attachments/assets/3f9b2648-b47b-49ea-991d-d83622d85a70" />
+
+
+I found its IP as '37.37.187.37.150'.
+
+
+I tried searching in Sysmon log to find any other information related to the file that contains the Cerber ransomware cryptor code as it was downloaded from that domain.
+
+
+```
+index=botsv1 sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" host=we8105desk EventCode=3 SourceHostname="we8105desk.waynecorpinc.local"  37.187.37.150  dest_ip="37.187.37.150" | stats  values(SourceHostname) values(DestinationHostname) values(Image)
+```
+
+
+<img width="1871" height="362" alt="image" src="https://github.com/user-attachments/assets/f15be0e5-cf9e-424c-a8b8-8efa6b1c33f9" />
+
+
+SourceHostname,we8105desk.waynecorpinc.local, connected to the	DestinationHostname, dedie73.olfsoft.net having the same IP '37.187.37.150' using 'C:\Windows\SysWOW64\wscript.exe'.
+
+**Note: Domain Generation Algorithm was clearly used**
+
+Finally, the data was investigated in 'stream:http' as it would show the downloaded file.
+
+
+```
+index=botsv1 src=192.168.250.100  sourcetype="stream:http" dest="37.187.37.150"   | stats  count by http_method url status
+```
+
+<img width="1867" height="332" alt="image" src="https://github.com/user-attachments/assets/3c79426e-3189-4253-ade0-cbcf2e36deb6" />
+
+Finally found the only one file downloaded.
+
+Though status was '404', the file 'mhtr.jpg'was downloaded successfully. Attacker used the status code of '404' to hide the successful behaviour of the download. 
+
+
+**Answer: mhtr.jpg**
+
+
+
+### **Q211**
+
+Now that you know the name of the ransomware's encryptor file, what obfuscation technique does it likely use?
+
+
+#### **Approach**
+
+As the ransomware's encryptor file that had the Cerber ransomware cryptor code was in .jpg extension, the attacker buried the code in the jpg file. This technique is known as 'steganography'.
+
+
+**Answer: steganography**
