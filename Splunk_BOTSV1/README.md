@@ -95,7 +95,7 @@ What content management system is imreallynotbatman.com likely using?
 
 #### **Approach**
 
-To know the CMS that the domain was using, it's important to know that the vulnerability scanner could have found the CMS name with the help of http status code '200', 'success', as it would probe for the CMS directories and the attacker could confirm this by seeing the status code.
+To know the CMS that the domain was using, it was needed to know that the vulnerability scanner could have found the CMS name with the help of http status code '200', 'success', as it would probe for the CMS directories and the attacker could confirm this by seeing the status code.
 
 Because of this, the web server's IP was needed and after doing log analysis, the web server's IP was identified as '192.168.250.70'.
 
@@ -335,7 +335,7 @@ As the file was uploaded, the content-type must be 'multipart/form-data' and the
 
 As content-disposition has the 'filename' field for every file that attacker put it in their headers.
 
-The intended data could be search using the keyword 'content-disposition' OR 'filename'.
+The intended data could be searched using the keyword 'content-disposition' OR 'filename'.
 
 
 
@@ -410,7 +410,7 @@ GCPD reported that common TTPs (Tactics, Techniques, Procedures) for the Po1s0n1
 
 #### **Approach**
 
-As the IPs that attacked the web server are '40.80.148.42' and '23.22.63.114', I tried to search them in VirusTotal first and found the file with a name containing 'screensaver' that showed it being used for spear phishing attacks.
+As the IPs that attacked the web server are '40.80.148.42' and '23.22.63.114', I tried to search for them in VirusTotal first and found the file with a name containing 'screensaver' that showed it being used for spear phishing attacks.
 
 
 <img width="1581" height="845" alt="image" src="https://github.com/user-attachments/assets/f4abcf27-93bb-4a6f-8b98-4e9de86d99aa" />
@@ -418,7 +418,7 @@ As the IPs that attacked the web server are '40.80.148.42' and '23.22.63.114', I
 
  **Filename: 'MirandaTateScreensaver.scr.exe'**
 
- I found search the SHA256 hash of the file in 'hybrid-anaysis.com'.
+ I found the SHA256 hash of the file in 'hybrid-analysis.com'.
 
  <img width="1292" height="646" alt="image" src="https://github.com/user-attachments/assets/b4bc1637-600b-4f03-9eba-e28bcf52c273" />
 
@@ -563,7 +563,7 @@ What was the correct password for admin access to the content management system 
 
 **Approach**
 
-As the source ip that did the brute force attack was known as '23.22.63.114' from the 'Q108', it was needed to confirm the brute force attack being successful and which IP logging in with the succeeded password. As per question, the admin access was focused to find its password.
+As the source ip that did the brute force attack was known as '23.22.63.114' from the 'Q108', it was needed to confirm the brute force attack being successful and which IP logging in with the succeeded password. As per the question, the admin access was focused to find its password.
 
 
 ```
@@ -637,7 +637,7 @@ How many seconds elapsed between the time the brute force password scan identifi
 
 #### **Approach**
 
-As I knew about that the IPs, '23.22.63.114' was used for brute force attack and '40.80.148.42' was used for the credential access, the time difference in seconds between these timestamps of these two events could be found. The password was 'batman'.
+As I knew that the IPs, '23.22.63.114' was used for brute force attack and '40.80.148.42' was used for the credential access, the time difference in seconds between these timestamps of these two events could be found. The password was 'batman'.
 
 First, I list again the results
 
@@ -741,7 +741,7 @@ They got the access to the CMS with the password using '40.80.148.42' IP.
 **4. EXECUTION, PERSISTENCE and 'COMMAND AND CONTROL'**
 
 
-They uploaded the web shell, 'agent.php', successfully and got the web shell access as a persistence mechanism. From this, attacker executed commands using web shell and dropped the malware, 3791.exe, using that shell access and got the reverse shell to their C2 with the help of malware to gain persistence and C2 tactics.
+They uploaded the web shell, 'agent.php', successfully and got the web shell access as a persistence mechanism. From this, attacker executed commands using the web shell and dropped the malware, 3791.exe, using that shell access and got the reverse shell to their C2 with the help of malware to gain persistence and C2 tactics.
 
 
 
