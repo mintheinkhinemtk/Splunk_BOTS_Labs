@@ -1164,8 +1164,9 @@ index=botsv1 we8105desk sourcetype="xmlwineventlog:microsoft-windows-sysmon/oper
 
 <img width="1877" height="362" alt="image" src="https://github.com/user-attachments/assets/31a9f4c4-dd4a-4058-9f5f-66531aa3af49" />
 
-Owning to osk.exe is not a legitimate name and created after the malicious dotm file was run, I could conclude that osk.exe was the ransomware file and it encrypted the dotm file as well from the result of the EventID 2.
+Owning to osk.exe being a legitimate name but created under the path 'C:\\Users\\bob.smith.WAYNECORPINC\\AppData\\Roaming\\{35ACA89F-933F-6A5D-2776-A3589FB99832}\\osk.exe' after the malicious dotm file was run, I could conclude that osk.exe was the ransomware file and it encrypted the dotm file as well from the result of the EventID 2.
 
+**Note: The actual file path is 'C:\Windows\System32\osk.exe' and the legitimate one is the exe file for the Windows On-Screen Keyboard**
 
 Finally, finding all the .txt files encrypted under Both Smith's Windows profile was done.
 
@@ -1191,6 +1192,7 @@ The malware downloads a file that contains the Cerber ransomware cryptor code. W
 #### **Approach**
 
 From seeing the question, it had been shown that the timeline was before the end of encryption phase and thus, I tried to investigate the answer related to "solidaritedeproximite.org" domain that was the first visited by the victim. 
+
 
 The malware would have downloaded the ransomware cryptor code from that domain as there were only two suspicious domain found, "solidaritedeproximite.org", the first domain the malware visited and "cerberhhyed5frqa.xmfir0.win", the one it visited at the end of encryption phase.
 
@@ -1252,3 +1254,57 @@ As the ransomware's encryptor file that had the Cerber ransomware cryptor code w
 
 
 **Answer: steganography**
+
+
+## **Summary**
+
+
+#### **Mapping with the MITRE framework**
+
+Tactic	Technique	Evidence
+
+**1. Initial Access**
+
+Replication Through Removable Media	USB key - MIRANDA_PRI was inserted with malicious .dotm
+
+
+**2. Execution**
+
+User Execution -	Bob opened Miranda_Tate_unveiled.dotm in WINWORD.EXE
+
+Command and Scripting Interpreter -	Obfuscated VBScript from the dotm file was executed via cmd.exe and PowerShell	Script spawned 
+
+
+**3. Stealth**
+
+Obfuscated Files or Information -	VBScript obfuscated with variable junk and encoding
+
+Masquerading- Match Legitimate Name	Malware named osk.exe (on-screen keyboard) and fake 404 status	HTTP response that returned 404 but file downloaded successfully
+
+Timestomp:	File creation time changed to 1602-05-15
+
+
+**4. Discovery**
+
+File and Directory Discovery - The ransomware	scanned C:\Users\bob.smith.* and the fileshare on the file server for files to encrypt
+
+
+**5. Collection**
+
+Data from Local System - The ransomware	Accessed files on remote file share
+
+
+**6. Command and Control**
+
+Application Layer Protocol -	C2 via HTTP to 37.187.37.150
+
+Dynamic Resolution - Domain Generation Algorithm	for the IP '37.187.37.150'.
+
+Data Obfuscation - Steganography	mhtr.jpg contained cryptor code
+
+Ingress Tool Transfer	- Downloaded mhtr.jpg (ransomware cryptor)
+
+
+**7. Impact**
+
+Data Encrypted for Impact	- 257 PDFs encrypted on file server and 406 .txt files on Bob's profile
