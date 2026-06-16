@@ -367,7 +367,7 @@ index=botsv1 sourcetype=stream:http "install_package" "agent.php"
 
 
 
-The executable file '3791.exe' and a web shell disgused as 'agent.php' were successfully uploaded with the status response code '200' from the Microsoft web server and the attacker's IP that uploaded the files was shown as '40.80.148.42' as well. 
+The executable file '3791.exe' and a web shell disguised as 'agent.php' were successfully uploaded with the status response code '200' from the Microsoft web server and the attacker's IP that uploaded the files was shown as '40.80.148.42' as well. 
 
 **Note: Status code 303 for the file 'agent.php' meant the post request was successful and the server was now redirecting the attacker to the dash board page of joomla CMS to see the results."**
 
@@ -1015,7 +1015,7 @@ index=botsv1 we8105desk sourcetype="stream:smb" src_ip=192.168.250.100
 <img width="1878" height="412" alt="image" src="https://github.com/user-attachments/assets/78e2a703-bd30-4912-8c7a-5f1009fbe5d9" />
 
 
-As 192.168.250.100 was connecting to 192.168.250.20 and its smb port, 445, with its emphemeral source port, it could be the file server.
+As 192.168.250.100 was connecting to 192.168.250.20 and its smb port, 445, with its ephemeral source port, it could be the file server.
 
 I investigated this information in the Windows Sysmon Logs in Splunk to confirm the answer. SMB uses port 445 and Sysmon Event ID for network connections is 3.
 
@@ -1059,7 +1059,7 @@ How many distinct PDFs did the ransomware encrypt on the remote file server?
 
 #### **Approach**
 
-As I had known that the remote file server hostname is 'we9041srv', I could filter the scope related to the server name in WinEvent Logs because the logs could provide the evidence according to the file share access from the ransomware of Bob Smith's Machine and whether the access was granted and its associated requested permissions (Read, Write, Delete and so on) with the event ID '5145'.
+As I had known that the remote file server hostname was 'we9041srv', I could filter the scope related to the server name in WinEvent Logs because the logs could provide the evidence according to the file share access from the ransomware of Bob Smith's Machine and whether the access was granted and its associated requested permissions (Read, Write, Delete and so on) with the event ID '5145'.
 
 
 These kinds of logs are associated with Windows security.
@@ -1164,7 +1164,7 @@ index=botsv1 we8105desk sourcetype="xmlwineventlog:microsoft-windows-sysmon/oper
 
 <img width="1877" height="362" alt="image" src="https://github.com/user-attachments/assets/31a9f4c4-dd4a-4058-9f5f-66531aa3af49" />
 
-Owning to osk.exe being a legitimate name but created under the path 'C:\\Users\\bob.smith.WAYNECORPINC\\AppData\\Roaming\\{35ACA89F-933F-6A5D-2776-A3589FB99832}\\osk.exe' after the malicious dotm file was run, I could conclude that osk.exe was the ransomware file and it encrypted the dotm file as well from the result of the EventID 2.
+Owing to osk.exe being a legitimate name but created under the path 'C:\\Users\\bob.smith.WAYNECORPINC\\AppData\\Roaming\\{35ACA89F-933F-6A5D-2776-A3589FB99832}\\osk.exe' after the malicious dotm file was run, I could conclude that osk.exe was the ransomware file and it encrypted the dotm file as well from the result of the EventID 2.
 
 **Note: The actual file path is 'C:\Windows\System32\osk.exe' and the legitimate one is the exe file for the Windows On-Screen Keyboard**
 
@@ -1207,7 +1207,7 @@ index=botsv1 sourcetype=stream:DNS src=192.168.250.100 "solidaritedeproximite.or
 <img width="1870" height="488" alt="image" src="https://github.com/user-attachments/assets/3f9b2648-b47b-49ea-991d-d83622d85a70" />
 
 
-I found its IP as '37.37.187.37.150'.
+I found its IP as '37.187.37.150'.
 
 
 I tried searching in Sysmon log to find any other information related to the file that contains the Cerber ransomware cryptor code as it was downloaded from that domain.
@@ -1307,4 +1307,4 @@ Ingress Tool Transfer	- Downloaded mhtr.jpg (ransomware cryptor)
 
 **7. Impact**
 
-Data Encrypted for Impact	- 257 PDFs encrypted on file server and 406 .txt files on Bob's profile
+Data Encrypted for Impact	- 257 PDFs encrypted on the file server and 406 .txt files on Bob's profile
