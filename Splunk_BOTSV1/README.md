@@ -1250,7 +1250,7 @@ Now that you know the name of the ransomware's encryptor file, what obfuscation 
 
 #### **Approach**
 
-As the ransomware's encryptor file that had the Cerber ransomware cryptor code was in .jpg extension, the attacker buried the code in the jpg file. This technique is known as 'steganography'.
+As the file that had the Cerber ransomware cryptor code was in .jpg extension, the attacker buried the code in the jpg file with the goal of concealing secret information, such as the malicious  code within ordinary files (like images, audio, or network packets) to avoid detection technique and it is known as 'steganography'.
 
 
 **Answer: steganography**
