@@ -1179,7 +1179,7 @@ index=botsv1 sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational"  h
 
 
 
-** Answer: 406**
+**Answer: 406**
 
 
 ### **Q210**
