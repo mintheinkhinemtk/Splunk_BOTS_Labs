@@ -1051,4 +1051,65 @@ Registry path had the IP '192.168.250.20' in the registry path for the file shar
 Answer: 192.168.250.20 
 
 
+### **Q207**
 
+How many distinct PDFs did the ransomware encrypt on the remote file server?
+
+
+#### **Approach**
+
+As I had known that the remote file server hostname is 'we9041srv', I could filter the scope related to the server name in WinEvent Logs because the logs could provide the evidence according to the file share access from the ransomware of Bob Smith's Machine and whether the access was granted and its associated requested permissions (Read, Write, Delete and so on) with the event ID '5145'.
+
+
+These kinds of logs are associated with Windows security.
+
+
+Attackers could have deleted the original files after encrypting the PDF files and because of this, I tried to filter the search with 'DELETE' access and 'success' action for the PDF files on the server.
+
+
+```
+index=botsv1  we9041srv sourcetype="wineventlog:security" *.PDF Account_Name="bob.smith" host=we9041srv Accesses=DELETE
+| stats count by Relative_Target_Name
+```
+
+
+<img width="1882" height="701" alt="image" src="https://github.com/user-attachments/assets/1130d58b-8355-4286-b483-c18b1cd8cd6f" />
+
+
+**Answer: 257**
+
+
+
+### **Q208**
+
+The VBscript found in question 204 launches 121214.tmp. What is the ParentProcessId of this initial launch?
+
+
+#### **Approach**
+
+The question asks about the ParentProcessId of the initial launch of 121214.tmp, but not its parent process. I firstly needed to know its initial launcher as the question ask the ParentProcessId of that initial process that launched 121214.tmp.
+
+
+
+```
+index=botsv1 sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" Image="*121214.tmp" host=we8105desk EventCode=1
+| table _time ParentImage Image ParentProcessId ProcessId
+```
+
+
+<img width="1881" height="516" alt="image" src="https://github.com/user-attachments/assets/e64774be-aea5-445b-a21e-e5b0cff9f4f9" />
+
+
+I knew the parent process id being 1476 and the process 'C:\Windows\SysWOW64\cmd.exe'. Using this information, I filtered the search to the scope of just that id and the process as the child.
+
+
+```
+index=botsv1 sourcetype=XmlWinEventLog:Microsoft-Windows-Sysmon/Operational (ProcessId=1476 AND Image="C:\\Windows\\SysWOW64\\cmd.exe") | stats count by  CommandLine ProcessId ParentProcessId ParentCommandLine
+```
+
+<img width="1878" height="453" alt="image" src="https://github.com/user-attachments/assets/383c7608-54fd-4b88-8778-ca2ab8e61e30" />
+
+
+As Wscript.exe was in the CommandLine and its ParentId was shown, the Parent process was Wscritp.exe and its Id being '3968'.
+
+**Answer: 3968**
