@@ -45,4 +45,4 @@ index=botsv2 sourcetype="stream:http" src_ip="10.0.2.101" dest_port=80
 <img width="1873" height="391" alt="image" src="https://github.com/user-attachments/assets/02d7202b-3eb6-4021-a93d-44bdc43c3f1d" />
 
 
-**Answer: www\.berkbeer\.com**
+**Answer: "www.berkbeer.com"**
