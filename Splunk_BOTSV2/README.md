@@ -348,3 +348,70 @@ Saw the length of the salt first and its value subsequently related to the frank
 
 **Answer: gGsxysZL**
 
+
+### **Q205**
+
+What is user btun's password on brewertalk.com?
+
+
+#### **Approach**
+
+`Note: salt values are added to the passwords before the whole hashes are computed in order to make the precomputed attacks like 'rainbow table' fail. `
+
+In a database, there will be every computed hash and the salt value.
+
+MyBB's format is md5(md5($salt)+md5($pass)). I would need btun's salt and the whole computed hash stored in MyBB.
+
+let's find btun's row and salt first.
+
+```
+index=botsv2 dest_port=80 src_ip="45.77.65.211"  sourcetype="stream:http" site="www.brewertalk.com"  "btun" "uri_path"="/member.php"
+```
+
+<img width="1902" height="673" alt="image" src="https://github.com/user-attachments/assets/55611f15-babe-4e90-bc92-99b91f686872" />
+
+
+<img width="1485" height="245" alt="image" src="https://github.com/user-attachments/assets/cb355700-c9e9-4ec6-8600-f70f2c8ab340" />
+
+
+Got the row of btun. Salt value was still needed.
+
+```
+index=botsv2 dest_port=80 src_ip="45.77.65.211" "uri_path"="/member.php" "salt" sourcetype="stream:http" site="www.brewertalk.com"   http_user_agent="Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.17 Safari/537.36" "ORDER BY UID LIMIT 2,1"
+| reverse
+```
+
+<img width="1892" height="785" alt="image" src="https://github.com/user-attachments/assets/6f8de4cc-be94-4bad-9937-b7c04bd3f263" />
+
+
+<img width="1522" height="257" alt="image" src="https://github.com/user-attachments/assets/98d46a2a-185d-41ae-9f57-08d3af67f00a" />
+
+I could now find the whole computed hash of the password and its salt value using the row and the salt.
+
+Using reverse to get the events from the oldest to the newest...
+
+```
+index=botsv2 dest_port=80 src_ip="45.77.65.211" sourcetype="stream:http" site="www.brewertalk.com" "/member.php"  "SELECT password FROM mybb_users ORDER BY UID LIMIT 2,1"
+| reverse
+```
+
+<img width="1910" height="646" alt="image" src="https://github.com/user-attachments/assets/b2314fb7-2635-4617-a279-ce66c0ec94b4" />
+
+
+<img width="1546" height="323" alt="image" src="https://github.com/user-attachments/assets/5cd6f912-14a3-4a3b-949b-7342f2068960" />
+
+Attacker got the character count as 32.
+
+<img width="1458" height="282" alt="image" src="https://github.com/user-attachments/assets/0b3df68d-200e-4efd-920d-2cb2c35eedfe" />
+
+The length of password was 32 but the subtracted string was only 31 character long. 
+
+
+<img width="1433" height="273" alt="image" src="https://github.com/user-attachments/assets/423a6cb3-d6c0-419b-8886-5b1cae5e50ca" />
+
+
+The final character was extracted.
+
+So, the total password hash value was 'f91904c1dd2723d5911eeba409cc0d14' and it's a md5 hash as it is exactly 32 characters long.
+
+
