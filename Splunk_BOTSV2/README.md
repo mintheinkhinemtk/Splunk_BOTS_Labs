@@ -414,4 +414,95 @@ The final character was extracted.
 
 So, the total password hash value was 'f91904c1dd2723d5911eeba409cc0d14' and it's a md5 hash as it is exactly 32 characters long.
 
+Running the hashcat command in my Linux VM to crack the md5hash of MyBB `hashcat -m 2811 -a 0 'f91904c1dd2723d5911eeba409cc0d14':'tlX7cQPE' ~/rockyou/rockyou.txt` ...
+
+<img width="1850" height="752" alt="image" src="https://github.com/user-attachments/assets/d3d4a232-67f3-4f9b-8a76-5f426ef2fa3f" />
+
+
+<img width="1051" height="802" alt="image" src="https://github.com/user-attachments/assets/862c5c89-0983-458d-840e-ebe8fdcf9029" />
+
+
+Got the password for btun as '123456'.
+
+
+**Answer: 123456**
+
+
+### **Q206**
+
+What are the characters displayed by the XSS probe? Answer guidance: Submit answer in the native language or character set.
+
+
+#### **Approach**
+
+Basic xss probes mostly contain <script>alert("x")</script> tags and thus, I tried to find with that keyword first.
+
+
+```
+index=botsv2 sourcetype="stream:http"   "<script>alert(*"
+```
+
+<img width="1887" height="658" alt="image" src="https://github.com/user-attachments/assets/9ba6d2d6-b0e3-4d12-b29f-0e1ec0e79c85" />
+
+
+<img width="1472" height="490" alt="image" src="https://github.com/user-attachments/assets/bc4e9c44-6f49-42d0-ac35-a59f0b07c454" />
+
+
+**Answer: 대동**
+
+
+### **Q207**
+
+What was the value of the cookie that Kevin's browser transmitted to the malicious URL as part of a XSS attack? Answer guidance: All digits. Not the cookie name or symbols like an equal sign.
+
+
+#### **Approach**
+
+Firstly, I needed to aim for the XSS payload that got the cookie.
+
+```
+index=botsv2  sourcetype="stream:http" kevin "<script>"
+```
+
+<img width="1905" height="678" alt="image" src="https://github.com/user-attachments/assets/fc578646-e5c1-4922-a2a3-3ea11170e654" />
+
+
+<img width="1551" height="422" alt="image" src="https://github.com/user-attachments/assets/9fd20022-12df-4483-b4f0-1a5b8ecab69a" />
+
+Malicious xss payload script put by the attacker.
+
+```var postdata= "my_post_key="+my_post_key+"&username=kIagerfield&password=beer_lulz&confirm_password=beer_lulz&email=kIagerfield@froth.ly&usergroup=4&additionalgroups[]=4&displaygroup=4"```
+
+The adversary injected the payload at the 'utid' parameter as the stored xss mechanism stealing the token, 'my_post_key' of the admin, Kevin, and created another user account 'kIagerfield' and the password 'beer_lulz'with the email 'kIagerfield@froth.ly' and the admin privileges (usergroup=4) in MyBB under Kevin's session.
+
+
+
+<img width="1592" height="82" alt="image" src="https://github.com/user-attachments/assets/ad72d672-7090-44c5-a941-7c72b49c4ba3" />
+
+<img width="1691" height="46" alt="image" src="https://github.com/user-attachments/assets/b0344ce6-33e4-467d-b82f-34f36243f7a0" />
+
+<img width="1526" height="93" alt="image" src="https://github.com/user-attachments/assets/b3803e09-ea4c-4b24-82d2-2af8aefe992f" />
+
+
+```
+<div id="logo"><h1><span class="invisible">MyBB Admin CP</span></h1></div>
+<div id="welcome"><span class="logged_in_as">Logged in as <a href="index.php?module=user-users&amp;action=edit&amp;uid=17" class="username">kevin</a></span> | <a href="http://www.brewertalk.com" target="_blank" class="forum">View Forum</a> | <a href="index.php?action=logout&amp;my_post_key=1bc3eab741900ab25c98eee86bf20feb" class="logout">Log Out</a></div>
+<div id="menu">
+```
+
+HTML Code from these three screenshots showing kevin was an admin for MyBB and his post key as '1bc3eab741900ab25c98eee86bf20feb'.
+
+
+<img width="1860" height="832" alt="image" src="https://github.com/user-attachments/assets/96246c88-f5d9-4624-817b-6108659d9ff6" />
+
+
+As the question mentioned the cookie had only digits and thus, lastvisit would make more sense.
+
+
+The cookie was sent to the attacker's server. Attacker got the admin session cookie and Kevin's username and password.
+
+
+**Answer: 1502408189**
+
+
 
