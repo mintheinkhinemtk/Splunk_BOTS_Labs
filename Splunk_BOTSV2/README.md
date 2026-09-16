@@ -531,6 +531,11 @@ Actually, attacker injected their XSS payload script to use the value in my_post
 As the token would be hidden, I searched with 'hidden' in the raw log to confirm my theory. 
 
 
+```
+index=botsv2  sourcetype="stream:http" kevin "<script>"
+```
+
+
 <img width="1918" height="588" alt="image" src="https://github.com/user-attachments/assets/74ccb1d8-e887-417f-8996-6a974e14499a" />
 
 I had got that anti-CSRF token from Q207.
