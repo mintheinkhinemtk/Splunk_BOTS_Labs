@@ -473,7 +473,7 @@ Malicious xss payload script put by the attacker.
 
 ```var postdata= "my_post_key="+my_post_key+"&username=kIagerfield&password=beer_lulz&confirm_password=beer_lulz&email=kIagerfield@froth.ly&usergroup=4&additionalgroups[]=4&displaygroup=4"```
 
-The adversary injected the payload at the 'utid' parameter as the stored xss mechanism stealing the token, 'my_post_key' of the admin, Kevin, and created another user account 'kIagerfield' and the password 'beer_lulz'with the email 'kIagerfield@froth.ly' and the admin privileges (usergroup=4) in MyBB under Kevin's session.
+The adversary injected the payload at the 'utid' parameter as the stored xss mechanism stealing the token, 'my_post_key' of the admin, Kevin, and created another user account 'kIagerfield' and the password 'beer_lulz' with the email 'kIagerfield@froth.ly' using that key and the admin privileges (usergroup=4) in MyBB under Kevin's session.
 
 
 
@@ -492,6 +492,10 @@ The adversary injected the payload at the 'utid' parameter as the stored xss mec
 
 HTML Code from these three screenshots showing kevin was an admin for MyBB and his post key as '1bc3eab741900ab25c98eee86bf20feb'.
 
+```
+index=botsv2 sourcetype="stream:http" "kevin"    src_ip="10.0.2.109" dest_ip="52.42.208.228"
+```
+
 
 <img width="1860" height="832" alt="image" src="https://github.com/user-attachments/assets/96246c88-f5d9-4624-817b-6108659d9ff6" />
 
@@ -503,6 +507,35 @@ The cookie was sent to the attacker's server. Attacker got the admin session coo
 
 
 **Answer: 1502408189**
+
+
+### **Q208**
+
+The brewertalk.com web site employed Cross Site Request Forgery (CSRF) techniques. What was the value of the anti-CSRF token that was stolen from Kevin Lagerfield's computer and used to help create an unauthorized admin user on brewertalk.com?
+
+
+#### **Approach**
+
+
+`Note: Anti-CSRF tokens are usually hidden form elements set. If a form is submitted without the anti-CSRF token, the backend code of the website rejects the transaction to prevent malicious sources from attackers and they are temporary, random values linked to a user's current session `
+
+
+Attacker's script had stolen my_post_key in its script and uploaded to brewertalk.com to create a new user with the admin privilege under Kevin's session.
+
+That was the anti-CSRF token of Kevin. 
+
+
+Actually, attacker injected their XSS payload script to use the value in my_post_key that was the temporary anti-CSRF token as a user session for Kevin to create another admin level account controlled by them.
+
+
+As the token would be hidden, I searched with 'hidden' in the raw log to confirm my theory. 
+
+
+<img width="1918" height="588" alt="image" src="https://github.com/user-attachments/assets/74ccb1d8-e887-417f-8996-6a974e14499a" />
+
+I had got that anti-CSRF token from Q207.
+
+**Answer: 1bc3eab741900ab25c98eee86bf20feb**
 
 
 
