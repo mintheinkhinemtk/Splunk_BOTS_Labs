@@ -941,3 +941,17 @@ The Taedonggang APT group encrypts most of their traffic with SSL. What is the "
 #### **Approach**
 
 
+SSL works in TCP/IP Layer. I would need the attacker's IP and the information in the 'stream:tcp' to know the issuer used in the connection to the brewertalk domain. 
+
+IP information had not been found yet.
+
+As the file name was already known, I tried to investigate the content further from Q400 as it was coded in base64 format to get any more information related to IP and the domain.
+
+
+<img width="947" height="662" alt="image" src="https://github.com/user-attachments/assets/9d835025-512f-4bc4-8d7a-0951da9be0c8" />
+
+Copied all of the base64 content and saved it in a file. 
+
+
+
+
