@@ -927,7 +927,7 @@ index=botsv2  "*.zip" sourcetype="stream:smtp" "attach_filename{}"="invoice.zip"
 <img width="962" height="297" alt="image" src="https://github.com/user-attachments/assets/a2529bc2-041e-4ebd-9f17-1112ba5baf38" />
 
 
-The originating sending server was not compatible with the domain in the 'From' field. This was a phishing email and the zip file had a password to open it. 
+The originating sending server was not compatible with the domain in the 'From' field. This was a phishing email and the zip file had a password (912345678) to open it. 
 
 
 **Answer:  invoice.zip**
@@ -953,5 +953,96 @@ As the file name was already known, I tried to investigate the content further f
 Copied all of the base64 content and saved it in a file. 
 
 
+<img width="1853" height="573" alt="image" src="https://github.com/user-attachments/assets/2ef0f9ac-bef4-489f-8f99-8483cef6741d" />
+
+
+stripped newlines
+
+`cat invoice | tr -d '\n' > invoice1`
+
+I saw whitespace left in the file when I checked with cat command.
+
+
+<img width="1177" height="111" alt="image" src="https://github.com/user-attachments/assets/e0e09005-5526-4e79-a9e8-2b5f34f7a27b" />
+
+
+stripped any whitespace again to get the whole base64 content.
+
+`cat invoice1 | tr -d ' ' > invoice2`
+
+
+<img width="1858" height="727" alt="image" src="https://github.com/user-attachments/assets/b757f457-0d1a-47a4-9cea-c4be0f1e5097" />
+
+
+All was clear.
+
+
+`cat invoice2 | base64 --decode > invoice.zip`
+
+`unzip invoice.zip`
+
+<img width="1182" height="201" alt="image" src="https://github.com/user-attachments/assets/d368716a-1f65-4010-9def-15ab0eef9b90" />
+
+
+Used the password (912345678) in the email. (Don't run the file as it's a malware. Use strings 'file' to see its string contents.)
+
+
+`sha256sum invoice.doc` to get the hash for uploading and seeing it on VirusTotal.
+
+<img width="1013" height="56" alt="image" src="https://github.com/user-attachments/assets/195b44b3-0df8-47b6-86d9-cd539edeb6fe" />
+
+
+Got its sha256 hash. 
+
+<img width="1187" height="681" alt="image" src="https://github.com/user-attachments/assets/274d8909-70a8-4181-94a0-53569c8cbd5c" />
+
+
+After uploading the hash on VirusTotal, the IP, 45.77.65.211, seen in the above series, was contained in the contacted IP addresses section. 
+
+
+Using that IP information, I could search SSL information in the stream:tcp logs.
+
+
+```
+index=botsv2  sourcetype="stream:tcp" "45.77.65.211" "ssl" 
+| stats count by ssl_issuer
+```
+
+<img width="1888" height="422" alt="image" src="https://github.com/user-attachments/assets/efdebfae-9f02-43a3-99bb-def32ee964aa" />
+
+
+**Answer: C=US**
+
+
+
+### **Q402**
+
+Threat indicators for a specific file triggered notable events on two distinct workstations. What IP address did both workstations have a connection with?
+
+
+Let me skip this as I didn't have any incident dashboard.
+
+
+
+### **Q403**  
+
+Based on the IP address found in question 402, what domain of interest is associated with that IP address?
+
+
+#### **Approach**
+
+The IP form Q402 is 160.153.91.7 when it was searched on google.
+
+As I got the IP Address, I could investigate the answer in dns logs. 
+
+```
+index=botsv2  sourcetype="stream:dns" "160.153.91.7"   "message_type{}"=RESPONSE | stats  count by name{}
+```
+
+
+<img width="1877" height="383" alt="image" src="https://github.com/user-attachments/assets/6c30f4e0-3ae3-4778-8136-4ff6d92f48ec" />
+
+
+Answer: hildegardsfarm.com
 
 
