@@ -543,4 +543,194 @@ I had got that anti-CSRF token from Q207.
 **Answer: 1bc3eab741900ab25c98eee86bf20feb**
 
 
+### **Q209**
+
+What brewertalk.com username was maliciously created by a spearphishing attack?
+
+
+#### **Approach**
+
+
+In Q207, it was seen that the username 'kIagerfield' was created.
+
+
+**Answer: kIagerfield**
+
+
+## **Series 3xx**
+
+
+### **Q300**
+
+According to Frothly's records, what is the likely MAC address of Mallory's corporate MacBook? Answer guidance: Her corporate MacBook has the hostname MACLORY-AIR13. 
+
+I skipped this as there was no Splunk Enterprise Security for me in the lab I did to use 'Asset Centre'.
+
+
+### **Q301**
+
+What episode of Game of Thrones is Mallory excited to watch? Answer guidance: Submit the HBO title of the episode.
+
+
+#### **Approach**
+
+
+The abbreviation for Game of Thrones is 'GOT'. I got the hostname from Q300. Tried keyword guessing.
+
+```
+index=botsv2 host="MACLORY-AIR13" "GOT"
+| stats count by columns.target_path
+```
+
+<img width="1905" height="655" alt="image" src="https://github.com/user-attachments/assets/42a2e372-ecdf-4d70-b033-d3f6fe8144be" />
+
+Got the episode number and season as GoT.S07E02. 
+
+After searching on google, its HBQ title is...
+
+**Answer: Stormborn**
+
+
+### **Q302**
+
+BOTS2 302: What is Mallory Krauesen's phone number? Answer guidance: ddd-ddd-dddd where d=[0-9]. No country code.
+
+
+This requires the asset center and the dashboard.
+
+
+### **Q303**
+
+Enterprise Security contains a threat list notable event for MACLORY-AIR13 and suspect IP address 5.39.93.112. What is the name of the threatlist (i.e. Threat Group) that is triggering the notable?
+
+
+This requires the asset center and the dashboard.
+
+
+### **Q304**
+
+
+Considering the threatlist you found in the question above, and related data, what protocol often used for file transfer is actually responsible for the generated traffic? 
+
+
+#### **Approach**
+
+
+Using the IP Address from Q303...
+
+
+```
+index=botsv2 "5.39.93.112"
+```
+
+<img width="851" height="752" alt="image" src="https://github.com/user-attachments/assets/64e83e53-b716-44b5-81d7-c9b49e7190df" />
+
+
+
+<img width="897" height="753" alt="image" src="https://github.com/user-attachments/assets/234d70ad-fae5-4352-8880-203b26b31a05" />
+
+
+10.0.4.4 was connecting to 5.39.93.112. 71.39.18.125 was the src_NAT_public IP for the organization and the protocol used was bittorrent.
+
+
+ "mkraeusen" and "10.0.4.4" were the src_user and the src_ip.
+
+
+ **Answer: bittorrent**
+
+
+
+### **Q305**
+
+Mallory's critical PowerPoint presentation on her MacBook gets encrypted by ransomware on August 18. At what hour, minute, and second does this actually happen? Answer guidance: Provide the time in PDT. Use the 24h format `HH:MM:SS`, using leading zeroes if needed. Do not use Splunk's _time (index time).
+
+
+#### **Approach**
+
+Using reverse command to get the oldest events first for seeing the first time the encryption happened at.
+
+```
+index=botsv2 "*.pptx" host="MACLORY-AIR13"
+|reverse
+```
+
+<img width="1386" height="741" alt="image" src="https://github.com/user-attachments/assets/4775161d-08b0-4df2-99cd-f3128045302c" />
+
+
+The second event had the ctime, 1503093022, that stands for the status change time and the target_path had the file with the extension .crypt meaning the file was changed to the encrypted state at that time.
+
+ 
+ Frothly_marketing_campaign_Q317.pptx.crypt was the file.
+
+
+This is an unix epoch format. Convert this at 'https://www.epochconverter.com/'. 
+
+UTC = `21:50:22`. PDT = `14:50:22`
+
+
+**Answer: `14:50:22`**
+
+
+### **Q306**
+
+How many seconds elapsed between the time the ransomware executable was written to disk on MACLORY-AIR13 and the first local file encryption? Answer guidance: Use the index times (_time) instead of other timestamps in the events.
+
+
+#### **Approach**
+
+
+Needed to know the two events, the first local file encryption and the ransomware executable written to disk on MACLORY-AIR13.
+
+
+Using reverse to see the oldest events first.
+
+```
+index=botsv2 host="MACLORY-AIR13"  "*.crypt" 
+| reverse
+```
+
+
+<img width="1502" height="742" alt="image" src="https://github.com/user-attachments/assets/8642e0fa-7639-413a-ab0e-08a3d2ac625a" />
+
+
+The encryption Unix command, `find /Users/ -not -iname "README!.txt" -print -exec zip -0 -P TPq3NrjTLn2fSBZIxklL6ZRM5 {}.crypt {} \; -exec rm {} \; -exec touch -mt 201002130000 {}.crypt \;
+`, was run at 08/18/17 `21:50:43` UTC.
+
+
+<img width="1367" height="745" alt="image" src="https://github.com/user-attachments/assets/2163575f-32dc-47c4-8dd5-d5b2da673ddf" />
+
+
+At the same time, the first file encrypted was  "/Users/mallorykraeusen/Desktop/.DS_Store.crypt".
+
+I needed to find the time the ransomware executable was written at.
+
+
+Going back to the timeframe within 5 mins before that event happened to find the app written as the encrypted command from it was run at the same time as the first file encrypted.
+
+
+Mac executable file extension is '*.app'.
+
+```
+index=botsv2 host="MACLORY-AIR13" "*.app" action="added" 
+| reverse
+```
+
+
+<img width="1897" height="776" alt="image" src="https://github.com/user-attachments/assets/02b35ca2-b565-4283-aa55-79ff2dc44e9c" />
+
+
+<img width="1292" height="650" alt="image" src="https://github.com/user-attachments/assets/fde5ebd4-bb9b-4a88-a649-6d1e20722632" />
+
+
+Found the malicious file with suspicious name under User Downloads folder. 
+
+/Users/mallorykraeusen/Downloads/Office 2016 Patcher.app at Fri Aug 18 `21:48:31` 2017 UTC.
+
+There is no patcher app from Office and the directory being Downloads meant the victim machine got that ransomware executable in that folder at that time.
+
+Subtracting the time gave the 132 seconds (2:12 mins).
+
+**Answer:  132**
+
+
 
