@@ -1,4 +1,4 @@
-# **Splunk BOTSV2 Walkthrough**
+<img width="978" height="652" alt="image" src="https://github.com/user-attachments/assets/d95685a5-7be5-45e8-85c0-145537a0f659" /># **Splunk BOTSV2 Walkthrough**
 
 **Platform**: Splunk BOTS Version 2 (2017)
 
@@ -732,5 +732,212 @@ Subtracting the time gave the 132 seconds (2:12 mins).
 
 **Answer:  132**
 
+
+### **Q307**
+
+Kevin Lagerfield used a USB drive to move malware onto kutekitten, Mallory's personal MacBook. She ran the malware, which obfuscates itself during execution. Provide the vendor name of the USB drive Kevin likely used. Answer Guidance: Use time correlation to identify the USB drive. 
+
+
+#### **Approach**
+
+
+I needed to use time correlation to the two events, USB drive inserted, and the malware run. 
+
+Investigated the malware running event to know the USB insertion timeline and then pivoted to that for getting the USB information.
+
+`Note: The related sourcetype was about 'osquery', a tool that lets a user query their Operating Systems like a database in SQL. It has built-in packs, JSON config files containing a collection of pre-written queries grouped.`
+
+
+`Note: In SPL, '/', forward slash, works as a delimiter in SPL and the string parser of Splunk will split on those forward slashes during indexing, making keyword search only instead of 'directory path' search. 
+To make this work, an escaped character, '\', backslash, must be put in front of it to make those as a literal character but as there is no direct escaping for '\/' letting the string parser omit the backslash (not consuming the following character, the forward slash) and treat the forward slash as a delimiter again, the double backslashes were needed to put making '\\' as a '\' literal and SPL treats '\/' as a literal '/'.`
+
+
+`Summary: \\/  →  Layer 1 (string parser) produces \  →  Layer 2 (search interpreter) sees \/ `
+
+
+```index=botsv2 "kutekitten"  "\\/Users\\/mkraeusen\\/*" | stats  count by columns.target_path```
+
+
+<img width="1883" height="332" alt="image" src="https://github.com/user-attachments/assets/48c78333-027c-430e-b008-92bfd371fc73" />
+
+
+I found the suspicious file under Downloads directory.
+
+
+```
+index=botsv2 "kutekitten"   "columns.target_path"="/Users/mkraeusen/Downloads/Important_HR_INFO_for_mkraeusen"
+| reverse
+```
+
+
+<img width="1250" height="686" alt="image" src="https://github.com/user-attachments/assets/66d10bb2-cc35-4ee5-91a5-2f0caad44923" />
+
+Got the file hash and the time of the file created and ran as Aug 03 `18:19:07` UTC.
+
+
+<img width="1843" height="425" alt="image" src="https://github.com/user-attachments/assets/cef553d1-c9d2-46cf-8634-ff875aefcf82" />
+
+
+Virustotal flagged this as a malware that used perl language.
+
+
+Searched the usb drive insertion event and its timeline before the malware file was created and run.
+
+```
+index=botsv2 "kutekitten"  "usb" name="pack_hardware-monitoring_usb_devices"
+| reverse
+| table _time action columns.vendor_id
+```
+
+<img width="1897" height="541" alt="image" src="https://github.com/user-attachments/assets/71b0a0ee-5397-4942-8685-89ccd7fc6d6e" />
+
+
+Found the suspicious USB drive event with the action added at Aug 03 `18:18:10` 2017 UTC and since it was the time the closet to that of the malware file being created and run, that usb drive event was the answer. 
+
+
+<img width="637" height="130" alt="image" src="https://github.com/user-attachments/assets/94154b9e-97ef-443c-ad1e-43bec8278070" />
+
+Vendor ID, 058f, is the one from Alcor Micro Corp.
+
+**Answer: Alcor**
+
+
+
+### **Q308**
+
+What programming language is at least part of the malware from the question above written in?
+
+
+#### **Approach**
+
+
+We had already seen in Q307. It's perl.
+
+Besides, we could find in the logs. As the malware was running in the process, the OS process logs could be investigated.
+
+```
+index=botsv2 "kutekitten" name="pack_osx-proclaunch_ProcessesInUserSpace" "columns.name"="perl5.18"
+```
+
+
+<img width="1007" height="521" alt="image" src="https://github.com/user-attachments/assets/88d69127-5a83-4e69-88e1-4dc9170b6907" />
+
+
+There was no perl script file run shown in the cmdline and the process was shown as java in it even though the actual binary path run was /usr/bin/per15.18. That's the malware running with perl and masquerading as a legitimate JVM spawn.
+
+The technique is a process-masquerade.
+
+
+**Answer: Perl**
+
+
+
+### **Q309**
+
+The malware from the two questions above appears as a specific process name in the process table when it is running. What is it?
+
+Got the answer from Q308.
+
+Answer: Java
+
+
+Q310: The malware infecting kutekitten uses dynamic DNS destinations to communicate with two C&C servers shortly after installation. What is the fully-qualified domain name (FQDN) of the first (alphabetically) of these destinations?
+
+
+#### **Approach**
+
+There were dynamic DNS domains shown in VirusTotal under Relations tab.
+
+<img width="1357" height="653" alt="image" src="https://github.com/user-attachments/assets/48ef90f9-e8dd-43a1-81d2-13f1c45604bf" />
+
+Chose the first (alphabetically) of these destinations as per question.
+
+**Answer: eidk.duckdns.org** 
+
+
+### **Q311**
+
+From the question above, what is the fully-qualified domain name (FQDN) of the second (alphabetically) contacted C&C server?
+
+
+**Answer: eidk.hopto.org**
+
+
+
+### **Q312** 
+
+What is the average Alexa 1M rank of the domains between August 18 and August 19 that MACLORY-AIR13 tries to resolve while connected via VPN to the corporate network? Answer guidance: Round to two decimal places. Remember to include domains with no rank in your average! Answer example: 3.23 or 223234.91 
+
+
+Let me skip this as there's no csv file relate to this in my lab. 
+
+
+### **Q313**
+
+Two .jpg-formatted photos of Mallory exist in Kevin Lagerfield's server home directory that have eight-character file names, not counting the .jpg extension. Both photos were encrypted by the ransomware. One of the photos can be downloaded at the following link, replacing 8CHARACTERS with the eight characters from the file name. https://splunk.box.com/v/8CHARACTERS After you download the file to your computer, decrypt the file using the encryption key used by the ransomware. What is the complete line of text in the photo, including any punctuation? Answer guidance: The encryption key can be found in Splunk.
+
+
+#### **Approach**
+
+
+The Microsoft sysmon logs related to Kevin's server machine would have those jpg files. I needed those two files first and the password used to decrypt those files. 
+
+
+```
+index=botsv2 sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational"  "kevin" "*.jpg.crypt"
+| stats count by file_path
+```
+
+
+<img width="1897" height="773" alt="image" src="https://github.com/user-attachments/assets/3ff12c8f-42f6-49ea-bb4e-e6b753bcc1ca" />
+
+
+Found the jpg files with 8 character long under his home directory. 
+
+
+From Q306, the Unix command run by the ransomware, `find /Users/ -not -iname "README!.txt" -print -exec zip -0 -P TPq3NrjTLn2fSBZIxklL6ZRM5 {}.crypt {} \; -exec rm {} \; -exec touch -mt 201002130000 {}.crypt \;` had the password as "TPq3NrjTLn2fSBZIxklL6ZRM5".
+
+
+The ransomeware encrypted the files using that password. 
+
+That's the password to do decryption to the file but the file has been removed on that share as the lab is old. Let me skip this though I got the correct solution to get the answer. 
+
+
+## **Series 4xx**
+
+
+### **Q400**
+
+A Federal law enforcement agency reports that Taedonggang often spearphishes its victims with zip files that have to be opened with a password. What is the name of the attachment sent to Frothly by a malicious Taedonggang actor?
+
+
+#### **Approach**
+
+The zip files would definitely be in smtp logs as described per the question.
+
+```
+index=botsv2  "*.zip" sourcetype="stream:smtp" "attach_filename{}"="invoice.zip"
+|reverse
+```
+
+
+<img width="918" height="437" alt="image" src="https://github.com/user-attachments/assets/2dbee507-9848-42ed-b3fb-759b48de202e" />
+
+
+<img width="962" height="297" alt="image" src="https://github.com/user-attachments/assets/a2529bc2-041e-4ebd-9f17-1112ba5baf38" />
+
+
+The originating sending server was not compatible with the domain in the 'From' field. This was a phishing email and the zip file had a password to open it. 
+
+
+**Answer:  invoice.zip**
+
+
+### **Q401**
+
+The Taedonggang APT group encrypts most of their traffic with SSL. What is the "SSL Issuer" that they use for the majority of their traffic? Answer guidance: Copy the field exactly, including spaces. 
+
+
+#### **Approach**
 
 
