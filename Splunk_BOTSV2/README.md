@@ -1046,3 +1046,52 @@ index=botsv2  sourcetype="stream:dns" "160.153.91.7"   "message_type{}"=RESPONSE
 Answer: hildegardsfarm.com
 
 
+### **Q404** 
+
+What unusual file (for an American company) does winsys32.dll cause to be downloaded into the Frothly environment?
+
+
+#### **Approach**
+
+winsys32.dll is not a legitimate dll.
+
+```
+index=botsv2 "winsys32.dll"
+```
+
+<img width="1273" height="792" alt="image" src="https://github.com/user-attachments/assets/f41b5629-b13f-4cb4-a33d-6dcebac3aec1" />
+
+
+Got the process cmdline as `C:\Windows\system32\ftp.exe"  -i -s:winsys32.dll`.
+
+ftp.exe was running winsys32.dll with -i, the interactive mode being OFF and -s:winsys32.dll, reading ftp commands from winsys32.dll. 
+
+The attacker named their script as a fake windows dll name to make it look like a normal Windows system file.
+
+ftp doesn't care the file extension and treats every file as a script and text file in its command. 
+
+
+I needed to investigate what ftp downloaded using the commands from winsys32.dll. stream:ftp sourcetype was focused. The download or retrieve command in ftp is 'RETR'.
+
+
+```index=botsv2 sourcetype="stream:ftp" RETR```
+
+
+<img width="1891" height="787" alt="image" src="https://github.com/user-attachments/assets/415e832d-e903-47ee-9860-0ca0449cb3f3" />
+
+
+**Answer: 나는_데이비드를_사랑한다.hwp**
+
+
+### **Q405**
+
+What is the first and last name of the poor innocent sap who was implicated in the metadata of the file that executed PowerShell Empire on the first victim's workstation? Answer example: John Smith 
+
+We could find this information using OSINT on virustotal.com or seeing the file metadata in our sandbox.
+
+
+
+
+
+
+Answer: Ryan Kovar
