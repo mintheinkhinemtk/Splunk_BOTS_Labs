@@ -1087,11 +1087,93 @@ I needed to investigate what ftp downloaded using the commands from winsys32.dll
 
 What is the first and last name of the poor innocent sap who was implicated in the metadata of the file that executed PowerShell Empire on the first victim's workstation? Answer example: John Smith 
 
+
+#### **Approach**
+
+
 We could find this information using OSINT on virustotal.com or seeing the file metadata in our sandbox.
 
 
+`file invoice.doc`
 
 
+<img width="1851" height="135" alt="image" src="https://github.com/user-attachments/assets/2ac3089f-1db9-46ec-b3a3-3cd530491f9a" />
 
 
 Answer: Ryan Kovar
+
+
+
+### **Q406** 
+
+What is the average Shannon entropy score of the subdomain containing UDP-exfiltrated data? Answer guidance: Cut off, not rounded, to the first decimal place. Answer examples: 3.2 or 223234.9 (15 pts) 
+
+
+#### **Approach**
+
+
+
+UDP port for DNS is 53.
+
+As there was data exfiltration. There would be many connections to the attacker's domain.
+
+```
+index=botsv2  dest_port="53" sourcetype="stream:dns" 
+| stats count by dest_ip
+| sort -count
+```
+
+
+<img width="1912" height="855" alt="image" src="https://github.com/user-attachments/assets/2e49df40-aad5-436d-86cd-ebdaad7985fc" />
+
+
+
+The two of the first four were internal IPs and the rest the google DNS ones.
+
+208.109.255.42 and 216.69.185.42 were suspicious as it had over 400 requests.
+
+Tried to find their domains.
+
+```
+index=botsv2  dest_port="53" sourcetype="stream:dns"   dest_ip="208.109.255.42"
+| stats count by query{}
+```
+
+
+<img width="1876" height="787" alt="image" src="https://github.com/user-attachments/assets/b1fbac5a-da87-4ccc-ae4f-b370d7b9b6a5" />
+
+
+```
+index=botsv2  dest_port="53" sourcetype="stream:dns"   dest_ip="216.69.185.42"
+| stats count by query{}
+```
+
+
+<img width="1896" height="777" alt="image" src="https://github.com/user-attachments/assets/18f655ea-d653-42e6-9951-b872bfa40e00" />
+
+
+0DsAAHNIclYsFcDN.hildegardsfarm.com to take the one as an example. All of these sub domains have the same character count. 
+
+
+See the guide for calculating Shannon entropy score at `https://www.splunk.com/en_us/blog/security/domain-parsing-url-toolbox.html` and `https://www.splunk.com/en_us/blog/security/random-words-on-entropy-and-dns.html`
+
+
+You would need urltoolbox to use Shannon entropy score calculation function. 
+
+
+I calculated the Shannon entropy of the subdomain and calculated the avg value based on the IPs of the attacker domains.
+
+
+```
+index=botsv2  dest_port="53" sourcetype="stream:dns"   (dest_ip="216.69.185.42" OR dest_ip="208.109.255.42") query{}=*
+| rex field=query{} "(?<sub_domain>\w+)\.hildegardsfarm.com"
+| `ut_shannon(sub_domain)`
+| stats avg(ut_shannon) by dest_ip
+```
+
+
+
+
+**Answer: 3.6**
+
+
