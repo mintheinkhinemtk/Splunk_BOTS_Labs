@@ -1583,7 +1583,7 @@ index=botsv2 sourcetype="stream:http"  "ZDd2VGcWWKcKM95o"  http_method="POST" fo
 <img width="1857" height="621" alt="image" src="https://github.com/user-attachments/assets/2da68f36-1f0b-420f-bf8c-902af383426b" />
 
 
-The original email was bkildcare@yandex.com. The user tried to change their email address after logging in. I needed to confirm the one thing that the profile was edited before placing an order over $1000 in the same clickstream. 
+The original email was `bkildcare@yandex.com`. The user tried to change their email address after logging in. I needed to confirm the one thing that the profile was edited before placing an order over $1000 in the same clickstream. 
 
 
 ```
@@ -1601,7 +1601,7 @@ index=botsv2 sourcetype="stream:http" url="http://store.froth.ly/magento2/checko
 The user placed an order of $1152 after editing their profile by seeing the time. 
 
 
-**Answer: bkildcare@yandex.com**
+**Answer: `bkildcare@yandex.com`**
 
 
 
