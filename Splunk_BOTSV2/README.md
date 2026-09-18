@@ -1524,4 +1524,85 @@ So, the unique user id count was 7 as there were only 7 usernames.
 **Answer: 7**
 
 
+### **Q502**
+
+Which user, identified by their email address, edited their profile before placing an order over $1000 in the same clickstream? Answer guidance: Provide the user ID, not other values found from the profile edit, such as name.
+
+
+#### **Approach**
+
+
+The question asked the user identified by their email address meaning I had to focus on the user email thinking it as a user.
+
+
+Finding the associated urls first related to changing the user information.
+
+```
+index=botsv2 sourcetype="stream:http" url="*magento2/customer/account/*" "*change*" | stats count by url
+```
+
+<img width="1838" height="445" alt="image" src="https://github.com/user-attachments/assets/3bc6df27-69dc-4adb-9bd7-6ec45cc10fb8" />
+
+Got the interesting urls and choosing the one 'edit' endpoint.
+
+
+```
+index=botsv2 sourcetype="stream:http"   url="http://store.froth.ly/magento2/customer/account/edit/" | rex field=cookie "form_key=(?<session_id>[^;]+);" | stats count by session_id
+```
+
+<img width="1846" height="338" alt="image" src="https://github.com/user-attachments/assets/40b0d764-5f6b-45f1-98ef-bbf4944ca925" />
+
+
+Got the session_id as 'ZDd2VGcWWKcKM95o'
+
+Went to the another 'edit' url.
+
+
+```
+index=botsv2 sourcetype="stream:http"  "ZDd2VGcWWKcKM95o"  url="http://store.froth.ly/magento2/customer/account/editPost/" 
+| stats count by form_data
+```
+
+<img width="1846" height="397" alt="image" src="https://github.com/user-attachments/assets/929cf838-a24d-46d1-9d18-c2c1146ebe9b" />
+
+
+It was shown that the user tried to change their email address.
+
+The question asked the user email as a user and the user edited their email address. 
+
+It asked about the phase before the user changing their info and therefore, their original email address was needed to be investigated.
+
+
+```
+index=botsv2 sourcetype="stream:http"  "ZDd2VGcWWKcKM95o"  http_method="POST" form_data=* 
+| table _time  url form_data
+| sort +_time
+```
+
+
+<img width="1857" height="621" alt="image" src="https://github.com/user-attachments/assets/2da68f36-1f0b-420f-bf8c-902af383426b" />
+
+
+The original email was bkildcare@yandex.com. The user tried to change their email address after logging in. I needed to confirm the one thing that the profile was edited before placing an order over $1000 in the same clickstream. 
+
+
+```
+index=botsv2 sourcetype="stream:http" url="http://store.froth.ly/magento2/checkout/"  "ZDd2VGcWWKcKM95o" 
+| rex field=dest_content "USD\",\"grand_total\":\"(?<gtotal_value>\d+).\d+\","  
+| rex field=cookie "form_key=(?<session_id>\w+);" 
+| search gtotal_value=* OR session_id 
+| table _time gtotal_value session_id
+```
+
+
+<img width="1852" height="431" alt="image" src="https://github.com/user-attachments/assets/dbf6c613-261b-4af4-89b7-a95a4e020aad" />
+
+
+The user placed an order of $1152 after editing their profile by seeing the time. 
+
+
+**Answer: bkildcare@yandex.com**
+
+
+
 
