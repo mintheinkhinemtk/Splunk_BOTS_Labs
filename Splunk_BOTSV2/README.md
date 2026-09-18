@@ -1513,3 +1513,15 @@ index=botsv2 sourcetype="stream:http" url="http://store.froth.ly/magento2/custom
 ```
 
 
+<img width="1835" height="627" alt="image" src="https://github.com/user-attachments/assets/a93c83e9-9655-48a1-a8b5-9e224bdaf861" />
+
+
+It can be seen that the user 'friztmaytag' had the two session ids.
+
+So, the unique user id count was 7 as there were only 7 usernames.
+
+
+**Answer: 7**
+
+
+
