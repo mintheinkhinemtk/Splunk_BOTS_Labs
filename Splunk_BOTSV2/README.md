@@ -1,4 +1,4 @@
-<img width="978" height="652" alt="image" src="https://github.com/user-attachments/assets/d95685a5-7be5-45e8-85c0-145537a0f659" /># **Splunk BOTSV2 Walkthrough**
+<img width="1822" height="665" alt="image" src="https://github.com/user-attachments/assets/45d5f6ab-4cf9-4aa8-b2c2-e230418f3c37" /><img width="978" height="652" alt="image" src="https://github.com/user-attachments/assets/d95685a5-7be5-45e8-85c0-145537a0f659" /># **Splunk BOTSV2 Walkthrough**
 
 **Platform**: Splunk BOTS Version 2 (2017)
 
@@ -1300,5 +1300,216 @@ searched it at https://platform.censys.io but there was no data found for that. 
 **Answer: 104.238.159.19**
 
 
+### **Q409** 
 
-## **Series 4xx**
+The Taedonggang group had several issues exfiltrating data. Determine how many bytes were successfully transferred in their final, mostly successful attempt to exfiltrate files via a method using TCP, using only the data available in Splunk logs. Use 1024 for byte conversion. 
+
+
+#### **Approach**
+
+I couldn't get the exact and correct answer as the official one.
+
+The hint told us to find this in ftp logs. ftp is for file transfer. The attacker exfiltrated the data using ftp. 
+
+
+```index=botsv2  sourcetype="stream:ftp" ```
+
+
+<img width="1831" height="617" alt="image" src="https://github.com/user-attachments/assets/fc80b8cc-74c5-40b5-95c3-f79b75d89a74" />
+
+
+There's only one IP, 160.153.91.7 and its domain was hildegardsfarm.com as per from Q403. 
+
+The attacker exfiltrated data to their server. That's uploading to the server. In ftp, the command is 'STOR'. 
+
+
+```
+index=botsv2  sourcetype="stream:ftp" "STOR" "160.153.91.7"
+```
+
+
+<img width="570" height="377" alt="image" src="https://github.com/user-attachments/assets/44e74f8f-4e69-4b4e-bb73-8cd14abd83d8" />
+
+
+transfer_duration field was in microseconds.
+
+transfer_duration/1000000 x 1.24 Mbytes would needed to be multiplied to know the data size transferred for this.
+
+transfer_duration x 1.24 x 1024 x 1024 to get the bytes. This was for one event. 
+
+I would like to aim for the events that have the data successfully transferred.
+
+
+```index=botsv2  sourcetype="stream:ftp" "STOR" "160.153.91.7"  reply_content="*successfully transferred*"
+```
+
+<img width="1822" height="665" alt="image" src="https://github.com/user-attachments/assets/af4e8f81-7ad8-4b68-b28c-b7f58c3dd4eb" />
+
+
+There were 3 flow ids and the one had the maximum counts.
+
+I would then have to add the results from all of these events by event flow ids.
+
+
+```
+index=botsv2  sourcetype="stream:ftp" "STOR" "160.153.91.7" reply_content="*(measured here)*"
+| rex field=reply_content "(?<rate>[0-9]{1,4}\.[0-9]{2}) (?<size>M|K)bytes per second"
+| table _time reply_content time_duration rate size
+```
+
+<img width="1838" height="717" alt="image" src="https://github.com/user-attachments/assets/1428d662-9bf8-4916-a54f-a9ff7621839e" />
+
+
+1024 bytes for Kbytes or 1048576 for Mbytes
+
+
+```
+index=botsv2  sourcetype="stream:ftp" "STOR" "160.153.91.7" reply_content="*(measured here)*"
+| rex field=reply_content "(?<rate>[0-9]{1,4}\.[0-9]{2}) (?<size>M|K)bytes per second"
+| eval convertion = case(size == "M", 1048576, size == "K", 1024) 
+| eval value = (transfer_duration/1000000) * rate * convertion
+| stats sum(value) as total by flow_id 
+| eval round_value = round(total,0)
+```
+
+
+<img width="1827" height="517" alt="image" src="https://github.com/user-attachments/assets/20bcf008-02fa-4800-9ab6-be8eaf4d58dc" />
+
+
+
+I chose the one with the flow_id with the maximum counts as the question wanted the most successfully transferred bytes.
+
+
+I got '1,395,796,324' but the official answer is
+
+
+**Answer: 1,394,847,505**
+
+
+
+## **Series 5xx**
+
+
+### **Q500**
+
+Individual clicks made by a user when interacting with a website are associated with each other using session identifiers. You can find session identifiers in the stream:http sourcetype. The Frothly store website session identifier is found in one of the stream:http fields and does not change throughout the user session. What session identifier is assigned to dberry398@mail.com when visiting the Frothly store for the very first time? Answer guidance: Provide the value of the field, not the field name.  
+
+
+#### **Approach**
+
+The session identifier would be in cookie, data that web servers send to clients for storing related data and help websites remember who clients are and what they do. 
+
+```
+index=botsv2 sourcetype="stream:http" "dberry398@mail.com" 
+| stats count by c_ip cookie
+```
+
+
+<img width="1832" height="682" alt="image" src="https://github.com/user-attachments/assets/165e37dc-13fe-4d98-89b5-861f50d6636b" />
+
+
+The client ip was 74.130.56.117 and there was a form_key=lwh9Ql7oUbnJUqxR assigned to that user account when it had been registered. 
+
+Checking again using its IP.
+
+
+```
+index=botsv2 sourcetype="stream:http" "74.130.56.117"  
+| rex field=cookie "form_key=(?<session_id>\w+);" 
+| stats values(session_id)
+```
+
+
+<img width="1836" height="352" alt="image" src="https://github.com/user-attachments/assets/969357d4-4c0a-40f5-a795-d7eadc1299c3" />
+
+The same form key was used throughout all of the interactions by that user.
+
+**Answer: lwh9Ql7oUbnJUqxR**
+
+
+
+### **Q501**
+
+How many unique user ids are associated with a grand total order of $1000 or more? 
+
+
+#### **Approach**
+
+
+Let's check the logs related to the 'grand total' keyword.
+
+
+```
+index=botsv2 sourcetype="stream:http"  "grand total"
+| stats count by url
+```
+
+<img width="1856" height="490" alt="image" src="https://github.com/user-attachments/assets/2c9d4a0d-990e-4d73-b0b2-a229b30d6108" />
+
+
+Let's choose the checkout url because it meant the order was completed. 
+
+
+```
+index=botsv2 sourcetype="stream:http" "grand_total" url="http://store.froth.ly/magento2/checkout/"  
+| rex field=dest_content "USD\",\"grand_total\":\"(?<gtotal_value>\d+).\d+\"," 
+| rex field=cookie "form_key=(?<session_id>\w+);"
+| search gtotal_value=* OR session_id
+| where gtotal_value >=1000 
+| stats count by gtotal_value session_id
+```
+
+<img width="1848" height="657" alt="image" src="https://github.com/user-attachments/assets/7ed1877d-aa01-45dd-9ddb-c45fdceba15f" />
+
+
+I got the values greater than $1000 and related session_ids as the count being 8 but the question asked the unique user ids, not the session ids. 
+
+I needed to know how many usernames were related to this and the information could be found in form_data as form_data is about posting usernames, passwords and its related cookies and ids. 
+
+If we knew how many usernames were related to this, it's the same as knowing the unique user id count.
+
+
+Using one session identifier to know the url that form_data was used for,
+
+
+```
+index=botsv2 sourcetype="stream:http"  "yjB8uDMr9vRpbibM" 
+| stats count by url form_data
+```
+
+
+<img width="1838" height="650" alt="image" src="https://github.com/user-attachments/assets/a1d4fd57-dd48-49b9-a41b-8419907dd25d" />
+
+
+`url= http://store.froth.ly/magento2/customer/account/loginPost/`
+
+`form_data="form_key=yjB8uDMr9vRpbibM&login[username]=go@outlook.com&login[password]=BlOcKy@4!1&send="`
+
+
+Let's combine all this information.
+
+To get the 8 session_id values to use in another query.
+
+
+```
+index=botsv2 sourcetype="stream:http" "grand_total" url="http://store.froth.ly/magento2/checkout/"  
+| rex field=dest_content "USD\",\"grand_total\":\"(?<gtotal_value>\d+).\d+\"," 
+| rex field=cookie "form_key=(?<session_id>\w+);"
+| search gtotal_value=* OR session_id
+| where gtotal_value >=1000 
+| fields session_id
+| return 8 session_id
+```
+
+
+<img width="1832" height="496" alt="image" src="https://github.com/user-attachments/assets/1a938a07-4627-4062-a92d-602d0deac7a5" />
+
+
+```
+index=botsv2 sourcetype="stream:http" url="http://store.froth.ly/magento2/customer/account/loginPost/" form_data=* (("0XnzRTpeOVy9HD1Z") OR ("0w3UxbR9QnnI5OHw") OR ("4wHUQN8O31Qt0Qth") OR ("9opxLVZ5zgicn5kx") OR ("QHHVI6brFPuLxVUk") OR ("SqxyMqO5xJVNB865") OR ("ZDd2VGcWWKcKM95o") OR ("yjB8uDMr9vRpbibM")) 
+| rex field=form_data "form_key=(?<session_id>[^&]+)"   
+| rex field=form_data "\[username\]=(?<name>[^&]+)"  
+| stats values(name) by session_id
+```
+
+
