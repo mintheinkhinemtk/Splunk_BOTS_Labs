@@ -160,7 +160,7 @@ The file was 'C:\Users\amber.turing\Downloads\torbrowser-install-7.0.4_en-US.exe
 
 ### **Q200**
 
-What is the public IPv4 address of the server running www.brewertalk.com?
+What is the public IPv4 address of the server running `www.brewertalk.com`?
 
 
 #### **Approach**
@@ -182,7 +182,7 @@ There were both private and public IPs for that but I excluded '172.31.4.249' as
 
 ### **Q201**
 
-Provide the IP address of the system used to run a web vulnerability scan against www.brewertalk.com.
+Provide the IP address of the system used to run a web vulnerability scan against `www.brewertalk.com`.
 
 
 #### **Approach**
@@ -296,7 +296,7 @@ The function syntax is updatexml(xml_target, xpath_expr, new_value).`
 
 ### **Q204**
 
-What is Frank Ester's password salt value on www.brewertalk.com? 
+What is Frank Ester's password salt value on `www.brewertalk.com`? 
 
 
 #### **Approach**
