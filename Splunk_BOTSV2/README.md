@@ -1,4 +1,4 @@
-<img width="1822" height="665" alt="image" src="https://github.com/user-attachments/assets/45d5f6ab-4cf9-4aa8-b2c2-e230418f3c37" /><img width="978" height="652" alt="image" src="https://github.com/user-attachments/assets/d95685a5-7be5-45e8-85c0-145537a0f659" /># **Splunk BOTSV2 Walkthrough**
+# **Splunk BOTSV2 Walkthrough**
 
 **Platform**: Splunk BOTS Version 2 (2017)
 
