@@ -1604,5 +1604,364 @@ The user placed an order of $1152 after editing their profile by seeing the time
 **Answer: `bkildcare@yandex.com`**
 
 
+### **Q503**
 
+What street address was used most often as the shipping address across multiple accounts, when the billing address does not match the shipping address? Answer example: 123 Sesame St
+
+
+#### **Approach**
+
+
+Firstly, I needed to focus on the necessary fields to see the addresses. 
+
+The 'dest_content' field would not show the addresses returned. 
+
+Only the http requests from clients would have the address information. 
+
+Among all of these, src_content would have the information as it would carry the information input by clients. 
+
+src_headers would have the header data requested by clients containing cookie information and requested url information and other related header data.
+
+
+```
+index=botsv2 sourcetype="stream:http" "shipping" "address"
+| stats count by src_content
+```
+
+<img width="1832" height="666" alt="image" src="https://github.com/user-attachments/assets/98fd6edf-afd2-4803-ae90-25a49abe393b" />
+
+
+I saw the dictionary values of address and street names. 
+
+Finding the src_content fields
+
+
+```
+index=botsv2 sourcetype="stream:http" "address" (src_content="*shipping*" AND src_content="*billing*" AND src_content="*address*")  
+| stats count by src_content
+```
+
+
+<img width="1850" height="656" alt="image" src="https://github.com/user-attachments/assets/9a686d09-7787-4b40-81de-7dd0f2a5537e" />
+
+
+Chose shipping-information endpoint to see the list of shipping and billing addresses
+
+
+```
+index=botsv2 sourcetype="stream:http"  url="http://store.froth.ly/magento2/rest/default/V1/carts/mine/shipping-information" (src_content="*shipping*" AND src_content="*billing*" AND src_content="*address*") 
+| rex field=src_content "shipping_address\".+?\"street\":\[\"(?<shipping>.+?)\"\].+?billing_address\".+?\"street\":\[\"(?<billing>.+?)\"\]" 
+| rex field=cookie "form_key=(?<session_id>\w+);"  
+| stats  count by shipping billing
+```
+
+<img width="1860" height="507" alt="image" src="https://github.com/user-attachments/assets/cf756b1b-7cec-4dcc-9412-93153b512eb2" />
+
+
+<img width="1855" height="631" alt="image" src="https://github.com/user-attachments/assets/f08bd316-cd31-4103-92b0-b00016d84105" />
+
+
+They all were the same.
+
+Let's dive into other urls. 
+
+
+```
+index=botsv2 sourcetype="stream:http" (src_content="*shipping*" OR src_content="*billing*" OR src_content="*address*") 
+| stats count by url
+```
+
+
+<img width="1852" height="477" alt="image" src="https://github.com/user-attachments/assets/c2f7c5f6-6534-41d3-b63f-0bea089e6798" />
+
+
+The `magento2/rest/default/V1/carts/mine/payment-information` was targeted as I had seen the data on the `magento2/rest/default/V1/carts/mine/shipping-information` uri. 
+
+
+```
+index=botsv2 sourcetype="stream:http"  url="http://store.froth.ly/magento2/rest/default/V1/carts/mine/payment-information" (src_content="*shipping*" OR src_content="*billing*" OR src_content="*address*")
+| rex field=src_content "street\":\[\"(?<billing_only>.+?)\"\]" 
+| rex field=cookie "form_key=(?<session_id>\w+);" 
+| stats count by billing_only
+```
+
+
+<img width="1852" height="507" alt="image" src="https://github.com/user-attachments/assets/d9a0592e-6500-436f-8115-cf915aa20547" />
+
+
+
+18 unique billing addresses were got at the payment-information endpoint and 16 at the shipping-information. 
+
+I extracted the session_id field in the queries for comparing the results using it to see the most often used address when billing and shipping addresses were not the same. 
+
+
+A user could have more than one session_ids seen in Q501 and thus, I extracted usernames and session_ids from form_data to know the number of user accounts and its related ids.
+
+
+```
+index=botsv2 sourcetype="stream:http" url="http://store.froth.ly/magento2/customer/account/loginPost/" form_data=*
+| rex field=form_data "form_key=(?<session_id>[^&]+)"   
+| rex field=form_data "\[username\]=(?<name>[^&]+)"  
+| stats count by session_id name
+```
+
+<img width="1860" height="650" alt="image" src="https://github.com/user-attachments/assets/0f0500dc-874e-4f2b-9542-c31c8a924f21" />
+
+
+Joining all three queries depending on session_id to see the most often used address when billing and shipping addresses were not the same. 
+
+
+```
+index=botsv2 sourcetype="stream:http" url="http://store.froth.ly/magento2/customer/account/loginPost/" form_data=* 
+| rex field=form_data "form_key=(?<session_id>[^&]+)"   
+| rex field=form_data "\[username\]=(?<name>[^&]+)"   
+| table session_id name
+
+| join session_id      [search index=botsv2 sourcetype="stream:http" (src_content="*shipping*" AND src_content="*billing*" AND src_content="*address*")  url="http://store.froth.ly/magento2/rest/default/V1/carts/mine/shipping-information"  
+| rex field=src_content "shipping_address\".+?\"street\":\[\"(?<shipping>.+?)\"\].+?billing_address\".+?\"street\":\[\"(?<billing>.+?)\"\]"  
+| rex field=cookie "form_key=(?<session_id>\w+);"   
+| table session_id shipping ] 
+
+| join session_id     [search index=botsv2 sourcetype="stream:http"   url="http://store.froth.ly/magento2/rest/default/V1/carts/mine/payment-information" (src_content="*shipping*" OR src_content="*billing*" OR src_content="*address*") 
+| rex field=src_content "street\":\[\"(?<billing_only>.+?)\"\]" 
+| rex field=cookie "form_key=(?<session_id>\w+);" 
+| table session_id billing_only ] 
+
+| where isnotnull(shipping) AND isnotnull(billing_only) AND shipping != billing_only 
+| table name shipping billing_only
+```
+
+
+<img width="1865" height="653" alt="image" src="https://github.com/user-attachments/assets/9b759b75-0761-4f03-873a-2019cf637c53" />
+
+
+<img width="1865" height="642" alt="image" src="https://github.com/user-attachments/assets/67306267-34d3-4405-947f-ab3a27b9b22e" />
+
+
+200 Franklin St had the most used counts as a different shipping address across different users.
+
+
+**Answer: 200 Franklin St**
+
+
+
+### **Q504**
+
+What is the domain name used in email addresses by someone creating multiple accounts on the Frothly store website (http://store.froth.ly) that appear to have machine-generated usernames?
+
+
+#### **Approach**
+
+```
+index=botsv2 sourcetype="stream:http" url="*http://store.froth.ly/magento2/customer/account/create*"  
+| table _time url form_data
+```
+
+
+<img width="1845" height="443" alt="image" src="https://github.com/user-attachments/assets/00f99e71-706f-4d18-a8b8-f257e100e323" />
+
+
+There was only one username. Thus, I could not rely on the 'create' urls and `mail.com` did not give me any result other than this. 
+
+
+Then, I decided to extract all the usernames from form_data to see the domain patterns. 
+
+
+```
+index=botsv2 sourcetype="stream:http" form_data=* url="*login*"
+| rex field=form_data "\[username\]=(?<name>[^&]+)"  
+| stats count by name
+```
+
+<img width="1862" height="537" alt="image" src="https://github.com/user-attachments/assets/d3f39a29-08c6-439e-96c1-b511008e64e9" />
+
+
+<img width="1847" height="437" alt="image" src="https://github.com/user-attachments/assets/ea0ddbca-f7c5-4597-b10c-f24f16a7a1e5" />
+
+
+Found the machine generated usernames with 'elude.in' domain by seeing its username pattern. They are were clearly shown as generated from a tool or script.
+
+Checked the malicious domain again by using ut_shannon macro to see the entropy value of the usernames by the domain. 
+
+
+```
+index=botsv2 sourcetype="stream:http" form_data=* url="http://store.froth.ly/magento2/customer/account/loginPost/" 
+| rex field=form_data "\[username\]=(?<name>[^@]+)@(?<domain>[^&]+)" 
+|`ut_shannon(name)` 
+| stats avg(ut_shannon) as entropy_val, count by domain 
+| sort -entropy_val
+```
+
+<img width="1856" height="657" alt="image" src="https://github.com/user-attachments/assets/e9c4d6d6-701d-4b31-b247-63a069419591" />
+
+
+
+elude.in had the third most entropy value with 52 counts and the first and second had only 1 count for each.
+
+
+**Answer: elude.in**
+
+
+### **Q505**
+
+Which user ID experienced the most logins to their account from different IP address and user agent combinations? Answer guidance: The user ID is an email address. 
+
+
+#### **Approach**
+
+
+Only the username having email addresses were chosen as the question wanted those. As this was related to logins, the login url was used in the search. 
+
+As the question wanted unique IP Address and user agent counts based on the user logins, I used dc() function to get the distinct counts of the associated fields. If we want to see the field values, we can use list() function in stats command.
+
+
+
+```
+index=botsv2 sourcetype="stream:http" form_data=* url="http://store.froth.ly/magento2/customer/account/loginPost/"  
+| rex field=form_data "\[username\]=(?<name>\w+?@[^&]+)"  
+| stats dc(src_ip) as unique_src, dc(http_user_agent) as unique_agent, count by name 
+| sort -count
+```
+
+
+<img width="1855" height="642" alt="image" src="https://github.com/user-attachments/assets/fec87fd0-439f-4284-894b-8726f2ff186e" />
+
+
+**Answer: Tom2014@msn.com**
+
+
+### **Q506**
+
+What is the most popular coupon code being used successfully on the site?
+
+
+#### **Approach**
+
+
+I found coupon_code in dest_content field while searching with the 'coupon' keyword. Chose status code '200' and discarded '404' to get the results that showed http request was successful.
+
+```
+index=botsv2 sourcetype="stream:http" "coupon_code" status=200  site="store.froth.ly" "payment_methods" 
+| rex field=dest_content "coupon_code\":\"(?<coupon>[^\"]+)" 
+| stats count by coupon
+```
+
+
+<img width="1862" height="358" alt="image" src="https://github.com/user-attachments/assets/a16ed4bc-a916-47db-9af0-f7a03c45a1eb" />
+
+
+
+We could use another method as I saw that there was 'coupons' endpoint in request after searching.
+
+```
+index=botsv2 sourcetype="stream:http" coupon 
+| stats count by request
+```
+
+<img width="1845" height="662" alt="image" src="https://github.com/user-attachments/assets/12185524-daa8-4d1c-a3c0-2037c7515307" />
+
+
+```
+index=botsv2 sourcetype="stream:http"  http_method=PUT request="*coupons*" 
+| rex field=dest_content "message\":\"(?<message>.+?)\"" 
+| where NOT message="Coupon code is not valid" 
+| stats count by dest_content request status
+```
+
+
+<img width="1852" height="385" alt="image" src="https://github.com/user-attachments/assets/729d9ca8-096d-44a9-a937-a98f03c8839e" />
+
+
+dest_content was set to 'true' when the status was successful. 
+
+We can see the coupon code again for the successful action.
+
+
+**Answer: WINTER2017**
+
+
+### **Q507** 
+
+
+Several user accounts sharing a common password is usually a precursor to undesirable scenario orchestrated by a fraudster. Which password is being seen most often across users logging into http://store.froth.ly.
+
+
+#### **Approach**
+
+
+Ok. The login url should be investigated first as this is about users using their passwords in form_data to log in to the website. 
+
+
+```
+index=botsv2 sourcetype="stream:http" form_data=* url="http://store.froth.ly/magento2/customer/account/loginPost/"  form_data=* 
+| rex field=form_data "\[username\]=(?<name>[^&]+)&login\[password\]=(?<pass>[^&]+)" 
+| dedup name 
+| stats values(name), count by pass 
+| sort -count
+```
+
+
+<img width="1846" height="665" alt="image" src="https://github.com/user-attachments/assets/3ec160f5-1cd7-458e-b948-d957f579e7be" />
+
+
+I wanted to see how many unique users used the same password and thus, deduplicated function was used for the 'name' field and values() was used for seeing the usernames.
+
+
+**Answer: HardwareBasedEasterEggs2017**
+
+
+
+### **Q508**
+
+Which HTML page was most clicked by users before landing on http://store.froth.ly/magento2/checkout/ on August 19th? Answer guidance: Use earliest=1503126000 and latest=1503212400 to identify August 19th. Answer example: http://store.froth.ly/magento2/bigbrew.html 
+
+
+#### **Approach**
+
+
+The question is simple. The html page before landing the link in the question meant the http referrer that redirected to the checkout endpoint.
+Using the earliest and latest time in the query...
+
+
+
+```
+index=botsv2 sourcetype="stream:http"  (earliest=1503126000 AND latest=1503212400) url="http://store.froth.ly/magento2/checkout/" 
+| stats count by http_referrer
+```
+
+<img width="1852" height="423" alt="image" src="https://github.com/user-attachments/assets/d2bb8c75-ea70-48a7-8602-54b5ecf516d1" />
+
+
+
+Choosing the most count as the question asked about the page clicked most.
+
+
+**Answer: `http://store.froth.ly/magento2/mens-frothly-tee.html`**
+
+
+#### **Q509**
+
+Which HTTP user agent is associated with a fraudster who appears to be gaming the site by unsuccessfully testing multiple coupon codes? 
+
+
+In Q506, we had solved the events related to coupon codes. Filtering unsuccessful attempts...
+
+
+```
+index=botsv2 sourcetype="stream:http"  http_method=PUT request="*coupons*"  
+| rex field=dest_content "message\":\"(?<message>.+?)\""  
+| where message="Coupon code is not valid"  
+| stats count by http_user_agent 
+| sort -count
+```
+
+
+<img width="1848" height="663" alt="image" src="https://github.com/user-attachments/assets/a26ce9ea-39a7-46ab-9b2a-834e729d4997" />
+
+
+Unsuccessful testing multiple coupon codes meant the attempts with the most counts. 
+
+**Answer: Mozilla/5.0 (Windows NT 6.333; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36**
+
+That's it. Thank you........
 
