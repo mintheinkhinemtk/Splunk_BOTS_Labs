@@ -70,7 +70,7 @@ index=botsv2 sourcetype="stream:smtp" "aturing@froth.ly" "berkbeer"
 <img width="931" height="432" alt="image" src="https://github.com/user-attachments/assets/7b967c7f-0a90-49c6-87ee-90401074a084" />
 
 
-Found the CEO's email as  mberk@berkbeer.com and the name was found in the reply from that email.
+Found the CEO's email as  `mberk@berkbeer.com` and the name was found in the reply from that email.
 
 **Answer: Martin Berk**
 
@@ -83,9 +83,9 @@ After the initial contact with the CEO, Amber contacted another employee at this
 #### **Approach**
 
 
-In the email replied from mberk@berkbeer.com, Bernhard was mentioned. 
+In the email replied from `mberk@berkbeer.com`, Bernhard was mentioned. 
 
-I found his email as hbernhard@berkbeer.com in the following logs from the previous query and the content sent from Amber was encoded in base64. 
+I found his email as `hbernhard@berkbeer.com` in the following logs from the previous query and the content sent from Amber was encoded in base64. 
 
 It could be that Amber encoded her content in base64 for the malicious reasons.
 
@@ -95,7 +95,7 @@ It could be that Amber encoded her content in base64 for the malicious reasons.
 <img width="928" height="632" alt="image" src="https://github.com/user-attachments/assets/0bf0380a-c458-4825-ade7-211630ba6abc" />
 
 
-**Answer: hbernhard@berkbeer.com**
+**Answer: `hbernhard@berkbeer.com`**
 
 
 ### **Q103**
@@ -203,7 +203,7 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80
 
 ### **Q202**
 
-The IP address from question 201 is also being used by a likely different piece of software to attack a URI path. What is the URI path? Answer guidance: Include the leading forward slash in your answer. Do not include the query string or other parts of the URI. Answer example: /phpinfo.php
+The IP address from question 201 is also being used by a likely different piece of software to attack a URI path. What is the URI path? Answer guidance: Include the leading forward slash in your answer. Do not include the query string or other parts of the URI. Answer example: `/phpinfo.php`
 
 
 #### **Approach**
@@ -219,7 +219,7 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80   s
 <img width="1868" height="551" alt="image" src="https://github.com/user-attachments/assets/ddd1453b-be10-4425-85f7-dbb5bb9d45c0" />
 
 
-One got 'w3af.org' in the user agent. w3af is an open-source web application security scanner and the attacker forgot to sanitize the domain in its crafted user agent. From this, I knew which tool they used. 
+One got `w3af.org` in the user agent. w3af is an open-source web application security scanner and the attacker forgot to sanitize the domain in its crafted user agent. From this, I knew which tool they used. 
 
 ```
 index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80   src_ip="45.77.65.211"  http_user_agent="Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; w3af.org)"  
@@ -251,7 +251,7 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80   s
 
 /member.php had only the http POST requests from them using this user agent.
 
-After analyzing the logs, I found the sql injection attempts and the targeted uri_path was '/member.php' requested with the http POST method. 
+After analyzing the logs, I found the sql injection attempts and the targeted uri_path was `/member.php` requested with the http POST method. 
 
 ```
 index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80   src_ip="45.77.65.211"  http_user_agent="Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.17 Safari/537.36" http_method=POST uri_path="/member.php"
@@ -262,7 +262,7 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80   s
 
 
 
-**Answer: /member.php**
+**Answer: `/member.php`**
 
 
 ### **Q203**
@@ -342,7 +342,7 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80 src
 <img width="1691" height="523" alt="image" src="https://github.com/user-attachments/assets/2aab5c5e-107a-4619-8ac5-f089e0a08882" />
 
 
-Saw the length of the salt first and its value subsequently related to the frank's row, ''ORDER BY UID LIMIT 0,1'.
+Saw the length of the salt first and its value subsequently related to the frank's row, 'ORDER BY UID LIMIT 0,1'.
 
 `Note: In these attacks, attackers check the length first to see the actual length before dumping the value as XPATHE error value from updatexml gets truncated at 32 characters.`
 
@@ -1101,7 +1101,7 @@ What is the first and last name of the poor innocent sap who was implicated in t
 #### **Approach**
 
 
-We could find this information using OSINT on virustotal.com or seeing the file metadata in our sandbox.
+We could find this information using OSINT on `virustotal.com` or seeing the file metadata in our sandbox.
 
 
 `file invoice.doc`
