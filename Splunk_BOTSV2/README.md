@@ -120,7 +120,7 @@ What is Amber's personal email address?
 #### **Approach**
 
 
-That was a little tricky. I tried to find that in the smtp logs and found nothing but as mentioned in the Q102, the content were encoded in base64 in the email sent from Amber to hbernhard@berkbeer.com. 
+That was a little tricky. I tried to find that in the smtp logs and found nothing but as mentioned in the Q102, the content were encoded in base64 in the email sent from Amber to `hbernhard@berkbeer.com`. 
 
 After decoding this in cyberchef, the private message was found and there was Amber's personal email.
 
