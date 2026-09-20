@@ -916,6 +916,15 @@ A Federal law enforcement agency reports that Taedonggang often spearphishes its
 
 The zip files would definitely be in smtp logs as described per the question.
 
+
+```
+index=botsv2  "*.zip" sourcetype="stream:smtp"
+```
+
+<img width="1905" height="665" alt="image" src="https://github.com/user-attachments/assets/8a51b91f-ed19-4c71-a680-f43e600a1a72" />
+
+Found the zip file and investigated its email content.
+
 ```
 index=botsv2  "*.zip" sourcetype="stream:smtp" "attach_filename{}"="invoice.zip"
 |reverse
@@ -998,7 +1007,7 @@ Got its sha256 hash.
 <img width="1187" height="681" alt="image" src="https://github.com/user-attachments/assets/274d8909-70a8-4181-94a0-53569c8cbd5c" />
 
 
-After uploading the hash on VirusTotal, the IP, 45.77.65.211, seen in the above series, was contained in the contacted IP addresses section. 
+After uploading the hash on VirusTotal, the IP, `45.77.65.211`, seen in the above series, was contained in the contacted IP addresses section. 
 
 
 Using that IP information, I could search SSL information in the stream:tcp logs.
@@ -1032,7 +1041,7 @@ Based on the IP address found in question 402, what domain of interest is associ
 
 #### **Approach**
 
-The IP form Q402 is 160.153.91.7 when it was searched on google.
+The IP form Q402 is `160.153.91.7` when it was searched on google.
 
 As I got the IP Address, I could investigate the answer in dns logs. 
 
@@ -1044,7 +1053,7 @@ index=botsv2  sourcetype="stream:dns" "160.153.91.7"   "message_type{}"=RESPONSE
 <img width="1877" height="383" alt="image" src="https://github.com/user-attachments/assets/6c30f4e0-3ae3-4778-8136-4ff6d92f48ec" />
 
 
-Answer: hildegardsfarm.com
+Answer: `hildegardsfarm.com`
 
 
 ### **Q404** 
@@ -1131,7 +1140,7 @@ index=botsv2  dest_port="53" sourcetype="stream:dns"
 
 The two of the first four were internal IPs and the rest the google DNS ones.
 
-208.109.255.42 and 216.69.185.42 were suspicious as it had over 400 requests.
+`208.109.255.42` and `216.69.185.42` were suspicious as it had over 400 requests.
 
 Tried to find their domains.
 
@@ -1153,7 +1162,7 @@ index=botsv2  dest_port="53" sourcetype="stream:dns"   dest_ip="216.69.185.42"
 <img width="1896" height="777" alt="image" src="https://github.com/user-attachments/assets/18f655ea-d653-42e6-9951-b872bfa40e00" />
 
 
-0DsAAHNIclYsFcDN.hildegardsfarm.com to take the one as an example. All of these sub domains have the same character count. 
+`0DsAAHNIclYsFcDN.hildegardsfarm.com` was chosen to take the one as an example. All of these sub domains have the same character count. 
 
 
 See the guide for calculating Shannon entropy score at `https://www.splunk.com/en_us/blog/security/domain-parsing-url-toolbox.html` and `https://www.splunk.com/en_us/blog/security/random-words-on-entropy-and-dns.html`
@@ -1212,6 +1221,8 @@ index=botsv2  sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" "
 
 Saw the base64 encoded powershell command and decoded it in cyberchef.
 
+The encoded powershell command spawned the scheduled task.
+
 
 PowerShell's -EncodedCommand does not use plain Base64 → ASCII/UTF-8 and it uses Base64-encoded UTF-16 Little Endian (UTF-16LE).
 
@@ -1245,7 +1256,7 @@ The uri was '/admin/get.php' and it's child CommandLine events, `C:\Windows\syst
 The attacker created a scheduled task called Updater daily at 10:26 to run the payloads from the registry 'HKLM:\Software\Microsoft\Network debug' for the persistence mechanism.
 
 
-From this, we could conclude that the victim machine first connected to the 'https://45.77.65.211:443/admin/get.php/' url, ran the payloads from the C2 connection to create the registry and run scheduled task commands creating the 'Updater' task that ran the powershell command. 
+From this, we could conclude that the victim machine first connected to the `https://45.77.65.211:443/admin/get.php/` url, ran the payloads from the C2 connection to create the registry and run scheduled task commands creating the 'Updater' task that ran the powershell command. 
 
 The command decoded and ran the payloads in base64 format from the registry value 'debug'.
 
@@ -1261,13 +1272,15 @@ index=botsv2 sourcetype=WinRegistry "Software\\Microsoft\\Network"
 <img width="1887" height="558" alt="image" src="https://github.com/user-attachments/assets/f6130a4a-3dd9-482d-84da-c2f429c34892" />
 
 
+Decoded the commands.
+
 <img width="1527" height="793" alt="image" src="https://github.com/user-attachments/assets/44e2a193-d03d-4315-860c-71e1f570a07d" />
 
 
 <img width="1521" height="715" alt="image" src="https://github.com/user-attachments/assets/211aae5a-0931-4ed2-b0da-a5738b8690ee" />
 
 
-'/login/process.php' had the two counts and the other endpoints were '/admin/get.php' and '/new.php' having one count each. 
+`/login/process.php` had the two counts and the other endpoints were `/admin/get.php` and `/new.php` having one count each. 
 
 
 **Answer: process.php**
@@ -1295,10 +1308,10 @@ index=botsv2  sourcetype="stream:tcp" "45.77.65.211" "ssl"
 
 671DFE1D4F15C5A05F21DDB66D3B7815
 
-searched it at https://platform.censys.io but there was no data found for that. platform.censysio is a migrated one. The old data would have been lost. Google has the answer.
+searched it at `https://platform.censys.io` but there was no data found for that. `platform.censysio` is a migrated one. The old data would have been lost. Google has the answer.
 
 
-**Answer: 104.238.159.19**
+**Answer: `104.238.159.19`**
 
 
 ### **Q409** 
@@ -1319,7 +1332,7 @@ The hint told us to find this in ftp logs. ftp is for file transfer. The attacke
 <img width="1831" height="617" alt="image" src="https://github.com/user-attachments/assets/fc80b8cc-74c5-40b5-95c3-f79b75d89a74" />
 
 
-There's only one IP, 160.153.91.7 and its domain was hildegardsfarm.com as per from Q403. 
+There's only one IP, 160.153.91.7 and its domain was `hildegardsfarm.com` as per from Q403. 
 
 The attacker exfiltrated data to their server. That's uploading to the server. In ftp, the command is 'STOR'. 
 
