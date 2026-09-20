@@ -4,7 +4,9 @@ These are my comprehensive walkthroughs of Splunk's Boss of the SOC (BOTS) CTF-S
 
 # Walkthroughs
 
-- [Splunk_BOTSV1](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/tree/main/Splunk_BOTSV1) 
+- [Splunk_BOTSV1](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/tree/main/Splunk_BOTSV1)
+
+- [Splunk_BOTSV2](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/tree/main/Splunk_BOTSV2)
 
 # Suggestions
 
