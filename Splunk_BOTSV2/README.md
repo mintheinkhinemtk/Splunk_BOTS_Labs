@@ -128,7 +128,7 @@ After decoding this in cyberchef, the private message was found and there was Am
 <img width="937" height="697" alt="image" src="https://github.com/user-attachments/assets/4545fa43-a9dd-4b2d-9642-5c0d89de5267" />
 
 
-**Answer: ambersthebest@yeastiebeastie.com**
+**Answer: `ambersthebest@yeastiebeastie.com`**
 
 
 ### **Q105**
