@@ -1,6 +1,6 @@
 # About
 
-These are my comprehensive walkthroughs of Splunk's Boss of the SOC (BOTS) CTF-Style Labs
+These are my comprehensive walkthroughs of Splunk's Boss of the SOC (BOTS) CTF-Style Labs including my thinking approach, reasoning structure and problem solving skills. 
 
 # Walkthroughs
 
