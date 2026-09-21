@@ -16,4 +16,7 @@ There is a summary for mapping the scenarios to MITRE tactics.
 **This walkthrough documents the analytical reasoning for each stage**
 
 
-[BOTSV2](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/BOTSV2.md)
+-[BOTSV2](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/BOTSV2.md)
+
+
+-[Summary](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/Summary_MITRE_Tactics.md)
