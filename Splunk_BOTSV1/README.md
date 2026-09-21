@@ -6,6 +6,6 @@ You can sign up for an account and take the challenge at `https://bots.splunk.co
 
 **This walkthrough documents the analytical reasoning for each stage**
 
-- (BOTSV1)[https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV1/BOTSV1.md]
+- [BOTSV1](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV1/BOTSV1.md)
 
-- (Summary)[https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV1/Summary_MITRE_Tactics.md]
+- [Summary](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV1/Summary_MITRE_Tactics.md)
