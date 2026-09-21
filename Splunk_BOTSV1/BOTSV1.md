@@ -1,10 +1,4 @@
-# **Splunk BOTSV1 CTF Walkthrough**
-
-**Platform:** Splunk BOTS Version 1 (2015)  
-
-You can sign up for an account and take the challenge at https://bots.splunk.com
-
-**This walkthrough documents the analytical reasoning for each stage**
+# **Walkthrough**
 
 ## **Scenario 1 - Web Defacement**
 
