@@ -1,10 +1,4 @@
-# **Splunk BOTSV2 Walkthrough**
-
-**Platform**: Splunk BOTS Version 2 (2017)
-
-I took the questions from `https://samsclass.info/50/proj/botsv2.htm`
-
-**This walkthrough documents the analytical reasoning for each stage**
+# **Walkthrough**
 
 ## **Series 1xx**
 
@@ -1984,7 +1978,10 @@ Unsuccessful testing multiple coupon codes meant the attempts with the most coun
 ### **Series 1xx**
 
 
-Insider Attack from Amber Turing (Internal Data Theft and sold to the competitor.
+Insider Attack from Amber Turing (Internal Data Theft and sold to the competitor). 
+
+Installed Tor browser to have an unauthorized connection to sell the confidential information.
+
 
 
 ### **Series 2xx**
@@ -1992,7 +1989,7 @@ Insider Attack from Amber Turing (Internal Data Theft and sold to the competitor
 
 **Reconnaissance**
  
-45.77.65.211 did the vulnerability scan with w3af to `www.brewertalk.com` that had public IP, `52.42.208.228`
+`45.77.65.211` did the vulnerability scan with w3af to `www.brewertalk.com` that had public IP, `52.42.208.228`
 
 
 **Initial Access**
@@ -2007,7 +2004,7 @@ Got MyBB hashes of the users and the session cookie and CSRF token of the MyBB a
 
 **Persistence** and **Privilege Escalation**
 
-Created another admin account, kIagerfield using its CSRF token key as a persistence mechanism and done for internal spearphishing attack.
+Created another unauothorized admin-level account, kIagerfield using the CSRF token key of the admin as a persistence mechanism and used it for internal spearphishing attack as well.
 
 
 
@@ -2016,12 +2013,12 @@ Created another admin account, kIagerfield using its CSRF token key as a persist
 
 **Initial Access**
 
-malware delivered via USB vendor 058f
+Ransomware delivered via USB vendor 058f
 
 
 **Defense Evasion (Stealth and Defense Impairment)**
 
-The malware with perl5.18 masqueraded as a legitimate JVM spawn.
+The ransomware with perl5.18 masqueraded as a legitimate JVM spawn.
 
 
 **Impact**
@@ -2047,6 +2044,7 @@ Data was exfiltrated from Mallory's device to `5.39.93.112` with the bittorrent 
 
 Their servers had the SSL certification of C=US.
 
+
 **Initial Access**
 
 The password-protected invoice.zip email was sent to the origanization and the extracted file, invoice.doc, was run.
@@ -2064,7 +2062,7 @@ The schtasks "Updater" created daily beaconings to their C2 servers using https.
 
 **Exfiltration**
 
-Data exfiltration to `160.153.91.7` with ftp.
+Data exfiltration to `160.153.91.7` using FTP.
 
 
 
