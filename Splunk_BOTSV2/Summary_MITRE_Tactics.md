@@ -1,12 +1,15 @@
 # **Summary**
 
 
+
+
 ### **Series 1xx**
 
 
 Insider Attack from Amber Turing (Internal Data Theft and sold to the competitor). 
 
 Installed Tor browser to have an unauthorized connection to sell the confidential information.
+
 
 
 
@@ -34,6 +37,7 @@ Created another unauothorized admin-level account, kIagerfield using the CSRF to
 
 
 
+
 ### **Series 3xx**
 
 
@@ -54,13 +58,14 @@ The ransomware encrypted the data impacting the organization's confidentiality, 
 
 **Command & Control** and **Resource Development**
 
-
 Beaconing to `eidk.duckdns.org` and `eidk.hopto.org` developed by the attacker.
 
 
 **Exfilitration**
 
 Data was exfiltrated from Mallory's device to `5.39.93.112` with the bittorrent protocol.
+
+
 
 
 ### **Series 4xx**
@@ -89,6 +94,7 @@ The schtasks "Updater" created daily beaconings to their C2 servers using https.
 **Exfiltration**
 
 Data exfiltration to `160.153.91.7` using FTP.
+
 
 
 
