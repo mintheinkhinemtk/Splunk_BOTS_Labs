@@ -195,6 +195,8 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80
 | sort -count
 ```
 
+<img width="1905" height="745" alt="image" src="https://github.com/user-attachments/assets/f87334bb-ff59-4606-9d36-855b121e29eb" />
+
 
 **Answer: 45.77.65.211**
 
