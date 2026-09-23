@@ -1899,7 +1899,7 @@ We can see the coupon code again for the successful action.
 ### **Q507** 
 
 
-Several user accounts sharing a common password is usually a precursor to undesirable scenario orchestrated by a fraudster. Which password is being seen most often across users logging into http://store.froth.ly.
+Several user accounts sharing a common password is usually a precursor to undesirable scenario orchestrated by a fraudster. Which password is being seen most often across users logging into `http://store.froth.ly`.
 
 
 #### **Approach**
