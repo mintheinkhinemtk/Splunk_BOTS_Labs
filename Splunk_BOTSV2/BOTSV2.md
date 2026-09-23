@@ -1308,7 +1308,7 @@ index=botsv2  sourcetype="stream:tcp" "45.77.65.211" "ssl"
 
 671DFE1D4F15C5A05F21DDB66D3B7815
 
-searched it at `https://platform.censys.io` but there was no data found for that. `platform.censysio` is a migrated one. The old data would have been lost. Google has the answer.
+searched it at `https://platform.censys.io` but there was no data found for that. `platform.censysio` is a migrated one. The old data would have been lost. Google has the result for that hash.
 
 
 **Answer: `104.238.159.19`**
