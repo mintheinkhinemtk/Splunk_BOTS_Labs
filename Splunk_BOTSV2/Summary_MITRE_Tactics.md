@@ -1,8 +1,5 @@
 # **Summary**
 
-
-
-
 ## **Series 1xx**
 
 
