@@ -3,7 +3,7 @@
 
 
 
-### **Series 1xx**
+## **Series 1xx**
 
 
 Insider Attack from Amber Turing (Internal Data Theft and sold to the competitor). 
@@ -13,7 +13,7 @@ Installed Tor browser to have an unauthorized connection to sell the confidentia
 
 
 
-### **Series 2xx**
+## **Series 2xx**
 
 
 **Reconnaissance**
@@ -38,7 +38,7 @@ Created another unauothorized admin-level account, kIagerfield using the CSRF to
 
 
 
-### **Series 3xx**
+## **Series 3xx**
 
 
 **Initial Access**
@@ -68,7 +68,7 @@ Data was exfiltrated from Mallory's device to `5.39.93.112` with the bittorrent 
 
 
 
-### **Series 4xx**
+## **Series 4xx**
 
 
 **Resource Development**
@@ -98,7 +98,7 @@ Data exfiltration to `160.153.91.7` using FTP.
 
 
 
-### **Series 5xx**
+## **Series 5xx**
 
 
 Data Investigation in the web logs on the store to find the product checkouts abused by the fraudster creating multiple user accounts.
