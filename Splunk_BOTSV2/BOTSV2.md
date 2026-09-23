@@ -1341,7 +1341,7 @@ The attacker exfiltrated data to their server. That's uploading to the server. I
 index=botsv2  sourcetype="stream:ftp" "STOR" "160.153.91.7"
 ```
 
-<img width="1472" height="756" alt="image" src="https://github.com/user-attachments/assets/ffe5f48e-b7ef-438e-9691-8f05c5fd4b8d" />
+<img width="1312" height="755" alt="image" src="https://github.com/user-attachments/assets/5992c5d9-7041-4f17-81ff-4c441f1cab67" />
 
 
 transfer_duration field was in microseconds.
