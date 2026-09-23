@@ -26,7 +26,7 @@ index=botsv2 "amber" sourcetype="pan:traffic" (80 OR 443)
 
 Amber's private and public IPs were 10.0.2.101 and 71.39.18.125 found in Palo Alto Traffic Logs.
 
-The private IP was used in web logs to find the destination website visited.
+The private IP was used in web logs to find the destination website visited as private IPs can show the specific route to the destination through NAT using public IP. 
 
 I used the "beer" keyword in the search to find the beer site thinking there could be websites named beer.
 
