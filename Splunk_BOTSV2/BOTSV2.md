@@ -344,7 +344,7 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80 src
 
 Saw the length of the salt first and its value subsequently related to the frank's row, 'ORDER BY UID LIMIT 0,1'.
 
-`Note: In these attacks, attackers check the length first to see the actual length before dumping the value as XPATHE error value from updatexml gets truncated at 32 characters.`
+`Note: In these attacks, attackers check the length first to see the actual length before dumping the value as XPATH error value from updatexml gets truncated at 32 characters.`
 
 
 **Answer: gGsxysZL**
@@ -375,7 +375,7 @@ index=botsv2 dest_port=80 src_ip="45.77.65.211"  sourcetype="stream:http" site="
 <img width="1485" height="245" alt="image" src="https://github.com/user-attachments/assets/cb355700-c9e9-4ec6-8600-f70f2c8ab340" />
 
 
-Got the row of btun. Salt value was still needed.
+Got the row of btun as 'ORDER BY UID LIMIT 2,1'. Salt value was still needed.
 
 ```
 index=botsv2 dest_port=80 src_ip="45.77.65.211" "uri_path"="/member.php" "salt" sourcetype="stream:http" site="www.brewertalk.com"   http_user_agent="Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.17 Safari/537.36" "ORDER BY UID LIMIT 2,1"
@@ -387,9 +387,9 @@ index=botsv2 dest_port=80 src_ip="45.77.65.211" "uri_path"="/member.php" "salt" 
 
 <img width="1522" height="257" alt="image" src="https://github.com/user-attachments/assets/98d46a2a-185d-41ae-9f57-08d3af67f00a" />
 
-I could now find the whole computed hash of the password and its salt value using the row and the salt.
+Got the salt value as 'tlX7CQPE'. I could now find the whole computed hash of the password using the row and the salt.
 
-Using reverse to get the events from the oldest to the newest...
+Using reverse to get the events from the oldest to the newest to find the password hash.
 
 ```
 index=botsv2 dest_port=80 src_ip="45.77.65.211" sourcetype="stream:http" site="www.brewertalk.com" "/member.php"  "SELECT password FROM mybb_users ORDER BY UID LIMIT 2,1"
