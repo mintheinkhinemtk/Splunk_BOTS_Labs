@@ -99,8 +99,12 @@ What is the name of the file attachment that Amber sent to a contact at the comp
 
 #### **Approach**
 
+Investigating in the smtp log that Amber sent to `hbernhard@berkbeer.com`.
+
 
 <img width="532" height="112" alt="image" src="https://github.com/user-attachments/assets/c1992e52-7ef0-4cd2-877f-184416a29e5d" />
+
+<img width="1045" height="677" alt="image" src="https://github.com/user-attachments/assets/a6e183e1-a1fb-4194-8ce7-e8fcaf0e55d5" />
 
 
 **Answer: Saccharomyces_cerevisiae_patent.docx**
