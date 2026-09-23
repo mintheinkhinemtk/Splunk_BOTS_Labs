@@ -1329,7 +1329,8 @@ The hint told us to find this in ftp logs. ftp is for file transfer. The attacke
 ```index=botsv2  sourcetype="stream:ftp" ```
 
 
-<img width="1831" height="617" alt="image" src="https://github.com/user-attachments/assets/fc80b8cc-74c5-40b5-95c3-f79b75d89a74" />
+<img width="1312" height="755" alt="image" src="https://github.com/user-attachments/assets/91c24867-2592-4074-8710-4bd251fbf5c7" />
+
 
 
 There's only one IP, 160.153.91.7 and its domain was `hildegardsfarm.com` as per from Q403. 
