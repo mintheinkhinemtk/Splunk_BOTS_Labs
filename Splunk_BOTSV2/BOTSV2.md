@@ -1357,7 +1357,8 @@ I would like to aim for the events that have the data successfully transferred.
 index=botsv2  sourcetype="stream:ftp" "STOR" "160.153.91.7"  reply_content="*successfully transferred*"
 ```
 
-<img width="1822" height="665" alt="image" src="https://github.com/user-attachments/assets/af4e8f81-7ad8-4b68-b28c-b7f58c3dd4eb" />
+<img width="1312" height="755" alt="image" src="https://github.com/user-attachments/assets/895e1e1b-6db4-48c9-bb87-ba4a1b17969a" />
+
 
 
 There were 3 flow ids and the one had the maximum counts.
