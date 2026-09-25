@@ -46,8 +46,6 @@ The attacker got access to the web server, forced the system to write, save, and
 
 ### **Mapping with the MITRE framework**
 
-Tactic	Technique	Evidence
-
 **1. Initial Access**
 
 Replication Through Removable Media	USB key - MIRANDA_PRI was inserted with malicious .dotm
