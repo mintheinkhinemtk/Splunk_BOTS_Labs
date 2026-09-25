@@ -17,11 +17,10 @@ The first point must be Amber Turing as she was the visitor.
 ```
 index=botsv2 "amber" sourcetype="pan:traffic" (80 OR 443)
 ```
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/1.png)
 
-<img width="1905" height="611" alt="image" src="https://github.com/user-attachments/assets/d985c4ab-b358-432a-a02d-f02474c73602" />
 
-
-<img width="748" height="665" alt="image" src="https://github.com/user-attachments/assets/79372b9e-845a-443a-ac6b-510ed39d65bd" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/2.png)
 
 
 Amber's private and public IPs were 10.0.2.101 and 71.39.18.125 found in Palo Alto Traffic Logs.
@@ -37,7 +36,7 @@ index=botsv2 sourcetype="stream:http" src_ip="10.0.2.101" dest_port=80
 | stats count by site
 ```
 
-<img width="1873" height="391" alt="image" src="https://github.com/user-attachments/assets/02d7202b-3eb6-4021-a93d-44bdc43c3f1d" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/3.png)
 
 
 **Answer: `www.berkbeer.com`**
@@ -58,10 +57,9 @@ index=botsv2 sourcetype="stream:smtp" "aturing@froth.ly" "berkbeer"
 | sort +_time
 ```
 
-<img width="1891" height="383" alt="image" src="https://github.com/user-attachments/assets/d3c0897d-b8c0-4e43-9307-1964efa334f9" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/4.png)
 
-
-<img width="931" height="432" alt="image" src="https://github.com/user-attachments/assets/7b967c7f-0a90-49c6-87ee-90401074a084" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/5.png)
 
 
 Found the CEO's email as  `mberk@berkbeer.com` and the name was found in the reply from that email.
@@ -84,9 +82,9 @@ I found his email as `hbernhard@berkbeer.com` in the following logs from the pre
 It could be that Amber encoded her content in base64 for the malicious reasons.
 
 
-<img width="613" height="382" alt="image" src="https://github.com/user-attachments/assets/de3793ff-0c5e-44d2-8f79-afc2346b7934" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/6.png)
 
-<img width="928" height="632" alt="image" src="https://github.com/user-attachments/assets/0bf0380a-c458-4825-ade7-211630ba6abc" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/7.png)
 
 
 **Answer: `hbernhard@berkbeer.com`**
@@ -102,9 +100,9 @@ What is the name of the file attachment that Amber sent to a contact at the comp
 Investigating in the smtp log that Amber sent to `hbernhard@berkbeer.com`.
 
 
-<img width="532" height="112" alt="image" src="https://github.com/user-attachments/assets/c1992e52-7ef0-4cd2-877f-184416a29e5d" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/8.png)
 
-<img width="1045" height="677" alt="image" src="https://github.com/user-attachments/assets/a6e183e1-a1fb-4194-8ce7-e8fcaf0e55d5" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/8_1.png)
 
 
 **Answer: Saccharomyces_cerevisiae_patent.docx**
@@ -123,7 +121,7 @@ That was a little tricky. I tried to find that in the smtp logs and found nothin
 After decoding this in cyberchef, the private message was found and there was Amber's personal email.
 
 
-<img width="937" height="697" alt="image" src="https://github.com/user-attachments/assets/4545fa43-a9dd-4b2d-9642-5c0d89de5267" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/9.png)
 
 
 **Answer: `ambersthebest@yeastiebeastie.com`**
@@ -144,8 +142,7 @@ index=botsv2 sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" "a
 |stats count by Image EventCode
 ```
 
-<img width="1883" height="546" alt="image" src="https://github.com/user-attachments/assets/0fe9fcf7-ff39-4d92-aca4-f7ef4b9722fd" />
-
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/10.png)
 The file was 'C:\Users\amber.turing\Downloads\torbrowser-install-7.0.4_en-US.exe'
 
 
@@ -170,7 +167,7 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80
 | stats count by dest_ip
 ```
 
-<img width="1882" height="407" alt="image" src="https://github.com/user-attachments/assets/ec6d8849-f791-4138-81cd-9090035cc734" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/11.png)
 
 
 There were both private and public IPs for that but I excluded '172.31.4.249' as it's a private one.
@@ -195,7 +192,7 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80
 | sort -count
 ```
 
-<img width="1905" height="745" alt="image" src="https://github.com/user-attachments/assets/f87334bb-ff59-4606-9d36-855b121e29eb" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/12.png)
 
 
 **Answer: 45.77.65.211**
@@ -216,7 +213,7 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80   s
 |stats count by http_user_agent
 ```
 
-<img width="1868" height="551" alt="image" src="https://github.com/user-attachments/assets/ddd1453b-be10-4425-85f7-dbb5bb9d45c0" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/13.png)
 
 
 One got `w3af.org` in the user agent. w3af is an open-source web application security scanner and the attacker forgot to sanitize the domain in its crafted user agent. From this, I knew which tool they used. 
@@ -227,14 +224,14 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80   s
 | sort -count
 ```
 
-<img width="1881" height="652" alt="image" src="https://github.com/user-attachments/assets/b977cc6a-d994-4f3f-b7ed-8e86f0604bc2" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/14.png)
 
 
 ```
 index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80   src_ip="45.77.65.211"  http_user_agent="Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; w3af.org)" uri_path="/member.php" | stats  count by http_method
 ```
 
-<img width="1893" height="363" alt="image" src="https://github.com/user-attachments/assets/71393ba6-ece2-4804-a8cc-2f521460ba02" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/15.png)
 
 
 /member.php had the most requests with the http POST method.
@@ -246,7 +243,7 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80   s
 | stats count by  uri_path
 ```
 
-<img width="1887" height="397" alt="image" src="https://github.com/user-attachments/assets/d5b4339d-cec8-474b-8b12-1352c2193d45" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/16.png)
 
 
 /member.php had only the http POST requests from them using this user agent.
@@ -258,7 +255,7 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80   s
 | stats count by  form_data
 ```
 
-<img width="1887" height="780" alt="image" src="https://github.com/user-attachments/assets/09a9ad43-fac9-4128-8bd8-81f4759cae57" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/17.png)
 
 
 
@@ -280,7 +277,7 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80 src
 ```
 
 
-<img width="1892" height="790" alt="image" src="https://github.com/user-attachments/assets/022236fa-a218-4db7-b461-7357745a41cb" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/18.png)
 
 
 It was found that updatexml function was being abused. 
@@ -318,7 +315,7 @@ I tried to search the http response for the attack to frank ester's account firs
 index=botsv2 dest_port=80 src_ip="45.77.65.211"  sourcetype="stream:http" site="www.brewertalk.com"  "frank" "uri_path"="/member.php"
 ```
 
-<img width="1506" height="421" alt="image" src="https://github.com/user-attachments/assets/c4ccbb18-1d03-40fb-b5cd-bdbe28708a96" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/19.png)
 
 
 The name 'frank' could be seen in the MyBB error and the 'ORDER BY UID LIMIT 0,1' was the first row from the database table sorted by the 'UID' column.
@@ -334,12 +331,12 @@ index=botsv2 sourcetype="stream:http" site="www.brewertalk.com" dest_port=80 src
 ```
 
 
-<img width="1877" height="690" alt="image" src="https://github.com/user-attachments/assets/fa93e6be-aef1-47f9-8d98-34e42e7d4c18" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/20.png)
 
 
-<img width="1766" height="372" alt="image" src="https://github.com/user-attachments/assets/535de9ca-d333-49b5-bc1d-bbdafcbcac56" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/21.png)
 
-<img width="1691" height="523" alt="image" src="https://github.com/user-attachments/assets/2aab5c5e-107a-4619-8ac5-f089e0a08882" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/22.png)
 
 
 Saw the length of the salt first and its value subsequently related to the frank's row, 'ORDER BY UID LIMIT 0,1'.
@@ -369,10 +366,9 @@ let's find btun's row and salt first.
 index=botsv2 dest_port=80 src_ip="45.77.65.211"  sourcetype="stream:http" site="www.brewertalk.com"  "btun" "uri_path"="/member.php"
 ```
 
-<img width="1902" height="673" alt="image" src="https://github.com/user-attachments/assets/55611f15-babe-4e90-bc92-99b91f686872" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/23.png)
 
-
-<img width="1485" height="245" alt="image" src="https://github.com/user-attachments/assets/cb355700-c9e9-4ec6-8600-f70f2c8ab340" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/24.png)
 
 
 Got the row of btun as 'ORDER BY UID LIMIT 2,1'. Salt value was still needed.
@@ -382,10 +378,10 @@ index=botsv2 dest_port=80 src_ip="45.77.65.211" "uri_path"="/member.php" "salt" 
 | reverse
 ```
 
-<img width="1892" height="785" alt="image" src="https://github.com/user-attachments/assets/6f8de4cc-be94-4bad-9937-b7c04bd3f263" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/25.png)
 
 
-<img width="1522" height="257" alt="image" src="https://github.com/user-attachments/assets/98d46a2a-185d-41ae-9f57-08d3af67f00a" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/26.png)
 
 Got the salt value as 'tlX7CQPE'. I could now find the whole computed hash of the password using the row and the salt.
 
@@ -396,19 +392,18 @@ index=botsv2 dest_port=80 src_ip="45.77.65.211" sourcetype="stream:http" site="w
 | reverse
 ```
 
-<img width="1910" height="646" alt="image" src="https://github.com/user-attachments/assets/b2314fb7-2635-4617-a279-ce66c0ec94b4" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/27.png)
 
-
-<img width="1546" height="323" alt="image" src="https://github.com/user-attachments/assets/5cd6f912-14a3-4a3b-949b-7342f2068960" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/28.png)
 
 Attacker got the character count as 32.
 
-<img width="1458" height="282" alt="image" src="https://github.com/user-attachments/assets/0b3df68d-200e-4efd-920d-2cb2c35eedfe" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/29.png)
 
 The length of password was 32 but the subtracted string was only 31 character long. 
 
 
-<img width="1433" height="273" alt="image" src="https://github.com/user-attachments/assets/423a6cb3-d6c0-419b-8886-5b1cae5e50ca" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/30.png)
 
 
 The final character was extracted.
@@ -417,10 +412,10 @@ So, the total password hash value was 'f91904c1dd2723d5911eeba409cc0d14' and it'
 
 Running the hashcat command in my Linux VM to crack the md5hash of MyBB `hashcat -m 2811 -a 0 'f91904c1dd2723d5911eeba409cc0d14':'tlX7cQPE' ~/rockyou/rockyou.txt` ...
 
-<img width="1850" height="752" alt="image" src="https://github.com/user-attachments/assets/d3d4a232-67f3-4f9b-8a76-5f426ef2fa3f" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/31.png)
 
 
-<img width="1051" height="802" alt="image" src="https://github.com/user-attachments/assets/862c5c89-0983-458d-840e-ebe8fdcf9029" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/32.png)
 
 
 Got the password for btun as '123456'.
@@ -443,10 +438,9 @@ Basic xss probes mostly contain <script>alert("x")</script> tags and thus, I tri
 index=botsv2 sourcetype="stream:http"   "<script>alert(*"
 ```
 
-<img width="1887" height="658" alt="image" src="https://github.com/user-attachments/assets/9ba6d2d6-b0e3-4d12-b29f-0e1ec0e79c85" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/33.png)
 
-
-<img width="1472" height="490" alt="image" src="https://github.com/user-attachments/assets/bc4e9c44-6f49-42d0-ac35-a59f0b07c454" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/34.png)
 
 
 **Answer: 대동**
@@ -465,24 +459,24 @@ Firstly, I needed to aim for the XSS payload that got the cookie.
 index=botsv2  sourcetype="stream:http" kevin "<script>"
 ```
 
-<img width="1905" height="678" alt="image" src="https://github.com/user-attachments/assets/fc578646-e5c1-4922-a2a3-3ea11170e654" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/35.png)
 
 
-<img width="1551" height="422" alt="image" src="https://github.com/user-attachments/assets/9fd20022-12df-4483-b4f0-1a5b8ecab69a" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/36.png)
 
 Malicious xss payload script put by the attacker.
 
 ```var postdata= "my_post_key="+my_post_key+"&username=kIagerfield&password=beer_lulz&confirm_password=beer_lulz&email=kIagerfield@froth.ly&usergroup=4&additionalgroups[]=4&displaygroup=4"```
 
-The adversary injected the payload at the 'utid' parameter as the stored xss mechanism stealing the token, 'my_post_key' of the admin, Kevin, and created another user account 'kIagerfield' and the password 'beer_lulz' with the email 'kIagerfield@froth.ly' using that key and the admin privileges (usergroup=4) in MyBB under Kevin's session.
+The adversary injected the payload at the 'utid' parameter as the stored xss mechanism stealing the token, 'my_post_key' of the admin, Kevin, and created another user account 'kIagerfield' and the password 'beer_lulz' with the email `kIagerfield@froth.ly` using that key and the admin privileges (usergroup=4) in MyBB under Kevin's session.
 
 
 
-<img width="1592" height="82" alt="image" src="https://github.com/user-attachments/assets/ad72d672-7090-44c5-a941-7c72b49c4ba3" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/37.png)
 
-<img width="1691" height="46" alt="image" src="https://github.com/user-attachments/assets/b0344ce6-33e4-467d-b82f-34f36243f7a0" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/38.png)
 
-<img width="1526" height="93" alt="image" src="https://github.com/user-attachments/assets/b3803e09-ea4c-4b24-82d2-2af8aefe992f" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/39.png)
 
 
 ```
@@ -498,7 +492,7 @@ index=botsv2 sourcetype="stream:http" "kevin"    src_ip="10.0.2.109" dest_ip="52
 ```
 
 
-<img width="1860" height="832" alt="image" src="https://github.com/user-attachments/assets/96246c88-f5d9-4624-817b-6108659d9ff6" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/40.png)
 
 
 As the question mentioned the cookie had only digits and thus, lastvisit would make more sense.
@@ -537,7 +531,7 @@ index=botsv2  sourcetype="stream:http" kevin "<script>"
 ```
 
 
-<img width="1918" height="588" alt="image" src="https://github.com/user-attachments/assets/74ccb1d8-e887-417f-8996-6a974e14499a" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/41.png)
 
 I had got that anti-CSRF token from Q207.
 
@@ -583,7 +577,7 @@ index=botsv2 host="MACLORY-AIR13" "GOT"
 | stats count by columns.target_path
 ```
 
-<img width="1905" height="655" alt="image" src="https://github.com/user-attachments/assets/42a2e372-ecdf-4d70-b033-d3f6fe8144be" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/42.png)
 
 Got the episode number and season as GoT.S07E02. 
 
@@ -624,11 +618,10 @@ Using the IP Address from Q303...
 index=botsv2 "5.39.93.112"
 ```
 
-<img width="851" height="752" alt="image" src="https://github.com/user-attachments/assets/64e83e53-b716-44b5-81d7-c9b49e7190df" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/43.png)
 
 
-
-<img width="897" height="753" alt="image" src="https://github.com/user-attachments/assets/234d70ad-fae5-4352-8880-203b26b31a05" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/44.png)
 
 
 10.0.4.4 was connecting to 5.39.93.112. 71.39.18.125 was the src_NAT_public IP for the organization and the protocol used was bittorrent.
@@ -655,7 +648,7 @@ index=botsv2 "*.pptx" host="MACLORY-AIR13"
 |reverse
 ```
 
-<img width="1386" height="741" alt="image" src="https://github.com/user-attachments/assets/4775161d-08b0-4df2-99cd-f3128045302c" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/45.png)
 
 
 The second event had the ctime, 1503093022, that stands for the status change time and the target_path had the file with the extension .crypt meaning the file was changed to the encrypted state at that time.
@@ -691,14 +684,14 @@ index=botsv2 host="MACLORY-AIR13"  "*.crypt"
 ```
 
 
-<img width="1502" height="742" alt="image" src="https://github.com/user-attachments/assets/8642e0fa-7639-413a-ab0e-08a3d2ac625a" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/46.png)
 
 
 The encryption Unix command, `find /Users/ -not -iname "README!.txt" -print -exec zip -0 -P TPq3NrjTLn2fSBZIxklL6ZRM5 {}.crypt {} \; -exec rm {} \; -exec touch -mt 201002130000 {}.crypt \;
 `, was run at 08/18/17 `21:50:43` UTC.
 
 
-<img width="1367" height="745" alt="image" src="https://github.com/user-attachments/assets/2163575f-32dc-47c4-8dd5-d5b2da673ddf" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/47.png)
 
 
 At the same time, the first file encrypted was  "/Users/mallorykraeusen/Desktop/.DS_Store.crypt".
@@ -717,10 +710,10 @@ index=botsv2 host="MACLORY-AIR13" "*.app" action="added"
 ```
 
 
-<img width="1897" height="776" alt="image" src="https://github.com/user-attachments/assets/02b35ca2-b565-4283-aa55-79ff2dc44e9c" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/48.png)
 
 
-<img width="1292" height="650" alt="image" src="https://github.com/user-attachments/assets/fde5ebd4-bb9b-4a88-a649-6d1e20722632" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/49.png)
 
 
 Found the malicious file with suspicious name under User Downloads folder. 
@@ -759,7 +752,7 @@ To make this work, an escaped character, '\', backslash, must be put in front of
 ```index=botsv2 "kutekitten"  "\\/Users\\/mkraeusen\\/*" | stats  count by columns.target_path```
 
 
-<img width="1883" height="332" alt="image" src="https://github.com/user-attachments/assets/48c78333-027c-430e-b008-92bfd371fc73" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/50.png)
 
 
 I found the suspicious file under Downloads directory.
@@ -771,12 +764,14 @@ index=botsv2 "kutekitten"   "columns.target_path"="/Users/mkraeusen/Downloads/Im
 ```
 
 
-<img width="1250" height="686" alt="image" src="https://github.com/user-attachments/assets/66d10bb2-cc35-4ee5-91a5-2f0caad44923" />
+
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/51.png)
 
 Got the file hash and the time of the file created and ran as Aug 03 `18:19:07` UTC.
 
 
-<img width="1843" height="425" alt="image" src="https://github.com/user-attachments/assets/cef553d1-c9d2-46cf-8634-ff875aefcf82" />
+
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/52.png)
 
 
 Virustotal flagged this as a malware that used perl language.
@@ -790,13 +785,13 @@ index=botsv2 "kutekitten"  "usb" name="pack_hardware-monitoring_usb_devices"
 | table _time action columns.vendor_id
 ```
 
-<img width="1897" height="541" alt="image" src="https://github.com/user-attachments/assets/71b0a0ee-5397-4942-8685-89ccd7fc6d6e" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/53.png)
 
 
 Found the suspicious USB drive event with the action added at Aug 03 `18:18:10` 2017 UTC and since it was the time the closet to that of the malware file being created and run, that usb drive event was the answer. 
 
 
-<img width="637" height="130" alt="image" src="https://github.com/user-attachments/assets/94154b9e-97ef-443c-ad1e-43bec8278070" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/54.png)
 
 Vendor ID, 058f, is the one from Alcor Micro Corp.
 
@@ -821,7 +816,8 @@ index=botsv2 "kutekitten" name="pack_osx-proclaunch_ProcessesInUserSpace" "colum
 ```
 
 
-<img width="1007" height="521" alt="image" src="https://github.com/user-attachments/assets/88d69127-5a83-4e69-88e1-4dc9170b6907" />
+
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/55.png)
 
 
 There was no perl script file run shown in the cmdline and the process was shown as java in it even though the actual binary path run was /usr/bin/per15.18. That's the malware running with perl and masquerading as a legitimate JVM spawn.
@@ -849,7 +845,8 @@ Q310: The malware infecting kutekitten uses dynamic DNS destinations to communic
 
 There were dynamic DNS domains shown in VirusTotal under Relations tab.
 
-<img width="1357" height="653" alt="image" src="https://github.com/user-attachments/assets/48ef90f9-e8dd-43a1-81d2-13f1c45604bf" />
+
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/56.png)
 
 Chose the first (alphabetically) of these destinations as per question.
 
@@ -875,7 +872,7 @@ Let me skip this as there's no csv file relate to this in my lab.
 
 ### **Q313**
 
-Two .jpg-formatted photos of Mallory exist in Kevin Lagerfield's server home directory that have eight-character file names, not counting the .jpg extension. Both photos were encrypted by the ransomware. One of the photos can be downloaded at the following link, replacing 8CHARACTERS with the eight characters from the file name. https://splunk.box.com/v/8CHARACTERS After you download the file to your computer, decrypt the file using the encryption key used by the ransomware. What is the complete line of text in the photo, including any punctuation? Answer guidance: The encryption key can be found in Splunk.
+Two .jpg-formatted photos of Mallory exist in Kevin Lagerfield's server home directory that have eight-character file names, not counting the .jpg extension. Both photos were encrypted by the ransomware. One of the photos can be downloaded at the following link, replacing 8CHARACTERS with the eight characters from the file name. `https://splunk.box.com/v/8CHARACTERS` After you download the file to your computer, decrypt the file using the encryption key used by the ransomware. What is the complete line of text in the photo, including any punctuation? Answer guidance: The encryption key can be found in Splunk.
 
 
 #### **Approach**
@@ -890,7 +887,8 @@ index=botsv2 sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational"  "
 ```
 
 
-<img width="1897" height="773" alt="image" src="https://github.com/user-attachments/assets/3ff12c8f-42f6-49ea-bb4e-e6b753bcc1ca" />
+
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/57.png)
 
 
 Found the jpg files with 8 character long under his home directory. 
@@ -921,7 +919,8 @@ The zip files would definitely be in smtp logs as described per the question.
 index=botsv2  "*.zip" sourcetype="stream:smtp"
 ```
 
-<img width="1905" height="665" alt="image" src="https://github.com/user-attachments/assets/8a51b91f-ed19-4c71-a680-f43e600a1a72" />
+
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/58.png)
 
 Found the zip file and investigated its email content.
 
@@ -931,10 +930,12 @@ index=botsv2  "*.zip" sourcetype="stream:smtp" "attach_filename{}"="invoice.zip"
 ```
 
 
-<img width="918" height="437" alt="image" src="https://github.com/user-attachments/assets/2dbee507-9848-42ed-b3fb-759b48de202e" />
+
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/59.png)
 
 
-<img width="962" height="297" alt="image" src="https://github.com/user-attachments/assets/a2529bc2-041e-4ebd-9f17-1112ba5baf38" />
+
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/60.png)
 
 
 The originating sending server was not compatible with the domain in the 'From' field. This was a phishing email and the zip file had a password (912345678) to open it. 
@@ -958,12 +959,12 @@ IP information had not been found yet.
 As the file name was already known, I tried to investigate the content further from Q400 as it was coded in base64 format to get any more information related to IP and the domain.
 
 
-<img width="947" height="662" alt="image" src="https://github.com/user-attachments/assets/9d835025-512f-4bc4-8d7a-0951da9be0c8" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/61.png)
 
 Copied all of the base64 content and saved it in a file. 
 
 
-<img width="1853" height="573" alt="image" src="https://github.com/user-attachments/assets/2ef0f9ac-bef4-489f-8f99-8483cef6741d" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/62.png)
 
 
 stripped newlines
@@ -973,7 +974,7 @@ stripped newlines
 I saw whitespace left in the file when I checked with cat command.
 
 
-<img width="1177" height="111" alt="image" src="https://github.com/user-attachments/assets/e0e09005-5526-4e79-a9e8-2b5f34f7a27b" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/63.png)
 
 
 stripped any whitespace again to get the whole base64 content.
@@ -981,7 +982,7 @@ stripped any whitespace again to get the whole base64 content.
 `cat invoice1 | tr -d ' ' > invoice2`
 
 
-<img width="1858" height="727" alt="image" src="https://github.com/user-attachments/assets/b757f457-0d1a-47a4-9cea-c4be0f1e5097" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/64.png)
 
 
 All was clear.
@@ -990,8 +991,7 @@ All was clear.
 `cat invoice2 | base64 --decode > invoice.zip`
 
 `unzip invoice.zip`
-
-<img width="1182" height="201" alt="image" src="https://github.com/user-attachments/assets/d368716a-1f65-4010-9def-15ab0eef9b90" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/65.png)
 
 
 Used the password (912345678) in the email. (Don't run the file as it's a malware. Use strings 'file' to see its string contents.)
@@ -999,12 +999,11 @@ Used the password (912345678) in the email. (Don't run the file as it's a malwar
 
 `sha256sum invoice.doc` to get the hash for uploading and seeing it on VirusTotal.
 
-<img width="1013" height="56" alt="image" src="https://github.com/user-attachments/assets/195b44b3-0df8-47b6-86d9-cd539edeb6fe" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/66.png)
 
 
 Got its sha256 hash. 
-
-<img width="1187" height="681" alt="image" src="https://github.com/user-attachments/assets/274d8909-70a8-4181-94a0-53569c8cbd5c" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/67.png)
 
 
 After uploading the hash on VirusTotal, the IP, `45.77.65.211`, seen in the above series, was contained in the contacted IP addresses section. 
@@ -1018,7 +1017,7 @@ index=botsv2  sourcetype="stream:tcp" "45.77.65.211" "ssl"
 | stats count by ssl_issuer
 ```
 
-<img width="1888" height="422" alt="image" src="https://github.com/user-attachments/assets/efdebfae-9f02-43a3-99bb-def32ee964aa" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/68.png)
 
 
 **Answer: C=US**
@@ -1050,7 +1049,7 @@ index=botsv2  sourcetype="stream:dns" "160.153.91.7"   "message_type{}"=RESPONSE
 ```
 
 
-<img width="1877" height="383" alt="image" src="https://github.com/user-attachments/assets/6c30f4e0-3ae3-4778-8136-4ff6d92f48ec" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/69.png)
 
 
 Answer: `hildegardsfarm.com`
@@ -1069,7 +1068,7 @@ winsys32.dll is not a legitimate dll.
 index=botsv2 "winsys32.dll"
 ```
 
-<img width="1273" height="792" alt="image" src="https://github.com/user-attachments/assets/f41b5629-b13f-4cb4-a33d-6dcebac3aec1" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/70.png)
 
 
 Got the process cmdline as `C:\Windows\system32\ftp.exe"  -i -s:winsys32.dll`.
@@ -1087,8 +1086,7 @@ I needed to investigate what ftp downloaded using the commands from winsys32.dll
 ```index=botsv2 sourcetype="stream:ftp" RETR```
 
 
-<img width="1891" height="787" alt="image" src="https://github.com/user-attachments/assets/415e832d-e903-47ee-9860-0ca0449cb3f3" />
-
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/71.png)
 
 **Answer: 나는_데이비드를_사랑한다.hwp**
 
@@ -1107,7 +1105,7 @@ We could find this information using OSINT on `virustotal.com` or seeing the fil
 `file invoice.doc`
 
 
-<img width="1851" height="135" alt="image" src="https://github.com/user-attachments/assets/2ac3089f-1db9-46ec-b3a3-3cd530491f9a" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/72.png)
 
 
 Answer: Ryan Kovar
@@ -1134,7 +1132,7 @@ index=botsv2  dest_port="53" sourcetype="stream:dns"
 ```
 
 
-<img width="1912" height="855" alt="image" src="https://github.com/user-attachments/assets/2e49df40-aad5-436d-86cd-ebdaad7985fc" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/73.png)
 
 
 
@@ -1149,8 +1147,7 @@ index=botsv2  dest_port="53" sourcetype="stream:dns"   dest_ip="208.109.255.42"
 | stats count by query{}
 ```
 
-
-<img width="1876" height="787" alt="image" src="https://github.com/user-attachments/assets/b1fbac5a-da87-4ccc-ae4f-b370d7b9b6a5" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/74.png)
 
 
 ```
@@ -1159,8 +1156,7 @@ index=botsv2  dest_port="53" sourcetype="stream:dns"   dest_ip="216.69.185.42"
 ```
 
 
-<img width="1896" height="777" alt="image" src="https://github.com/user-attachments/assets/18f655ea-d653-42e6-9951-b872bfa40e00" />
-
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/75.png)
 
 `0DsAAHNIclYsFcDN.hildegardsfarm.com` was chosen to take the one as an example. All of these sub domains have the same character count. 
 
@@ -1182,7 +1178,7 @@ index=botsv2  dest_port="53" sourcetype="stream:dns"   (dest_ip="216.69.185.42" 
 ```
 
 
-<img width="1836" height="421" alt="image" src="https://github.com/user-attachments/assets/a79eb0cb-4e0e-458b-b0ec-138ab704f7bc" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/76.png)
 
 
 **Answer: 3.6**
@@ -1204,7 +1200,7 @@ index=botsv2  sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" "
 ```
 
 
-<img width="1885" height="671" alt="image" src="https://github.com/user-attachments/assets/1297ec81-01ab-4033-8172-7e0d2e64d8de" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/77.png)
 
 
 One of the hosts was wrk-btun.
@@ -1216,8 +1212,7 @@ index=botsv2  sourcetype="xmlwineventlog:microsoft-windows-sysmon/operational" "
 ```
 
 
-<img width="1882" height="778" alt="image" src="https://github.com/user-attachments/assets/bd7de48b-0b2d-407c-b7ca-08ee285cb4c4" />
-
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/78.png)
 
 Saw the base64 encoded powershell command and decoded it in cyberchef.
 
@@ -1228,7 +1223,7 @@ PowerShell's -EncodedCommand does not use plain Base64 → ASCII/UTF-8 and it us
 
 
 
-<img width="951" height="742" alt="image" src="https://github.com/user-attachments/assets/81d4ed13-bab1-4117-8c9a-b370744c4a55" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/79.png)
 
 
 
@@ -1269,18 +1264,20 @@ index=botsv2 sourcetype=WinRegistry "Software\\Microsoft\\Network"
 ```
 
 
-<img width="1887" height="558" alt="image" src="https://github.com/user-attachments/assets/f6130a4a-3dd9-482d-84da-c2f429c34892" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/80.png)
 
 
 Decoded the commands.
 
-<img width="1527" height="793" alt="image" src="https://github.com/user-attachments/assets/44e2a193-d03d-4315-860c-71e1f570a07d" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/79.png)
+
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/81.png)
 
 
-<img width="1521" height="715" alt="image" src="https://github.com/user-attachments/assets/211aae5a-0931-4ed2-b0da-a5738b8690ee" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/82.png)
 
 
-`/login/process.php` had the two counts and the other endpoints were `/admin/get.php` and `/new.php` having one count each. 
+`/login/process.php` had the two counts and the other endpoints were `/admin/get.php` and `/news.php` having one count each. 
 
 
 **Answer: process.php**
@@ -1303,7 +1300,7 @@ index=botsv2  sourcetype="stream:tcp" "45.77.65.211" "ssl"
 | stats count by ssl_cert_md5
 ```
 
-<img width="1880" height="353" alt="image" src="https://github.com/user-attachments/assets/20b073d7-55a2-41ae-8aab-21829c293dcf" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/83.png)
 
 
 671DFE1D4F15C5A05F21DDB66D3B7815
@@ -1329,7 +1326,7 @@ The hint told us to find this in ftp logs. ftp is for file transfer. The attacke
 ```index=botsv2  sourcetype="stream:ftp" ```
 
 
-<img width="1312" height="755" alt="image" src="https://github.com/user-attachments/assets/91c24867-2592-4074-8710-4bd251fbf5c7" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/84.png)
 
 
 
@@ -1342,7 +1339,7 @@ The attacker exfiltrated data to their server. That's uploading to the server. I
 index=botsv2  sourcetype="stream:ftp" "STOR" "160.153.91.7"
 ```
 
-<img width="1312" height="755" alt="image" src="https://github.com/user-attachments/assets/df85c92e-4444-4e40-a47d-b81dbf5e6997" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/85.png)
 
 
 transfer_duration field was in microseconds.
@@ -1357,8 +1354,7 @@ I would like to aim for the events that have the data successfully transferred.
 ```
 index=botsv2  sourcetype="stream:ftp" "STOR" "160.153.91.7"  reply_content="*successfully transferred*"
 ```
-
-<img width="1312" height="755" alt="image" src="https://github.com/user-attachments/assets/895e1e1b-6db4-48c9-bb87-ba4a1b17969a" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/86.png)
 
 
 
@@ -1373,7 +1369,7 @@ index=botsv2  sourcetype="stream:ftp" "STOR" "160.153.91.7" reply_content="*(mea
 | table _time reply_content time_duration rate size
 ```
 
-<img width="1838" height="717" alt="image" src="https://github.com/user-attachments/assets/1428d662-9bf8-4916-a54f-a9ff7621839e" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/87.png)
 
 
 1024 bytes for Kbytes or 1048576 for Mbytes
@@ -1389,7 +1385,7 @@ index=botsv2  sourcetype="stream:ftp" "STOR" "160.153.91.7" reply_content="*(mea
 ```
 
 
-<img width="1827" height="517" alt="image" src="https://github.com/user-attachments/assets/20bcf008-02fa-4800-9ab6-be8eaf4d58dc" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/88.png)
 
 
 
@@ -1421,7 +1417,7 @@ index=botsv2 sourcetype="stream:http" "dberry398@mail.com"
 ```
 
 
-<img width="1832" height="682" alt="image" src="https://github.com/user-attachments/assets/165e37dc-13fe-4d98-89b5-861f50d6636b" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/89.png)
 
 
 The client ip was 74.130.56.117 and there was a form_key=lwh9Ql7oUbnJUqxR assigned to that user account when it had been registered. 
@@ -1436,7 +1432,7 @@ index=botsv2 sourcetype="stream:http" "74.130.56.117"
 ```
 
 
-<img width="1836" height="352" alt="image" src="https://github.com/user-attachments/assets/969357d4-4c0a-40f5-a795-d7eadc1299c3" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/90.png)
 
 The same form key was used throughout all of the interactions by that user.
 
@@ -1460,7 +1456,7 @@ index=botsv2 sourcetype="stream:http"  "grand total"
 | stats count by url
 ```
 
-<img width="1856" height="490" alt="image" src="https://github.com/user-attachments/assets/2c9d4a0d-990e-4d73-b0b2-a229b30d6108" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/91.png)
 
 
 Let's choose the checkout url because it meant the order was completed. 
@@ -1475,7 +1471,8 @@ index=botsv2 sourcetype="stream:http" "grand_total" url="http://store.froth.ly/m
 | stats count by gtotal_value session_id
 ```
 
-<img width="1848" height="657" alt="image" src="https://github.com/user-attachments/assets/7ed1877d-aa01-45dd-9ddb-c45fdceba15f" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/92.png)
+
 
 
 I got the values greater than $1000 and related session_ids as the count being 8 but the question asked the unique user ids, not the session ids. 
@@ -1494,7 +1491,8 @@ index=botsv2 sourcetype="stream:http"  "yjB8uDMr9vRpbibM"
 ```
 
 
-<img width="1838" height="650" alt="image" src="https://github.com/user-attachments/assets/a1d4fd57-dd48-49b9-a41b-8419907dd25d" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/93.png)
+
 
 
 `url= http://store.froth.ly/magento2/customer/account/loginPost/`
@@ -1518,7 +1516,8 @@ index=botsv2 sourcetype="stream:http" "grand_total" url="http://store.froth.ly/m
 ```
 
 
-<img width="1832" height="496" alt="image" src="https://github.com/user-attachments/assets/1a938a07-4627-4062-a92d-602d0deac7a5" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/94.png)
+
 
 
 ```
@@ -1529,7 +1528,8 @@ index=botsv2 sourcetype="stream:http" url="http://store.froth.ly/magento2/custom
 ```
 
 
-<img width="1835" height="627" alt="image" src="https://github.com/user-attachments/assets/a93c83e9-9655-48a1-a8b5-9e224bdaf861" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/95.png)
+
 
 
 It can be seen that the user 'friztmaytag' had the two session ids.
@@ -1557,7 +1557,8 @@ Finding the associated urls first related to changing the user information.
 index=botsv2 sourcetype="stream:http" url="*magento2/customer/account/*" "*change*" | stats count by url
 ```
 
-<img width="1838" height="445" alt="image" src="https://github.com/user-attachments/assets/3bc6df27-69dc-4adb-9bd7-6ec45cc10fb8" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/96.png)
+
 
 Got the interesting urls and choosing the one 'edit' endpoint.
 
@@ -1566,7 +1567,8 @@ Got the interesting urls and choosing the one 'edit' endpoint.
 index=botsv2 sourcetype="stream:http"   url="http://store.froth.ly/magento2/customer/account/edit/" | rex field=cookie "form_key=(?<session_id>[^;]+);" | stats count by session_id
 ```
 
-<img width="1846" height="338" alt="image" src="https://github.com/user-attachments/assets/40b0d764-5f6b-45f1-98ef-bbf4944ca925" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/97.png)
+
 
 
 Got the session_id as `ZDd2VGcWWKcKM95o`
@@ -1579,7 +1581,8 @@ index=botsv2 sourcetype="stream:http"  "ZDd2VGcWWKcKM95o"  url="http://store.fro
 | stats count by form_data
 ```
 
-<img width="1846" height="397" alt="image" src="https://github.com/user-attachments/assets/929cf838-a24d-46d1-9d18-c2c1146ebe9b" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/98.png)
+
 
 
 It was shown that the user tried to change their email address.
@@ -1596,7 +1599,8 @@ index=botsv2 sourcetype="stream:http"  "ZDd2VGcWWKcKM95o"  http_method="POST" fo
 ```
 
 
-<img width="1857" height="621" alt="image" src="https://github.com/user-attachments/assets/2da68f36-1f0b-420f-bf8c-902af383426b" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/99.png)
+
 
 
 The original email was `bkildcare@yandex.com`. The user tried to change their email address after logging in. I needed to confirm the one thing that the profile was edited before placing an order over $1000 in the same clickstream. 
@@ -1611,7 +1615,8 @@ index=botsv2 sourcetype="stream:http" url="http://store.froth.ly/magento2/checko
 ```
 
 
-<img width="1852" height="431" alt="image" src="https://github.com/user-attachments/assets/dbf6c613-261b-4af4-89b7-a95a4e020aad" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/100.png)
+
 
 
 The user placed an order of $1152 after editing their profile by seeing the time. 
@@ -1644,7 +1649,8 @@ index=botsv2 sourcetype="stream:http" "shipping" "address"
 | stats count by src_content
 ```
 
-<img width="1832" height="666" alt="image" src="https://github.com/user-attachments/assets/98fd6edf-afd2-4803-ae90-25a49abe393b" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/101.png)
+
 
 
 I saw the dictionary values of address and street names. 
@@ -1658,7 +1664,8 @@ index=botsv2 sourcetype="stream:http" "address" (src_content="*shipping*" AND sr
 ```
 
 
-<img width="1850" height="656" alt="image" src="https://github.com/user-attachments/assets/9a686d09-7787-4b40-81de-7dd0f2a5537e" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/102.png)
+
 
 
 Chose shipping-information endpoint to see the list of shipping and billing addresses
@@ -1671,10 +1678,10 @@ index=botsv2 sourcetype="stream:http"  url="http://store.froth.ly/magento2/rest/
 | stats  count by shipping billing
 ```
 
-<img width="1860" height="507" alt="image" src="https://github.com/user-attachments/assets/cf756b1b-7cec-4dcc-9412-93153b512eb2" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/103.png)
 
 
-<img width="1855" height="631" alt="image" src="https://github.com/user-attachments/assets/f08bd316-cd31-4103-92b0-b00016d84105" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/104.png)
 
 
 They all were the same.
@@ -1688,7 +1695,8 @@ index=botsv2 sourcetype="stream:http" (src_content="*shipping*" OR src_content="
 ```
 
 
-<img width="1852" height="477" alt="image" src="https://github.com/user-attachments/assets/c2f7c5f6-6534-41d3-b63f-0bea089e6798" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/105.png)
+
 
 
 The `magento2/rest/default/V1/carts/mine/payment-information` was targeted as I had seen the data on the `magento2/rest/default/V1/carts/mine/shipping-information` uri. 
@@ -1702,7 +1710,7 @@ index=botsv2 sourcetype="stream:http"  url="http://store.froth.ly/magento2/rest/
 ```
 
 
-<img width="1852" height="507" alt="image" src="https://github.com/user-attachments/assets/d9a0592e-6500-436f-8115-cf915aa20547" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/106.png)
 
 
 
@@ -1721,7 +1729,7 @@ index=botsv2 sourcetype="stream:http" url="http://store.froth.ly/magento2/custom
 | stats count by session_id name
 ```
 
-<img width="1860" height="650" alt="image" src="https://github.com/user-attachments/assets/0f0500dc-874e-4f2b-9542-c31c8a924f21" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/107.png)
 
 
 Joining all three queries depending on session_id to see the most often used address when billing and shipping addresses were not the same. 
@@ -1748,10 +1756,9 @@ index=botsv2 sourcetype="stream:http" url="http://store.froth.ly/magento2/custom
 ```
 
 
-<img width="1865" height="653" alt="image" src="https://github.com/user-attachments/assets/9b759b75-0761-4f03-873a-2019cf637c53" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/108.png)
 
-
-<img width="1865" height="642" alt="image" src="https://github.com/user-attachments/assets/67306267-34d3-4405-947f-ab3a27b9b22e" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/109.png)
 
 
 200 Franklin St had the most used counts as a different shipping address across different users.
@@ -1774,7 +1781,7 @@ index=botsv2 sourcetype="stream:http" url="*http://store.froth.ly/magento2/custo
 ```
 
 
-<img width="1845" height="443" alt="image" src="https://github.com/user-attachments/assets/00f99e71-706f-4d18-a8b8-f257e100e323" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/110.png)
 
 
 There was only one username. Thus, I could not rely on the 'create' urls and `mail.com` did not give me any result other than this. 
@@ -1789,10 +1796,9 @@ index=botsv2 sourcetype="stream:http" form_data=* url="*login*"
 | stats count by name
 ```
 
-<img width="1862" height="537" alt="image" src="https://github.com/user-attachments/assets/d3f39a29-08c6-439e-96c1-b511008e64e9" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/111.png)
 
-
-<img width="1847" height="437" alt="image" src="https://github.com/user-attachments/assets/ea0ddbca-f7c5-4597-b10c-f24f16a7a1e5" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/112.png)
 
 
 Found the machine generated usernames with `elude.in` domain by seeing its username pattern. They are were clearly shown as generated from a tool or script.
@@ -1808,7 +1814,7 @@ index=botsv2 sourcetype="stream:http" form_data=* url="http://store.froth.ly/mag
 | sort -entropy_val
 ```
 
-<img width="1856" height="657" alt="image" src="https://github.com/user-attachments/assets/e9c4d6d6-701d-4b31-b247-63a069419591" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/113.png)
 
 
 
@@ -1839,8 +1845,7 @@ index=botsv2 sourcetype="stream:http" form_data=* url="http://store.froth.ly/mag
 | sort -count
 ```
 
-
-<img width="1855" height="642" alt="image" src="https://github.com/user-attachments/assets/fec87fd0-439f-4284-894b-8726f2ff186e" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/114.png)
 
 
 **Answer: `Tom2014@msn.com`**
@@ -1863,8 +1868,7 @@ index=botsv2 sourcetype="stream:http" "coupon_code" status=200  site="store.frot
 ```
 
 
-<img width="1862" height="358" alt="image" src="https://github.com/user-attachments/assets/a16ed4bc-a916-47db-9af0-f7a03c45a1eb" />
-
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/115.png)
 
 
 We could use another method as I saw that there was 'coupons' endpoint in request after searching.
@@ -1874,7 +1878,7 @@ index=botsv2 sourcetype="stream:http" coupon
 | stats count by request
 ```
 
-<img width="1845" height="662" alt="image" src="https://github.com/user-attachments/assets/12185524-daa8-4d1c-a3c0-2037c7515307" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/116.png)
 
 
 ```
@@ -1885,7 +1889,7 @@ index=botsv2 sourcetype="stream:http"  http_method=PUT request="*coupons*"
 ```
 
 
-<img width="1852" height="385" alt="image" src="https://github.com/user-attachments/assets/729d9ca8-096d-44a9-a937-a98f03c8839e" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/117.png)
 
 
 dest_content was set to 'true' when the status was successful. 
@@ -1917,7 +1921,7 @@ index=botsv2 sourcetype="stream:http" form_data=* url="http://store.froth.ly/mag
 ```
 
 
-<img width="1846" height="665" alt="image" src="https://github.com/user-attachments/assets/3ec160f5-1cd7-458e-b948-d957f579e7be" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/118.png)
 
 
 I wanted to see how many unique users used the same password and thus, deduplicated function was used for the 'name' field and values() was used for seeing the usernames.
@@ -1945,7 +1949,7 @@ index=botsv2 sourcetype="stream:http"  (earliest=1503126000 AND latest=150321240
 | stats count by http_referrer
 ```
 
-<img width="1852" height="423" alt="image" src="https://github.com/user-attachments/assets/d2bb8c75-ea70-48a7-8602-54b5ecf516d1" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/119.png)
 
 
 
@@ -1972,7 +1976,7 @@ index=botsv2 sourcetype="stream:http"  http_method=PUT request="*coupons*"
 ```
 
 
-<img width="1848" height="663" alt="image" src="https://github.com/user-attachments/assets/a26ce9ea-39a7-46ab-9b2a-834e729d4997" />
+![](https://github.com/mintheinkhinemtk/Splunk_BOTS_Labs/blob/main/Splunk_BOTSV2/screenshots/120.png)
 
 
 Unsuccessful testing multiple coupon codes meant the attempts with the most counts. 
